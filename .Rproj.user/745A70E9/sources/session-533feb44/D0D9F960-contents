@@ -1,0 +1,300 @@
+set.seed(42)
+
+library(mlr3verse)
+library(tidyverse)
+
+##### Pre Process #####
+
+all = read_csv("./data/titanic.csv") %>% 
+  mutate(name = str_replace(name, "\"", "")) %>% 
+  mutate(name = str_replace(name, "\\\"", ""))
+data_train_raw = read_csv("./data/train.csv") %>% 
+  mutate(Name = str_replace(Name, "\"", "")) %>% 
+  mutate(Name = str_replace(Name, "\\\"", ""))
+data_test_raw = read_csv("./data/test.csv") %>% 
+  mutate(Name = str_replace(Name, "\"", "")) %>% 
+  mutate(Name = str_replace(Name, "\\\"", ""))
+
+data_test_leaked = 
+  inner_join(data_test_raw, select(all, survived, name), by = c("Name" = "name")) %>% 
+  rename(Survived = survived) %>% 
+  distinct(Name, .keep_all = T)
+  
+data_train_mediated1 = data_train_raw %>% 
+  mutate(Family = str_extract(Name, "^[^,]+"), 
+         Appellation = str_sub(str_extract(Name, ",\\s(\\w+)(?=\\.)"), start = 3), 
+         Seat = str_sub(Cabin, end = 1))
+
+a = table(data_train_mediated1$Family)
+plural_names = names(a)[a != 1]
+
+b = table(data_train_mediated1$Appellation)
+TitleDict = c(Mr = "Mr",
+  Mlle = "Miss", Miss = "Miss",
+  Master = "Master", Jonkheer = "Master",
+  Mme = "Mrs", Ms = "Mrs", Mrs = "Mrs",
+  Don = "Master", Sir = "Master",
+  Lady = "Miss",
+  Capt = "Officer", Col = "Officer", Major = "Officer", Dr = "Officer", Rev = "Officer")
+
+Seats = LETTERS[1:7]
+
+# data_train_mediated2 = data_train_mediated1 %>% 
+#   select(-Name, -Cabin, -PassengerId, -Ticket) %>% 
+#   mutate(Seat = ifelse(is.na(Seat), "Unknown", Seat), 
+#          Family = ifelse(Family %in% plural_names, Family, "Single"), 
+#          Appellation = TitleDict[Appellation], 
+#          across(where(is.character), factor))
+
+lst_par = list(plural_names, TitleDict, Seats)
+preprocess = function(pars, data_raw){
+  data_raw %>% 
+    mutate(Name = str_replace(Name, "\"", "")) %>% 
+    mutate(Name = str_replace(Name, "\\\"", "")) %>% 
+    mutate(Family = str_extract(Name, "^[^,]+"), 
+           Appellation = str_sub(str_extract(Name, ",\\s(\\w+)(?=\\.)"), start = 3), 
+           Seat = str_sub(Cabin, end = 1)) %>% 
+    select(-Name, -Cabin, -PassengerId, -Ticket) %>% 
+    mutate(Seat = ifelse(Seat %in% lst_par[[3]], Seat, "Unknown"), 
+           # Family = ifelse(Family %in% lst_par[[1]], "pairs", "Single"), 
+           Appellation = lst_par[[2]][Appellation], 
+           across(where(is.character), factor), 
+           Sex = as.integer(Sex) - 1) %>% 
+    select(-Family, -Embarked)
+}
+
+data_train = preprocess(lst_par, data_train_raw)
+data_test = preprocess(lst_par, data_test_leaked)
+
+task_train_raw = as_task_classif(data_train, target = "Survived")
+task_test_raw = as_task_classif(data_test, target = "Survived")
+
+preprocess_pipe = 
+  po("imputelearner", id = "num", lrn("regr.lightgbm"), affect_columns = selector_type("numeric")) %>>% 
+  po("imputelearner", id = "fct", lrn("classif.rpart"), affect_columns = selector_type("factor")) %>>% 
+  po("encode", method = "one-hot")
+up_sp = po("classbalancing", reference = "minor",
+           adjust = "major")
+
+preprocess_pipe$train(task_train_raw)
+task_train_nob = preprocess_pipe$predict(task_train_raw)[[1]]
+task_train = up_sp$train(list(preprocess_pipe$predict(task_train_raw)[[1]]))[[1]]
+task_test = preprocess_pipe$predict(task_test_raw)[[1]]
+
+instance_f = fsi(
+  task = task_train,
+  learner = lrn("classif.rpart"),
+  resampling = rsmp("cv", folds = 3),
+  measures = msr("classif.ce"),
+  terminator = trm("evals", n_evals = 25)
+)
+fs("random_search", batch_size = 5)$optimize(instance_f)
+
+task_train_nob$select(instance_f$result_feature_set)
+task_train$select(instance_f$result_feature_set)
+task_test$select(instance_f$result_feature_set)
+
+split = partition(task_train)
+task_train_e = task_train$clone(deep = T)$set_row_roles(split$test, "test")
+
+split_nob = partition(task_train_nob)
+task_train_nob_e = task_train_nob$clone(deep = T)$set_row_roles(split_nob$test, "test")
+
+##### modeling ####
+
+to_optim = function(pre_train, num) {
+  pre_train$set_threshold(num)
+  -pre_train$score(msr("classif.acc"))
+}
+
+for_thres = function(pre_train) {
+  thres = optimize(\(x) to_optim(pre_train, x), lower = 0, upper = 1)$minimum
+  
+  cat("before: ", pre_train$set_threshold(0.5)$score(msr("classif.acc")), 
+      "\n", 
+      "after: ", pre_train$set_threshold(thres)$score(msr("classif.acc")))
+  
+  thres
+}
+
+##### lgb #####
+
+learner_lgb = lrn("classif.lightgbm")
+learner_lgb$param_set$set_values(
+  learning_rate = to_tune(0.001, 0.1),
+  num_iterations = to_tune(p_int(256, 1024, tags = "budget")),
+  max_depth = to_tune(1, 10),
+  num_leaves = to_tune(5, 53),
+  bagging_fraction = to_tune(0.75, 1), 
+  early_stopping = TRUE,
+  early_stopping_rounds = to_tune(128, 256)
+)
+
+instance = ti(
+  task = task_train_e,
+  learner = learner_lgb,
+  resampling = rsmp("holdout"),
+  measures = msr("classif.acc"),
+  terminator = trm("evals", n_evals = 50)
+)
+
+tnr("hyperband", eta = 2, repetitions = 3)$optimize(instance)
+
+learner_lgb$param_set$values = instance$result_learner_param_vals
+learner_lgb$train(task_train_e)
+
+prediction_lgb = learner_lgb$predict(task_test)
+prediction_lgb$score(msr("classif.acc"))
+
+learner_lgb$train(task_train_nob_e)
+prediction_lgb_train = learner_lgb$predict(task_train_nob, row_ids = split_nob$train)
+thres = for_thres(prediction_lgb_train)
+
+prediction_lgb_nob = learner_lgb$predict(task_test)
+prediction_lgb_nob$set_threshold(0.5)$score(msr("classif.acc"))
+prediction_lgb_nob$set_threshold(thres)$score(msr("classif.acc"))
+# prediction_lgb$score(msr("classif.acc"))
+
+##### xgb #####
+
+learner_xgb = lrn("classif.xgboost", predict_type = "prob")
+# set_threads(learner_xgb, n = 4)
+learner_xgb$param_set$set_values(
+  tree_method = "hist", 
+  booster = "gbtree", 
+  nrounds = to_tune(p_int(256, 1024, tags = "budget")),
+  eta = to_tune(1e-4, 1, logscale = TRUE),
+  max_depth = to_tune(1, 20),
+  colsample_bytree = to_tune(1e-1, 1),
+  colsample_bylevel = to_tune(1e-1, 1),
+  lambda = to_tune(1e-3, 1e3, logscale = TRUE),
+  alpha = to_tune(1e-3, 1e3, logscale = TRUE),
+  subsample = to_tune(1e-1, 1), 
+  early_stopping_rounds = to_tune(128, 256),
+  early_stopping_set = "test"
+)
+
+instance = ti(
+  task = task_train_e,
+  learner = learner_xgb,
+  resampling = rsmp("holdout"),
+  measures = msr("classif.acc"),
+  terminator = trm("evals", n_evals = 50)
+)
+
+tnr("hyperband", eta = 2, repetitions = 3)$optimize(instance)
+learner_xgb$param_set$values = instance$result_learner_param_vals
+learner_xgb$train(task_train_e)
+
+prediction_xgb = learner_xgb$predict(task_test)
+prediction_xgb$score(msr("classif.acc"))
+
+learner_xgb$train(task_train_nob_e)
+prediction_xgb_train = learner_xgb$predict(task_train_nob, row_ids = split_nob$train)
+thres = for_thres(prediction_xgb_train)
+
+prediction_xgb_nob = learner_xgb$predict(task_test)
+prediction_xgb_nob$set_threshold(0.5)$score(msr("classif.acc"))
+prediction_xgb_nob$set_threshold(thres)$score(msr("classif.acc"))
+
+##### rpart #####
+
+# learner_rpart = lts(lrn("classif.rpart"))
+# 
+# instance = ti(
+#   task = task_train,
+#   learner = learner_rpart,
+#   resampling = rsmp("cv", folds = 5),
+#   measures = msr("classif.acc"),
+#   terminator = trm("evals", n_evals = 50)
+# )
+# 
+# tnr("mbo")$optimize(instance)
+# learner_rpart$param_set$values = instance$result_learner_param_vals
+# learner_rpart$train(task_train)
+# prediction_rpart = learner_rpart$predict(task_test)
+# prediction_rpart$score(msr("classif.acc"))
+
+learner_rpart = lrn("classif.rpart")$train(task_train)
+prediction_rpart = learner_rpart$predict(task_test)
+prediction_rpart$score(msr("classif.acc"))
+
+learner_rpart_nob = lrn("classif.rpart", predict_type = "prob")$train(task_train_nob)
+prediction_rpart_train = learner_rpart_nob$predict(task_train_nob)
+
+thres = for_thres(prediction_rpart_train)
+
+prediction_rpart_nob = learner_rpart_nob$predict(task_test)
+prediction_rpart_nob$set_threshold(0.5)$score(msr("classif.acc"))
+prediction_rpart_nob$set_threshold(thres)$score(msr("classif.acc"))
+
+##### LR #####
+
+learner_LR = lrn("classif.log_reg")$train(task_train)
+prediction_LR = learner_LR$predict(task_test)
+prediction_LR$score(msr("classif.acc"))
+
+learner_LR_nob = lrn("classif.log_reg", predict_type = "prob")$train(task_train_nob)
+prediction_LR_nob = learner_LR_nob$predict(task_test)
+prediction_LR_nob$score(msr("classif.acc"))
+
+##### benchmark #####
+
+tasks = list(no_e = task_train, e = task_train_e)
+
+learners = list(
+  learner_lgb, 
+  learner_xgb, 
+  learner_rpart, 
+  learner_LR
+)
+
+design = benchmark_grid(tasks, learners, rsmps("cv", folds = 3))
+bmr = benchmark(design)
+bmr$aggregate(list(msr("classif.acc")))
+
+##### Emsemble #####
+
+prediction_lgb$score(msr("classif.acc"))
+prediction_xgb$score(msr("classif.acc"))
+prediction_rpart$score(msr("classif.acc"))
+prediction_LR$score(msr("classif.acc"))
+
+prediction_lgb_nob$score(msr("classif.acc"))
+prediction_xgb_nob$score(msr("classif.acc"))
+prediction_rpart_nob$score(msr("classif.acc"))
+prediction_LR_nob$score(msr("classif.acc"))
+
+predictions = list(prediction_lgb_nob, prediction_xgb_nob, prediction_rpart)
+
+prediction_ensembled = Reduce(
+  "+", 
+  map(predictions, ~ as.integer(as.data.table(.x)$response) - 1)
+) > 1
+
+ensembled = data.table(
+  row_ids = 1:length(data_test_leaked$Survived), 
+  truth = factor(data_test_leaked$Survived),
+  response = factor(as.numeric(prediction_ensembled))
+) %>% as_prediction_classif()
+
+ensembled$score(msr("classif.acc"))
+
+##### Export #####
+
+result = tibble(
+  PassengerId = data_test_raw$PassengerId, 
+  Survived = as.data.table(prediction_lgb)$response
+)
+
+result = tibble(
+  PassengerId = data_test_raw$PassengerId, 
+  Survived = as.numeric(ensembled)
+)
+
+
+
+write_csv(result, "submission.csv")
+
+
+

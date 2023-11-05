@@ -1,0 +1,92 @@
+---
+title: "example6"
+author: "Vinnish"
+date: "2023-11-04"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(mlr3verse)
+library(tidyverse)
+library(DT)
+```
+
+# 特征工程、交叉验证和超参数调优
+
+## 特征工程
+
+### 读入数据
+
+首先请读入数据，包括[playground的回归数据]()和[泰坦尼克号生存预测的二分类数据]()，这里分别缩写为pg和tt。
+
+```{r message=FALSE}
+data_pg_train_raw = read_csv("../Boston-Housing/data/train.csv")
+data_pg_test_raw  = read_csv("../Boston-Housing/data/test.csv")
+
+data_tt_train_raw = read_csv("../twoclass/data/train.csv")
+data_tt_test_raw  = read_csv("../twoclass/data/test.csv")
+```
+
+### 创建任务
+
+首先查看数据形式，将无需特征工程的pg数据转为mlr3中的任务。
+
+```{r}
+glimpse(data_pg_test_raw)
+```
+
+不知道你们从哪学的Task$new()的方法，尽量少用。
+
+```{r}
+task_pg_train = as_task_regr(data_pg_train_raw[, -1], target = "target")
+task_pg_test  = as_task_regr(mutate(data_pg_test_raw[, -1], target = 1), target = "target")
+```
+
+然后观察tt数据的形式。
+
+```{r}
+datatable(head(data_tt_train_raw))
+```
+
+计算缺失值。r中有用于专业分析缺失值分布规律的包，如mice。但是缺失值的处理一般从简即可。
+
+```{r}
+is.na(data_tt_train_raw) %>% 
+  colSums()
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

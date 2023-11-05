@@ -1,0 +1,50 @@
+library(data.table)
+library(tidyverse)
+
+Cattle = fread(
+  "
+id    group dfactor cattle infect
+1      1       1     11      8
+2      1       2     10      7
+3      1       3     12      5
+4      1       4     11      3
+5      1       5     12      2
+6      2       1     10     10
+7      2       2     10      9
+8      2       3     12      8
+9      2       4     11      6
+10     2       5     10      4
+  "
+)
+
+infect_ = Cattle$infect
+cattle_ = Cattle$cattle
+
+Cattle_expanded = copy(Cattle)[rep(id, cattle), ]
+Cattle_expanded[, infect := unlist(map2(infect_, cattle_ - infect_, ~ rep(c(1, 0), c(.x, .y))))]
+Cattle_expanded
+
+Cattle %>% 
+  group_by(id) %>% 
+  mutate(infected = list(c(rep(1, infect), rep(0, cattle-infect)))) %>% 
+  unnest() %>% 
+  View()
+
+Cattle %>% 
+  group_nest(id) %>% 
+  mutate(infected = map(data, ~ c(rep(1, .x$infect), rep(0, .x$cattle-.x$infect)))) %>% 
+  unnest(data) %>% 
+  unnest(infected) %>% 
+  select(-infect)
+
+Model1 = glm(cbind(infect, cattle - infect) ~ factor(group) + dfactor, family = binomial(link = logit), data = Cattle)
+summary(Model1)
+
+Model2 = glm(infect ~ factor(group) + dfactor, family = binomial(link = logit), data = Cattle_expanded)
+summary(Model2)
+
+
+
+
+
+

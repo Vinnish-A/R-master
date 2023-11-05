@@ -1,0 +1,7 @@
+"0","toylrn_r = lrn(""regr.lightgbm"") # 用lightgbm的原因是因为它收敛的快"
+"0","toylrn_r$train(task_pg_train)"
+"0","toypre_r = toylrn_r$predict(task_pg_test)"
+"0",""
+"0","toylrn_c = lrn(""classif.lightgbm"")"
+"0","toylrn_c$train(task_tt_train)"
+"0","toypre_c = toylrn_c$predict(task_tt_test)"

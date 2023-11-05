@@ -1,0 +1,225 @@
+---
+title: "example6"
+author: "Vinnish"
+date: "2023-11-04"
+output: 
+  prettydoc::html_pretty:
+    theme: architect
+    highlight: github
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(mlr3verse)
+library(tidyverse)
+library(DT)
+
+set.seed(42)
+```
+
+# 特征工程、交叉验证和超参数调优
+
+## 特征工程
+
+### 读入数据
+
+首先请读入数据，包括[playground的回归数据]()和[泰坦尼克号生存预测的二分类数据]()，这里分别缩写为pg和tt。由于泰坦尼克早已有完整的数据，为了方便测试，直接读取。
+
+```{r message=FALSE}
+data_pg_train_raw = read_csv("../../Boston-Housing/data/train.csv")
+data_pg_test_raw  = read_csv("../../Boston-Housing/data/test.csv")
+
+data_tt_train_raw = read_csv("../../twoclass/data/train.csv")
+data_tt_test_raw  = read_csv("../../twoclass/data/test.csv")
+data_tt_test_leak = read_csv("../../twoclass/data/titanic.csv")
+```
+
+操作一下数据。
+
+```{r}
+data_tt_test_raw = data_tt_test_raw %>% 
+  mutate(Name = str_replace(Name, "\"", "")) %>% 
+  mutate(Name = str_replace(Name, "\\\"", ""))
+data_tt_test_leak = data_tt_test_leak %>% 
+  mutate(name = str_replace(name, "\"", "")) %>% 
+  mutate(name = str_replace(name, "\\\"", ""))
+
+data_tt_test_raw = 
+  inner_join(data_tt_test_raw, select(data_tt_test_leak, survived, name), by = c("Name" = "name")) %>% 
+  rename(Survived = survived) %>% 
+  distinct(Name, .keep_all = T)
+```
+
+### 创建任务
+
+首先查看数据形式，将无需特征工程的pg数据转为mlr3中的任务。
+
+```{r echo=FALSE}
+datatable(head(data_pg_test_raw), options = list(scrollX = TRUE))
+```
+
+不知道你们从哪学的Task$new()的方法，尽量少用。
+
+```{r}
+task_pg_train = as_task_regr(data_pg_train_raw[, -1], target = "target")
+task_pg_test  = as_task_regr(mutate(data_pg_test_raw[, -1], target = 1), target = "target")
+```
+
+接下来是大头。然后观察tt数据的形式。
+
+```{r echo=FALSE}
+datatable(head(data_tt_train_raw), options = list(scrollX = TRUE))
+```
+
+计算缺失值。r中有用于专业分析缺失值分布规律的包，如mice。但是缺失值的处理一般从简即可。
+
+```{r echo=FALSE}
+is.na(data_tt_train_raw) %>% 
+  colSums()
+```
+
+有关泰坦尼克生存预测的具体特征处理方法，请参考[超复杂的特征处理](https://zhuanlan.zhihu.com/p/50194676)。我这里简化了部分，包括将name列中的的称呼提取并概括为若干类，然后将含有大量的缺失的列中的缺失值填充为未知类，然后将Cabin列中的首字母提取，其意义是客舱，具有一定价值，删除ID、Embarked等列。plural_names这部分没用，但我懒得删。
+
+```{r}
+data_train_mediated1 = data_tt_train_raw %>% 
+  mutate(Family = str_extract(Name, "^[^,]+"), 
+         Appellation = str_sub(str_extract(Name, ",\\s(\\w+)(?=\\.)"), start = 3), 
+         Seat = str_sub(Cabin, end = 1))
+
+a = table(data_train_mediated1$Family)
+plural_names = names(a)[a != 1]
+
+b = table(data_train_mediated1$Appellation)
+TitleDict = c(Mr = "Mr",
+  Mlle = "Miss", Miss = "Miss",
+  Master = "Master", Jonkheer = "Master",
+  Mme = "Mrs", Ms = "Mrs", Mrs = "Mrs",
+  Don = "Master", Sir = "Master",
+  Lady = "Miss",
+  Capt = "Officer", Col = "Officer", Major = "Officer", Dr = "Officer", Rev = "Officer")
+
+Seats = LETTERS[1:7]
+
+lst_par = list(plural_names, TitleDict, Seats)
+preprocess = function (pars, data_raw) {
+  judge = "Survived" %in% colnames(data_raw)
+  
+  if (judge) {
+    data_raw %>% 
+      mutate(Name = str_replace(Name, "\"", "")) %>% 
+      mutate(Name = str_replace(Name, "\\\"", "")) %>% 
+      mutate(Family = str_extract(Name, "^[^,]+"), 
+             Appellation = str_sub(str_extract(Name, ",\\s(\\w+)(?=\\.)"), start = 3), 
+             Seat = str_sub(Cabin, end = 1)) %>% 
+      select(-Name, -Cabin, -PassengerId, -Ticket) %>% 
+      mutate(Seat = ifelse(Seat %in% lst_par[[3]], Seat, "Unknown"), 
+             # Family = ifelse(Family %in% lst_par[[1]], "pairs", "Single"), 
+             Appellation = lst_par[[2]][Appellation], 
+             across(where(is.character), factor), 
+             Sex = as.integer(Sex) - 1) %>% 
+      select(-Family, -Embarked)
+  } else {
+    data_raw %>% 
+      mutate(Name = str_replace(Name, "\"", "")) %>% 
+      mutate(Name = str_replace(Name, "\\\"", "")) %>% 
+      mutate(Family = str_extract(Name, "^[^,]+"), 
+             Appellation = str_sub(str_extract(Name, ",\\s(\\w+)(?=\\.)"), start = 3), 
+             Seat = str_sub(Cabin, end = 1)) %>% 
+      select(-Name, -Cabin, -PassengerId, -Ticket) %>% 
+      mutate(Seat = ifelse(Seat %in% lst_par[[3]], Seat, "Unknown"), 
+             # Family = ifelse(Family %in% lst_par[[1]], "pairs", "Single"), 
+             Appellation = lst_par[[2]][Appellation], 
+             across(where(is.character), factor), 
+             Sex = as.integer(Sex) - 1) %>% 
+      select(-Family, -Embarked) %>% 
+      mutate(Survived = c(rep(0, nrow(.)-1), 1))
+  }
+}
+
+data_tt_train = preprocess(lst_par, data_tt_train_raw)
+data_tt_test  = preprocess(lst_par, data_tt_test_raw)
+
+task_tt_train_raw = as_task_classif(data_tt_train, target = "Survived")
+task_tt_test_raw  = as_task_classif(data_tt_test, target = "Survived")
+```
+
+然后对泰坦尼克生存数据中的数据进行进一步处理，包括对含少量缺失值的特征进行插补、将因子型特征进行独热编码。
+
+泰坦尼克生存数据属于分类任务，分类任务需要注意的一点是各个类别的数量要均等，否则会导致模型比较偏好一部分类别，这时候如果还以0.5作为阈值，预测结果就会偏向占比较多的类别。这一现象称作类别不均衡。对此要进行抽样或生成假样本以平衡数据。
+ 
+但是这个任务十分特殊，即训练集、测试集数据分布不一致。这时候进行抽样或者生成假样本会导致模型错误的重视某一部分样本，导致模型效果反而变差。考虑到样本不均衡其实并不严重，所以我们也不进行平衡样本，只在后面改阈值。
+
+这里为了分辨效果，我们做一组平衡的，做一组不平衡的。
+
+```{r}
+preprocess_pipe = 
+  po("imputelearner", id = "num", lrn("regr.lightgbm"), affect_columns = selector_type("numeric")) %>>% 
+  po("imputelearner", id = "fct", lrn("classif.rpart"), affect_columns = selector_type("factor")) %>>% 
+  po("encode", method = "one-hot")
+up_sp = po("classbalancing", reference = "minor",
+           adjust = "major")
+
+preprocess_pipe$train(task_tt_train_raw)
+task_tt_train_nob = preprocess_pipe$predict(task_tt_train_raw)[[1]]
+task_tt_train = up_sp$train(list(preprocess_pipe$predict(task_tt_train_raw)[[1]]))[[1]]
+task_tt_test  = preprocess_pipe$predict(task_tt_test_raw)[[1]]
+```
+
+处理好了以后我们使用简单的学习器进行拟合。
+
+```{r}
+toylrn_r = lrn("regr.lightgbm") # 用lightgbm的原因是因为它收敛的快
+toylrn_r$train(task_pg_train)
+toypre_r = toylrn_r$predict(task_pg_test)
+
+toylrn_c = lrn("classif.lightgbm")
+toylrn_c$train(task_tt_train)
+toypre_c = toylrn_c$predict(task_tt_test)
+```
+
+设计一个小函数用于汇总结果提交
+
+```{r}
+summary_of = function(pre, is_titanic = F) {
+  if (is_titanic) {
+    tibble(
+      PassengerId = data_tt_test_raw$PassengerId, 
+      Survived = pre$response
+    )
+  } else {
+    tibble(
+      id = data_pg_test_raw$id, 
+      target = pre$response
+    )
+  }
+}
+
+write_csv(summary_of(toypre_r), "temp/submission.csv")
+```
+
+playground的结果为0.7031，模型偏差已经十分逼近随机误差了，再看一下泰坦尼克的结果。
+
+```{r}
+toypre_c$score(msr("classif.acc"))
+```
+
+不好也不坏，接下来我们想一下如何优化这两个结果。
+
+## 交叉验证
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

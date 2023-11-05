@@ -1,0 +1,203 @@
+set.seed(42)
+
+library(mlr3verse)
+library(tidyverse)
+
+data_train_raw = read_csv("./data/train.csv")
+data_test_raw = read_csv("./data/test.csv")
+
+str(data_train_raw)
+summary(data_train_raw)
+
+task_train = as_task_regr(data_train_raw[, -1], target = "target")
+# split = partition(task_train)
+# task_train$set_row_roles(split$test, "test")
+
+learner_xgb = lrn("regr.xgboost")
+set_threads(learner_xgb, n = 4)
+learner_xgb$param_set$set_values(
+  tree_method = "hist", 
+  booster = "gbtree", 
+  nrounds = to_tune(p_int(256, 1024, tags = "budget")),
+  eta = to_tune(1e-4, 1, logscale = TRUE),
+  max_depth = to_tune(1, 20),
+  colsample_bytree = to_tune(1e-1, 1),
+  colsample_bylevel = to_tune(1e-1, 1),
+  lambda = to_tune(1e-3, 1e3, logscale = TRUE),
+  alpha = to_tune(1e-3, 1e3, logscale = TRUE),
+  subsample = to_tune(1e-1, 1)
+  # early_stopping_rounds = to_tune(128, 256),
+  # early_stopping_set = "test"
+)
+
+instance = ti(
+  task = task_train,
+  learner = learner_xgb,
+  resampling = rsmp("holdout"),
+  measures = msr("regr.rmse"),
+  terminator = trm("evals", n_evals = 50)
+)
+
+tuner = tnr("hyperband", eta = 2, repetitions = 1)
+tuner$optimize(instance)
+
+learner_xgb$param_set$values = instance$result_learner_param_vals
+learner_xgb$train(task_train)
+
+learner_lgb = lrn("regr.lightgbm")
+learner_lgb$param_set$set_values(
+  learning_rate = to_tune(0.001, 0.1),
+  num_iterations = to_tune(p_int(256, 1024, tags = "budget")),
+  max_depth = to_tune(1, 10),
+  num_leaves = to_tune(5, 53),
+  bagging_fraction = to_tune(0.75, 1)
+  # early_stopping = TRUE, 
+  # early_stopping_rounds = to_tune(128, 256)
+)
+
+instance = ti(
+  task = task_train,
+  learner = learner_lgb,
+  resampling = rsmp("holdout"),
+  measures = msr("regr.rmse"),
+  terminator = trm("evals", n_evals = 50)
+)
+
+tuner = tnr("hyperband", eta = 2, repetitions = 2)
+tuner$optimize(instance)
+
+learner_lgb$param_set$values = instance$result_learner_param_vals
+learner_lgb$train(task_train)
+
+# learner_xgb = lrn("regr.xgboost")$train(task_train)
+learner_ctb = lrn("regr.catboost")
+learner_ctb$param_set$set_values(
+  iterations = 1024,
+  learning_rate = 0.01,
+  depth = 12,
+  bagging_temperature = 0.2,
+  metric_period = 75, 
+  task_type = "GPU"
+)
+learner_ctb$train(as_task_regr(data_train_raw[, -1], target = "target"))
+
+# learner_rdf = lts(lrn("regr.ranger"))
+# instance = ti(
+#   task = task_train,
+#   learner = learner_rdf,
+#   resampling = rsmp("holdout"),
+#   measures = msr("regr.rmse"),
+#   terminator = trm("evals", n_evals = 50)
+# )
+# 
+# tuner = tnr("mbo")
+# future::plan("multisession", workers = 8)
+# tuner$optimize(instance)
+# 
+# learner_rdf$param_set$values = instance$result_learner_param_vals
+# learner_rdf$train(as_task_regr(data_train_raw[, -1], target = "target"))
+
+##### Stacking1 #####
+
+# resample(task_train, lrn("regr.xgboost"), rsmp("cv", folds = 5), store_models = T)$aggregate()
+cv5_xgb = resample(task_train, learner_xgb, rsmp("cv", folds = 5), store_models = T)
+# resample(task_train, lrn("regr.lightgbm"), rsmp("cv", folds = 5), store_models = T)$aggregate()
+cv5_lgb = resample(task_train, learner_lgb, rsmp("cv", folds = 5), store_models = T)
+# resample(task_train, lrn("regr.catboost"), rsmp("cv", folds = 5), store_models = T)$aggregate()
+cv5_ctb = resample(task_train, learner_ctb, rsmp("cv", folds = 5), store_models = T)
+
+data_stack = data.table(
+  truth = cv5_xgb$prediction()$truth, 
+  xgb = cv5_xgb$prediction()$response, 
+  lbb = cv5_lgb$prediction()$response,
+  ctb = cv5_ctb$prediction()$response
+)
+task_stack = as_task_regr(data_stack, target = "truth")
+
+library(glmnet)
+obj_glm = cv.glmnet(x = as.matrix(task_stack[, -1]), y = as.matrix(task_stack[, 1]), alpha = 0)
+
+result_xgb = tibble(
+  id = data_test_raw$id, 
+  target = as.data.table(learner_xgb$predict_newdata(data_test_raw[, -1]))$response
+)
+result_lgb = tibble(
+  id = data_test_raw$id, 
+  target = as.data.table(learner_lgb$predict_newdata(data_test_raw[, -1]))$response
+)
+result_ctb = tibble(
+  id = data_test_raw$id, 
+  target = as.data.table(learner_ctb$predict_newdata(data_test_raw[, -1]))$response
+)
+
+test_stack = data.table(
+  xgb = result_xgb$target, 
+  lbb = result_lgb$target, 
+  ctb = result_ctb$target
+)
+
+model = glmnet(x = as.matrix(data_stack[, -1]), y = as.matrix(data_stack[, 1]), alpha = 0, lambda = obj_glm$lambda.min)
+learner_base = lrn("regr.glmnet", family = "gaussian", alpha = 0, lambda = obj_glm$lambda.1se)
+learner_base$train(task_stack)
+# learner_base$predict_newdata(test_stack)
+
+result_stack = tibble(
+  id = data_test_raw$id,
+  target = predict(model, newx = as.matrix(test_stack))[, 1]
+)
+
+##### Stacking2 #####
+
+gstack = gunion(list(
+  po("learner_cv", lrn("regr.xgboost"), id = "xgb", param_vals = learner_xgb$param_set$values),
+  po("learner_cv", lrn("regr.lightgbm"), id = "lgb", param_vals = learner_lgb$param_set$values),
+  po("learner_cv", lrn("regr.catboost"), id = "ctb", param_vals = learner_ctb$param_set$values))) %>>%
+  po("featureunion") %>>%
+  lrn("regr.glmnet", family = "gaussian", alpha = 0, lambda = obj_glm$lambda.1se)
+  # lrn("regr.svm", id = "base")
+glearner = as_learner(gstack)
+glearner$train(task_train)
+glearner$param_set
+
+result_stack2 = tibble(
+  id = data_test_raw$id, 
+  target = as.data.table(glearner$predict_newdata(data_test_raw[, -1]))$response
+)
+
+write_csv(result_xgb, "submission_xgb.csv")
+write_csv(result_lgb, "submission_lgb.csv")
+write_csv(result_ctb, "submission_ctb.csv")
+write_csv(result_stack, "submission_stack.csv")
+write_csv(result_stack2, "submission_stack2.csv")
+# resample(task_train, glearner, rsmp("cv", folds = 5), store_models = T)
+
+##### EDA #####
+
+all_summary = bind_rows(result_xgb, result_lgb, result_ctb, result_stack, result_stack2) %>% 
+  mutate(lrn = rep(c("xgb", "lgb", "ctb", "stack", "stack2"), each = nrow(result_xgb)))
+
+library(ggsci)
+bind_rows(result_xgb, result_lgb, result_ctb, result_stack, result_stack2) %>% 
+  mutate(lrn = rep(c("xgb", "lgb", "ctb", "stack", "stack2"), each = nrow(result_xgb))) %>% 
+  ggplot(aes(target, color = lrn)) + 
+  geom_density() +
+  ggsci::scale_color_aaas()
+
+rbind(as.data.table(a[[1]]), data_stack, use.names = F) %>% 
+  mutate(lrn = rep(c("stack1", "stack2"), each = 300000)) %>% 
+  ggplot(aes(ctb.response, color = lrn)) + 
+  geom_density() +
+  ggsci::scale_color_aaas()
+
+##### test #####
+
+gstack_test = gunion(list(
+  po("learner_cv", lrn("regr.xgboost"), id = "xgb", param_vals = learner_xgb$param_set$values),
+  po("learner_cv", lrn("regr.lightgbm"), id = "lgb", param_vals = learner_lgb$param_set$values),
+  po("learner_cv", lrn("regr.catboost"), id = "ctb", param_vals = learner_ctb$param_set$values))) %>>%
+  po("featureunion")
+# glearner_test = as_learner(gstack_test)
+a = gstack_test$train(task_train)
+# b = glearner_test$predict(task_train)
+
+
