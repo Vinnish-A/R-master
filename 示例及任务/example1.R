@@ -6,8 +6,9 @@ iris
 data = as_tibble(iris)
 data
 
-# %>% 名为管道符
+# %>% 名为管道符，是tidyr的重要组件
 # 其作用是将管道符前的数据传递给管道符后的函数的第一个参数
+# 快捷键是 Ctrl + Shift + M
 data %>% 
   View()
 

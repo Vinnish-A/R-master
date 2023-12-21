@@ -1,0 +1,890 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>3 R的基础和特征 | R语言高手计划</title>
+  <meta name="description" content="Med-X社员手册" />
+  <meta name="generator" content="bookdown 0.36 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="3 R的基础和特征 | R语言高手计划" />
+  <meta property="og:type" content="book" />
+  
+  <meta property="og:description" content="Med-X社员手册" />
+  <meta name="github-repo" content="Vinnish-A/R-master" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="3 R的基础和特征 | R语言高手计划" />
+  
+  <meta name="twitter:description" content="Med-X社员手册" />
+  
+
+<meta name="author" content="Vinnish 普尔弥什" />
+
+
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="用tidyr读写操作文件.html"/>
+<link rel="next" href="字符串操作和r进阶.html"/>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+<script src="libs/htmlwidgets-1.6.3/htmlwidgets.js"></script>
+<link href="libs/datatables-css-0.0.0/datatables-crosstalk.css" rel="stylesheet" />
+<script src="libs/datatables-binding-0.30/datatables.js"></script>
+<link href="libs/dt-core-1.13.4/css/jquery.dataTables.min.css" rel="stylesheet" />
+<link href="libs/dt-core-1.13.4/css/jquery.dataTables.extra.css" rel="stylesheet" />
+<script src="libs/dt-core-1.13.4/js/jquery.dataTables.min.js"></script>
+<link href="libs/crosstalk-1.2.1/css/crosstalk.min.css" rel="stylesheet" />
+<script src="libs/crosstalk-1.2.1/js/crosstalk.min.js"></script>
+<link rel="stylesheet" type="text/css" href="style.css">
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-EHGBT6KMPG"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-EHGBT6KMPG');
+</script>
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  jax: ["input/TeX","output/SVG"],
+  extensions: ["tex2jax.js","MathMenu.js","MathZoom.js"],
+  TeX: {
+    extensions: ["AMSmath.js","AMSsymbols.js","noErrors.js","noUndefined.js"]
+  }
+});
+</script>
+<script type="text/javascript"
+   src="../../../MathJax/MathJax.js">
+</script>
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<style type="text/css">
+  
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+</style>
+<style type="text/css">
+/* Used with Pandoc 2.11+ new --citeproc when CSL is used */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> 预备</a>
+<ul>
+<li class="chapter" data-level="1.1" data-path="index.html"><a href="index.html#工作环境"><i class="fa fa-check"></i><b>1.1</b> 工作环境</a></li>
+<li class="chapter" data-level="1.2" data-path="index.html"><a href="index.html#使用project管理项目"><i class="fa fa-check"></i><b>1.2</b> 使用project管理项目</a></li>
+<li class="chapter" data-level="1.3" data-path="index.html"><a href="index.html#第一周"><i class="fa fa-check"></i><b>1.3</b> 第一周</a>
+<ul>
+<li class="chapter" data-level="1.3.1" data-path="index.html"><a href="index.html#目标"><i class="fa fa-check"></i><b>1.3.1</b> 目标</a></li>
+<li class="chapter" data-level="1.3.2" data-path="index.html"><a href="index.html#示例及任务"><i class="fa fa-check"></i><b>1.3.2</b> 示例及任务</a></li>
+</ul></li>
+<li class="chapter" data-level="1.4" data-path="index.html"><a href="index.html#第二周"><i class="fa fa-check"></i><b>1.4</b> 第二周</a>
+<ul>
+<li class="chapter" data-level="1.4.1" data-path="index.html"><a href="index.html#目标-1"><i class="fa fa-check"></i><b>1.4.1</b> 目标</a></li>
+<li class="chapter" data-level="1.4.2" data-path="index.html"><a href="index.html#示例及任务-1"><i class="fa fa-check"></i><b>1.4.2</b> 示例及任务</a></li>
+</ul></li>
+<li class="chapter" data-level="1.5" data-path="index.html"><a href="index.html#第三周"><i class="fa fa-check"></i><b>1.5</b> 第三周</a>
+<ul>
+<li class="chapter" data-level="1.5.1" data-path="index.html"><a href="index.html#目标-2"><i class="fa fa-check"></i><b>1.5.1</b> 目标</a></li>
+<li class="chapter" data-level="1.5.2" data-path="index.html"><a href="index.html#示例及任务-2"><i class="fa fa-check"></i><b>1.5.2</b> 示例及任务</a></li>
+</ul></li>
+<li class="chapter" data-level="1.6" data-path="index.html"><a href="index.html#第四周"><i class="fa fa-check"></i><b>1.6</b> 第四周</a>
+<ul>
+<li class="chapter" data-level="1.6.1" data-path="index.html"><a href="index.html#目标-3"><i class="fa fa-check"></i><b>1.6.1</b> 目标</a></li>
+<li class="chapter" data-level="1.6.2" data-path="index.html"><a href="index.html#示例及任务-3"><i class="fa fa-check"></i><b>1.6.2</b> 示例及任务</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="用tidyr读写操作文件.html"><a href="用tidyr读写操作文件.html"><i class="fa fa-check"></i><b>2</b> 用tidyr读写、操作文件</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="用tidyr读写操作文件.html"><a href="用tidyr读写操作文件.html#使用内置数据集iris"><i class="fa fa-check"></i><b>2.1</b> 使用内置数据集iris</a></li>
+<li class="chapter" data-level="2.2" data-path="用tidyr读写操作文件.html"><a href="用tidyr读写操作文件.html#的使用"><i class="fa fa-check"></i><b>2.2</b> %&gt;% 的使用</a></li>
+<li class="chapter" data-level="2.3" data-path="用tidyr读写操作文件.html"><a href="用tidyr读写操作文件.html#select的使用"><i class="fa fa-check"></i><b>2.3</b> select的使用</a></li>
+<li class="chapter" data-level="2.4" data-path="用tidyr读写操作文件.html"><a href="用tidyr读写操作文件.html#mutate的使用"><i class="fa fa-check"></i><b>2.4</b> mutate的使用</a></li>
+<li class="chapter" data-level="2.5" data-path="用tidyr读写操作文件.html"><a href="用tidyr读写操作文件.html#group_by-summarise"><i class="fa fa-check"></i><b>2.5</b> group_by + summarise</a></li>
+<li class="chapter" data-level="2.6" data-path="用tidyr读写操作文件.html"><a href="用tidyr读写操作文件.html#检验环节"><i class="fa fa-check"></i><b>2.6</b> 检验环节</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="r的基础和特征.html"><a href="r的基础和特征.html"><i class="fa fa-check"></i><b>3</b> R的基础和特征</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="r的基础和特征.html"><a href="r的基础和特征.html#r中的数据结构"><i class="fa fa-check"></i><b>3.1</b> R中的数据结构</a></li>
+<li class="chapter" data-level="3.2" data-path="r的基础和特征.html"><a href="r的基础和特征.html#向量化"><i class="fa fa-check"></i><b>3.2</b> 向量化</a></li>
+<li class="chapter" data-level="3.3" data-path="r的基础和特征.html"><a href="r的基础和特征.html#for循环"><i class="fa fa-check"></i><b>3.3</b> for循环</a></li>
+<li class="chapter" data-level="3.4" data-path="r的基础和特征.html"><a href="r的基础和特征.html#for的向量化"><i class="fa fa-check"></i><b>3.4</b> for的向量化</a></li>
+<li class="chapter" data-level="3.5" data-path="r的基础和特征.html"><a href="r的基础和特征.html#标准化"><i class="fa fa-check"></i><b>3.5</b> 标准化</a></li>
+<li class="chapter" data-level="3.6" data-path="r的基础和特征.html"><a href="r的基础和特征.html#求单个变量和其它变量的相关性"><i class="fa fa-check"></i><b>3.6</b> 求单个变量和其它变量的相关性</a></li>
+<li class="chapter" data-level="3.7" data-path="r的基础和特征.html"><a href="r的基础和特征.html#函数式编程"><i class="fa fa-check"></i><b>3.7</b> 函数式编程</a></li>
+<li class="chapter" data-level="3.8" data-path="r的基础和特征.html"><a href="r的基础和特征.html#实例和小测验"><i class="fa fa-check"></i><b>3.8</b> 实例和小测验</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="字符串操作和r进阶.html"><a href="字符串操作和r进阶.html"><i class="fa fa-check"></i><b>4</b> 字符串操作和R进阶</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="字符串操作和r进阶.html"><a href="字符串操作和r进阶.html#提纲"><i class="fa fa-check"></i><b>4.1</b> 提纲</a>
+<ul>
+<li class="chapter" data-level="4.1.1" data-path="字符串操作和r进阶.html"><a href="字符串操作和r进阶.html#变量掩蔽"><i class="fa fa-check"></i><b>4.1.1</b> 变量掩蔽</a></li>
+<li class="chapter" data-level="4.1.2" data-path="字符串操作和r进阶.html"><a href="字符串操作和r进阶.html#字符串操作"><i class="fa fa-check"></i><b>4.1.2</b> 字符串操作</a></li>
+<li class="chapter" data-level="4.1.3" data-path="字符串操作和r进阶.html"><a href="字符串操作和r进阶.html#grep"><i class="fa fa-check"></i><b>4.1.3</b> grep</a></li>
+<li class="chapter" data-level="4.1.4" data-path="字符串操作和r进阶.html"><a href="字符串操作和r进阶.html#substr"><i class="fa fa-check"></i><b>4.1.4</b> substr</a></li>
+<li class="chapter" data-level="4.1.5" data-path="字符串操作和r进阶.html"><a href="字符串操作和r进阶.html#正则表达式与str_extract"><i class="fa fa-check"></i><b>4.1.5</b> 正则表达式与str_extract</a></li>
+<li class="chapter" data-level="4.1.6" data-path="字符串操作和r进阶.html"><a href="字符串操作和r进阶.html#str_subset"><i class="fa fa-check"></i><b>4.1.6</b> str_subset</a></li>
+<li class="chapter" data-level="4.1.7" data-path="字符串操作和r进阶.html"><a href="字符串操作和r进阶.html#str_split"><i class="fa fa-check"></i><b>4.1.7</b> str_split</a></li>
+</ul></li>
+<li class="chapter" data-level="4.2" data-path="字符串操作和r进阶.html"><a href="字符串操作和r进阶.html#实战"><i class="fa fa-check"></i><b>4.2</b> 实战</a>
+<ul>
+<li class="chapter" data-level="4.2.1" data-path="字符串操作和r进阶.html"><a href="字符串操作和r进阶.html#向量化-1"><i class="fa fa-check"></i><b>4.2.1</b> 1. 向量化</a></li>
+<li class="chapter" data-level="4.2.2" data-path="字符串操作和r进阶.html"><a href="字符串操作和r进阶.html#tibble的nested-tibble性质"><i class="fa fa-check"></i><b>4.2.2</b> 2. tibble的nested tibble性质</a></li>
+<li class="chapter" data-level="4.2.3" data-path="字符串操作和r进阶.html"><a href="字符串操作和r进阶.html#dataframe操作"><i class="fa fa-check"></i><b>4.2.3</b> 3. dataframe操作</a></li>
+<li class="chapter" data-level="4.2.4" data-path="字符串操作和r进阶.html"><a href="字符串操作和r进阶.html#循环"><i class="fa fa-check"></i><b>4.2.4</b> 4. 循环</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="初探mlr3.html"><a href="初探mlr3.html"><i class="fa fa-check"></i><b>5</b> 初探mlr3</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="初探mlr3.html"><a href="初探mlr3.html#mlr3中使用po进行特征工程"><i class="fa fa-check"></i><b>5.1</b> mlr3中使用po()进行特征工程</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="二分类和多分类问题.html"><a href="二分类和多分类问题.html"><i class="fa fa-check"></i><b>6</b> 二分类和多分类问题</a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="二分类和多分类问题.html"><a href="二分类和多分类问题.html#二分类"><i class="fa fa-check"></i><b>6.1</b> 二分类</a></li>
+<li class="chapter" data-level="6.2" data-path="二分类和多分类问题.html"><a href="二分类和多分类问题.html#hardmax"><i class="fa fa-check"></i><b>6.2</b> hardmax</a></li>
+<li class="chapter" data-level="6.3" data-path="二分类和多分类问题.html"><a href="二分类和多分类问题.html#softmax"><i class="fa fa-check"></i><b>6.3</b> softmax</a></li>
+<li class="chapter" data-level="6.4" data-path="二分类和多分类问题.html"><a href="二分类和多分类问题.html#多分类的损失函数"><i class="fa fa-check"></i><b>6.4</b> 多分类的损失函数</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="特征工程交叉验证和超参数调优.html"><a href="特征工程交叉验证和超参数调优.html"><i class="fa fa-check"></i><b>7</b> 特征工程、交叉验证和超参数调优</a>
+<ul>
+<li class="chapter" data-level="7.1" data-path="特征工程交叉验证和超参数调优.html"><a href="特征工程交叉验证和超参数调优.html#特征工程"><i class="fa fa-check"></i><b>7.1</b> 特征工程</a>
+<ul>
+<li class="chapter" data-level="7.1.1" data-path="特征工程交叉验证和超参数调优.html"><a href="特征工程交叉验证和超参数调优.html#读入数据"><i class="fa fa-check"></i><b>7.1.1</b> 读入数据</a></li>
+<li class="chapter" data-level="7.1.2" data-path="特征工程交叉验证和超参数调优.html"><a href="特征工程交叉验证和超参数调优.html#创建任务"><i class="fa fa-check"></i><b>7.1.2</b> 创建任务</a></li>
+</ul></li>
+<li class="chapter" data-level="7.2" data-path="特征工程交叉验证和超参数调优.html"><a href="特征工程交叉验证和超参数调优.html#超参数调优"><i class="fa fa-check"></i><b>7.2</b> 超参数调优</a>
+<ul>
+<li class="chapter" data-level="7.2.1" data-path="特征工程交叉验证和超参数调优.html"><a href="特征工程交叉验证和超参数调优.html#mlr3实现"><i class="fa fa-check"></i><b>7.2.1</b> mlr3实现</a></li>
+<li class="chapter" data-level="7.2.2" data-path="特征工程交叉验证和超参数调优.html"><a href="特征工程交叉验证和超参数调优.html#使用注意"><i class="fa fa-check"></i><b>7.2.2</b> 使用注意</a></li>
+</ul></li>
+<li class="chapter" data-level="7.3" data-path="特征工程交叉验证和超参数调优.html"><a href="特征工程交叉验证和超参数调优.html#交叉验证"><i class="fa fa-check"></i><b>7.3</b> 交叉验证</a>
+<ul>
+<li class="chapter" data-level="7.3.1" data-path="特征工程交叉验证和超参数调优.html"><a href="特征工程交叉验证和超参数调优.html#模型堆叠"><i class="fa fa-check"></i><b>7.3.1</b> 模型堆叠</a></li>
+<li class="chapter" data-level="7.3.2" data-path="特征工程交叉验证和超参数调优.html"><a href="特征工程交叉验证和超参数调优.html#交叉验证失效怎么办"><i class="fa fa-check"></i><b>7.3.2</b> 交叉验证失效怎么办？</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="理解机器学习里数据不均衡.html"><a href="理解机器学习里数据不均衡.html"><i class="fa fa-check"></i><b>8</b> 理解机器学习里数据不均衡</a>
+<ul>
+<li class="chapter" data-level="8.1" data-path="理解机器学习里数据不均衡.html"><a href="理解机器学习里数据不均衡.html#data_prepare"><i class="fa fa-check"></i><b>8.1</b> data_prepare</a></li>
+<li class="chapter" data-level="8.2" data-path="理解机器学习里数据不均衡.html"><a href="理解机器学习里数据不均衡.html#model"><i class="fa fa-check"></i><b>8.2</b> model</a>
+<ul>
+<li class="chapter" data-level="8.2.1" data-path="理解机器学习里数据不均衡.html"><a href="理解机器学习里数据不均衡.html#数据均衡的模型"><i class="fa fa-check"></i><b>8.2.1</b> 数据均衡的模型</a></li>
+<li class="chapter" data-level="8.2.2" data-path="理解机器学习里数据不均衡.html"><a href="理解机器学习里数据不均衡.html#数据不均衡的模型"><i class="fa fa-check"></i><b>8.2.2</b> 数据不均衡的模型</a></li>
+<li class="chapter" data-level="8.2.3" data-path="理解机器学习里数据不均衡.html"><a href="理解机器学习里数据不均衡.html#训练集上后处理准确率的模型"><i class="fa fa-check"></i><b>8.2.3</b> 训练集上后处理准确率的模型</a></li>
+<li class="chapter" data-level="8.2.4" data-path="理解机器学习里数据不均衡.html"><a href="理解机器学习里数据不均衡.html#测试集上后处理准确率"><i class="fa fa-check"></i><b>8.2.4</b> 测试集上后处理准确率</a></li>
+<li class="chapter" data-level="8.2.5" data-path="理解机器学习里数据不均衡.html"><a href="理解机器学习里数据不均衡.html#过采样的模型"><i class="fa fa-check"></i><b>8.2.5</b> 过采样的模型</a></li>
+<li class="chapter" data-level="8.2.6" data-path="理解机器学习里数据不均衡.html"><a href="理解机器学习里数据不均衡.html#欠采样的模型"><i class="fa fa-check"></i><b>8.2.6</b> 欠采样的模型</a></li>
+<li class="chapter" data-level="8.2.7" data-path="理解机器学习里数据不均衡.html"><a href="理解机器学习里数据不均衡.html#添加权重的模型"><i class="fa fa-check"></i><b>8.2.7</b> 添加权重的模型</a></li>
+</ul></li>
+<li class="chapter" data-level="8.3" data-path="理解机器学习里数据不均衡.html"><a href="理解机器学习里数据不均衡.html#rough-edged"><i class="fa fa-check"></i><b>8.3</b> rough edged</a></li>
+</ul></li>
+<li class="chapter" data-level="9" data-path="rmarkdown中插入文献和修改引用样式.html"><a href="rmarkdown中插入文献和修改引用样式.html"><i class="fa fa-check"></i><b>9</b> （R）markdown中插入文献和修改引用样式</a>
+<ul>
+<li class="chapter" data-level="9.1" data-path="rmarkdown中插入文献和修改引用样式.html"><a href="rmarkdown中插入文献和修改引用样式.html#rmarkdown的组成"><i class="fa fa-check"></i><b>9.1</b> Rmarkdown的组成</a></li>
+<li class="chapter" data-level="9.2" data-path="rmarkdown中插入文献和修改引用样式.html"><a href="rmarkdown中插入文献和修改引用样式.html#插入参考文献"><i class="fa fa-check"></i><b>9.2</b> 插入参考文献</a></li>
+<li class="chapter" data-level="9.3" data-path="rmarkdown中插入文献和修改引用样式.html"><a href="rmarkdown中插入文献和修改引用样式.html#修改引用样式"><i class="fa fa-check"></i><b>9.3</b> 修改引用样式</a></li>
+<li class="chapter" data-level="9.4" data-path="rmarkdown中插入文献和修改引用样式.html"><a href="rmarkdown中插入文献和修改引用样式.html#其它技巧和问题"><i class="fa fa-check"></i><b>9.4</b> 其它技巧和问题</a>
+<ul>
+<li class="chapter" data-level="9.4.1" data-path="rmarkdown中插入文献和修改引用样式.html"><a href="rmarkdown中插入文献和修改引用样式.html#快捷键"><i class="fa fa-check"></i><b>9.4.1</b> 快捷键</a></li>
+<li class="chapter" data-level="9.4.2" data-path="rmarkdown中插入文献和修改引用样式.html"><a href="rmarkdown中插入文献和修改引用样式.html#引用多篇"><i class="fa fa-check"></i><b>9.4.2</b> 引用多篇</a></li>
+<li class="chapter" data-level="9.4.3" data-path="rmarkdown中插入文献和修改引用样式.html"><a href="rmarkdown中插入文献和修改引用样式.html#导出注意事项"><i class="fa fa-check"></i><b>9.4.3</b> 导出注意事项</a></li>
+</ul></li>
+<li class="chapter" data-level="9.5" data-path="rmarkdown中插入文献和修改引用样式.html"><a href="rmarkdown中插入文献和修改引用样式.html#参考文献"><i class="fa fa-check"></i><b>9.5</b> 参考文献</a></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="puzzle1展开折叠数据.html"><a href="puzzle1展开折叠数据.html"><i class="fa fa-check"></i><b>10</b> puzzle1：展开折叠数据</a>
+<ul>
+<li class="chapter" data-level="10.1" data-path="puzzle1展开折叠数据.html"><a href="puzzle1展开折叠数据.html#数据展开"><i class="fa fa-check"></i><b>10.1</b> 数据展开</a></li>
+<li class="chapter" data-level="10.2" data-path="puzzle1展开折叠数据.html"><a href="puzzle1展开折叠数据.html#模型建立"><i class="fa fa-check"></i><b>10.2</b> 模型建立</a></li>
+</ul></li>
+<li class="chapter" data-level="11" data-path="puzzle2初试假设检验.html"><a href="puzzle2初试假设检验.html"><i class="fa fa-check"></i><b>11</b> puzzle2：初试假设检验</a>
+<ul>
+<li class="chapter" data-level="11.1" data-path="puzzle2初试假设检验.html"><a href="puzzle2初试假设检验.html#示例"><i class="fa fa-check"></i><b>11.1</b> 示例</a>
+<ul>
+<li class="chapter" data-level="11.1.1" data-path="puzzle2初试假设检验.html"><a href="puzzle2初试假设检验.html#计算"><i class="fa fa-check"></i><b>11.1.1</b> 计算</a></li>
+</ul></li>
+<li class="chapter" data-level="11.2" data-path="puzzle2初试假设检验.html"><a href="puzzle2初试假设检验.html#题目"><i class="fa fa-check"></i><b>11.2</b> 题目</a></li>
+</ul></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">R语言高手计划</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="r的基础和特征" class="section level1 hasAnchor" number="3">
+<h1><span class="header-section-number">3</span> R的基础和特征<a href="r的基础和特征.html#r的基础和特征" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<div id="r中的数据结构" class="section level2 hasAnchor" number="3.1">
+<h2><span class="header-section-number">3.1</span> R中的数据结构<a href="r的基础和特征.html#r中的数据结构" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>R中最基本的数据格式是向量,R中事实上没有单个的数据格式比如字符串、数值,单个是数据实质上都是一维向量。</p>
+<div class="sourceCode" id="cb80"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb80-1"><a href="r的基础和特征.html#cb80-1" tabindex="-1"></a><span class="fu">class</span>(<span class="st">&quot;class&quot;</span>)</span></code></pre></div>
+<pre><code>## [1] &quot;character&quot;</code></pre>
+<div class="sourceCode" id="cb82"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb82-1"><a href="r的基础和特征.html#cb82-1" tabindex="-1"></a><span class="fu">class</span>(<span class="fu">c</span>(<span class="st">&quot;class&quot;</span>))</span></code></pre></div>
+<pre><code>## [1] &quot;character&quot;</code></pre>
+<div class="sourceCode" id="cb84"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb84-1"><a href="r的基础和特征.html#cb84-1" tabindex="-1"></a><span class="fu">class</span>(<span class="fu">c</span>(<span class="st">&quot;class1&quot;</span>, <span class="st">&quot;class2&quot;</span>))</span></code></pre></div>
+<pre><code>## [1] &quot;character&quot;</code></pre>
+<div class="sourceCode" id="cb86"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb86-1"><a href="r的基础和特征.html#cb86-1" tabindex="-1"></a><span class="fu">class</span>(<span class="dv">1</span>)</span></code></pre></div>
+<pre><code>## [1] &quot;numeric&quot;</code></pre>
+<div class="sourceCode" id="cb88"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb88-1"><a href="r的基础和特征.html#cb88-1" tabindex="-1"></a><span class="fu">class</span>(<span class="fu">c</span>(<span class="dv">1</span>))</span></code></pre></div>
+<pre><code>## [1] &quot;numeric&quot;</code></pre>
+<p>向量是同质性的，如果格式不同则强制转格式。</p>
+<div class="sourceCode" id="cb90"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb90-1"><a href="r的基础和特征.html#cb90-1" tabindex="-1"></a><span class="fu">c</span>(<span class="dv">1</span>, <span class="st">&quot;class&quot;</span>)</span></code></pre></div>
+<pre><code>## [1] &quot;1&quot;     &quot;class&quot;</code></pre>
+<p>列表是特殊的向量（异质性向量）</p>
+<div class="sourceCode" id="cb92"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb92-1"><a href="r的基础和特征.html#cb92-1" tabindex="-1"></a><span class="fu">list</span>(<span class="dv">1</span>, <span class="st">&quot;class&quot;</span>)</span></code></pre></div>
+<pre><code>## [[1]]
+## [1] 1
+## 
+## [[2]]
+## [1] &quot;class&quot;</code></pre>
+<div class="sourceCode" id="cb94"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb94-1"><a href="r的基础和特征.html#cb94-1" tabindex="-1"></a><span class="fu">list</span>(<span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>), <span class="st">&quot;class&quot;</span>)</span></code></pre></div>
+<pre><code>## [[1]]
+## [1] 1 2
+## 
+## [[2]]
+## [1] &quot;class&quot;</code></pre>
+<p>向量和列表的每一个元素都可以拥有名字,可以通过名字索引，所以不能重名。</p>
+<div class="sourceCode" id="cb96"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb96-1"><a href="r的基础和特征.html#cb96-1" tabindex="-1"></a>vec_exp <span class="ot">=</span> <span class="fu">c</span>(<span class="at">age =</span> <span class="dv">1</span>, <span class="at">class =</span> <span class="st">&quot;class&quot;</span>)</span>
+<span id="cb96-2"><a href="r的基础和特征.html#cb96-2" tabindex="-1"></a>vec_exp[[<span class="st">&quot;age&quot;</span>]]</span></code></pre></div>
+<pre><code>## [1] &quot;1&quot;</code></pre>
+<p>注意以下两者的区别</p>
+<div class="sourceCode" id="cb98"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb98-1"><a href="r的基础和特征.html#cb98-1" tabindex="-1"></a>vec_exp[[<span class="dv">1</span>]]</span></code></pre></div>
+<pre><code>## [1] &quot;1&quot;</code></pre>
+<div class="sourceCode" id="cb100"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb100-1"><a href="r的基础和特征.html#cb100-1" tabindex="-1"></a>vec_exp[<span class="dv">1</span>]</span></code></pre></div>
+<pre><code>## age 
+## &quot;1&quot;</code></pre>
+<div class="sourceCode" id="cb102"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb102-1"><a href="r的基础和特征.html#cb102-1" tabindex="-1"></a><span class="co"># 向量中无法使用$</span></span>
+<span id="cb102-2"><a href="r的基础和特征.html#cb102-2" tabindex="-1"></a><span class="co"># vec_exp$age</span></span>
+<span id="cb102-3"><a href="r的基础和特征.html#cb102-3" tabindex="-1"></a>lst_exp <span class="ot">=</span> <span class="fu">list</span>(<span class="at">age =</span> <span class="dv">1</span>, <span class="at">class =</span> <span class="st">&quot;class&quot;</span>)</span></code></pre></div>
+<p>注意以下两者的区别</p>
+<div class="sourceCode" id="cb103"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb103-1"><a href="r的基础和特征.html#cb103-1" tabindex="-1"></a>lst_exp[[<span class="dv">1</span>]]</span></code></pre></div>
+<pre><code>## [1] 1</code></pre>
+<div class="sourceCode" id="cb105"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb105-1"><a href="r的基础和特征.html#cb105-1" tabindex="-1"></a>lst_exp[<span class="dv">1</span>]</span></code></pre></div>
+<pre><code>## $age
+## [1] 1</code></pre>
+<p>以下三者等价</p>
+<div class="sourceCode" id="cb107"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb107-1"><a href="r的基础和特征.html#cb107-1" tabindex="-1"></a>lst_exp[[<span class="st">&quot;age&quot;</span>]] <span class="sc">==</span> lst_exp<span class="sc">$</span>age</span></code></pre></div>
+<pre><code>## [1] TRUE</code></pre>
+<div class="sourceCode" id="cb109"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb109-1"><a href="r的基础和特征.html#cb109-1" tabindex="-1"></a>lst_exp<span class="sc">$</span>age</span></code></pre></div>
+<pre><code>## [1] 1</code></pre>
+<div class="sourceCode" id="cb111"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb111-1"><a href="r的基础和特征.html#cb111-1" tabindex="-1"></a>lst_exp[<span class="dv">1</span>]<span class="sc">$</span>age</span></code></pre></div>
+<pre><code>## [1] 1</code></pre>
+<p>使用names调用向量和列表的名字。</p>
+<div class="sourceCode" id="cb113"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb113-1"><a href="r的基础和特征.html#cb113-1" tabindex="-1"></a><span class="fu">names</span>(lst_exp)</span></code></pre></div>
+<pre><code>## [1] &quot;age&quot;   &quot;class&quot;</code></pre>
+<p>dataframe是特殊的列表,列表中每个元素都是等长的向量,dataframe的每一列都是一个向量。</p>
+<div class="sourceCode" id="cb115"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb115-1"><a href="r的基础和特征.html#cb115-1" tabindex="-1"></a><span class="fu">data.frame</span>(<span class="fu">list</span>(<span class="at">age =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>), <span class="at">class =</span> <span class="fu">c</span>(<span class="st">&quot;class1&quot;</span>, <span class="st">&quot;class2&quot;</span>)))</span></code></pre></div>
+<pre><code>##   age  class
+## 1   1 class1
+## 2   2 class2</code></pre>
+<div class="sourceCode" id="cb117"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb117-1"><a href="r的基础和特征.html#cb117-1" tabindex="-1"></a>data_exp <span class="ot">=</span> <span class="fu">data.frame</span>(<span class="at">age =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>), <span class="at">class =</span> <span class="fu">c</span>(<span class="st">&quot;class1&quot;</span>, <span class="st">&quot;class2&quot;</span>))</span></code></pre></div>
+<p>所以基本上可以用操作列表的方法操作dataframe。</p>
+<div class="sourceCode" id="cb118"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb118-1"><a href="r的基础和特征.html#cb118-1" tabindex="-1"></a>var <span class="ot">=</span> <span class="st">&quot;age&quot;</span></span>
+<span id="cb118-2"><a href="r的基础和特征.html#cb118-2" tabindex="-1"></a></span>
+<span id="cb118-3"><a href="r的基础和特征.html#cb118-3" tabindex="-1"></a>data_exp<span class="sc">$</span>age</span></code></pre></div>
+<pre><code>## [1] 1 2</code></pre>
+<div class="sourceCode" id="cb120"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb120-1"><a href="r的基础和特征.html#cb120-1" tabindex="-1"></a>data_exp[[<span class="st">&quot;age&quot;</span>]]</span></code></pre></div>
+<pre><code>## [1] 1 2</code></pre>
+<div class="sourceCode" id="cb122"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb122-1"><a href="r的基础和特征.html#cb122-1" tabindex="-1"></a>data_exp[[var]]</span></code></pre></div>
+<pre><code>## [1] 1 2</code></pre>
+<p>尤其注意以下两者的区别</p>
+<div class="sourceCode" id="cb124"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb124-1"><a href="r的基础和特征.html#cb124-1" tabindex="-1"></a>data_exp[<span class="dv">1</span>]</span></code></pre></div>
+<pre><code>##   age
+## 1   1
+## 2   2</code></pre>
+<div class="sourceCode" id="cb126"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb126-1"><a href="r的基础和特征.html#cb126-1" tabindex="-1"></a>data_exp[[<span class="dv">1</span>]]</span></code></pre></div>
+<pre><code>## [1] 1 2</code></pre>
+<p>dataframe特有的方法是[x, y]行列索引,空格为全选。</p>
+<div class="sourceCode" id="cb128"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb128-1"><a href="r的基础和特征.html#cb128-1" tabindex="-1"></a>data_exp[, <span class="dv">1</span>]</span></code></pre></div>
+<pre><code>## [1] 1 2</code></pre>
+<div class="sourceCode" id="cb130"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb130-1"><a href="r的基础和特征.html#cb130-1" tabindex="-1"></a>data_exp[<span class="dv">1</span>, ]</span></code></pre></div>
+<pre><code>##   age  class
+## 1   1 class1</code></pre>
+<p>由于历史问题，下两者属性不同,但是在tidyverse的数据表tibble中这个问题不再。</p>
+<div class="sourceCode" id="cb132"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb132-1"><a href="r的基础和特征.html#cb132-1" tabindex="-1"></a><span class="fu">class</span>(data_exp[<span class="dv">1</span>, ])</span></code></pre></div>
+<pre><code>## [1] &quot;data.frame&quot;</code></pre>
+<div class="sourceCode" id="cb134"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb134-1"><a href="r的基础和特征.html#cb134-1" tabindex="-1"></a><span class="fu">class</span>(data_exp[, <span class="dv">1</span>])</span></code></pre></div>
+<pre><code>## [1] &quot;numeric&quot;</code></pre>
+<p>dataframe的名同列表，但不同的是多了行名属性,行名在tibble中并不常用。</p>
+<div class="sourceCode" id="cb136"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb136-1"><a href="r的基础和特征.html#cb136-1" tabindex="-1"></a><span class="fu">names</span>(data_exp)</span></code></pre></div>
+<pre><code>## [1] &quot;age&quot;   &quot;class&quot;</code></pre>
+<div class="sourceCode" id="cb138"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb138-1"><a href="r的基础和特征.html#cb138-1" tabindex="-1"></a><span class="fu">rownames</span>(data_exp)</span></code></pre></div>
+<pre><code>## [1] &quot;1&quot; &quot;2&quot;</code></pre>
+</div>
+<div id="向量化" class="section level2 hasAnchor" number="3.2">
+<h2><span class="header-section-number">3.2</span> 向量化<a href="r的基础和特征.html#向量化" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>向量化是R最典型的特征,不是说别的语言没有。</p>
+<p>矩阵运算</p>
+<div class="sourceCode" id="cb140"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb140-1"><a href="r的基础和特征.html#cb140-1" tabindex="-1"></a><span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>) <span class="sc">+</span> <span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">3</span>)</span></code></pre></div>
+<pre><code>## [1] 3 5</code></pre>
+<div class="sourceCode" id="cb142"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb142-1"><a href="r的基础和特征.html#cb142-1" tabindex="-1"></a><span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>) <span class="sc">*</span> <span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">3</span>)</span></code></pre></div>
+<pre><code>## [1] 2 6</code></pre>
+<div class="sourceCode" id="cb144"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb144-1"><a href="r的基础和特征.html#cb144-1" tabindex="-1"></a><span class="fu">matrix</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">4</span>, <span class="at">nrow =</span> <span class="dv">2</span>) <span class="sc">%*%</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>)</span></code></pre></div>
+<pre><code>##      [,1]
+## [1,]    7
+## [2,]   10</code></pre>
+<p>除了矩阵乘法，更多是作为泛函。</p>
+<div class="sourceCode" id="cb146"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb146-1"><a href="r的基础和特征.html#cb146-1" tabindex="-1"></a>data_exp <span class="sc">%&gt;%</span> </span>
+<span id="cb146-2"><a href="r的基础和特征.html#cb146-2" tabindex="-1"></a>  <span class="fu">apply</span>(<span class="dv">2</span>, length)</span></code></pre></div>
+<pre><code>##   age class 
+##     2     2</code></pre>
+<div class="sourceCode" id="cb148"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb148-1"><a href="r的基础和特征.html#cb148-1" tabindex="-1"></a><span class="fu">rep</span>(<span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>), <span class="fu">c</span>(<span class="dv">3</span>, <span class="dv">5</span>))</span></code></pre></div>
+<pre><code>## [1] 1 1 1 2 2 2 2 2</code></pre>
+<p>最常用的tidyr其实就是向量化的一种体现。</p>
+<div class="sourceCode" id="cb150"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb150-1"><a href="r的基础和特征.html#cb150-1" tabindex="-1"></a>data_exp <span class="sc">%&gt;%</span> </span>
+<span id="cb150-2"><a href="r的基础和特征.html#cb150-2" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">gender =</span> <span class="fu">c</span>(<span class="st">&quot;boy&quot;</span>, <span class="st">&quot;boy&quot;</span>), </span>
+<span id="cb150-3"><a href="r的基础和特征.html#cb150-3" tabindex="-1"></a>         <span class="at">location =</span> <span class="fu">paste</span>(gender, <span class="st">&quot;of&quot;</span>, class))</span></code></pre></div>
+<pre><code>##   age  class gender      location
+## 1   1 class1    boy boy of class1
+## 2   2 class2    boy boy of class2</code></pre>
+</div>
+<div id="for循环" class="section level2 hasAnchor" number="3.3">
+<h2><span class="header-section-number">3.3</span> for循环<a href="r的基础和特征.html#for循环" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>r中的for循环并不慢，之所以名声不好，是因为for循环太简单了，容易写出效率不高的冗余代码。</p>
+<div class="sourceCode" id="cb152"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb152-1"><a href="r的基础和特征.html#cb152-1" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>) {</span>
+<span id="cb152-2"><a href="r的基础和特征.html#cb152-2" tabindex="-1"></a>  <span class="fu">print</span>(i)</span>
+<span id="cb152-3"><a href="r的基础和特征.html#cb152-3" tabindex="-1"></a>}</span></code></pre></div>
+<pre><code>## [1] 1
+## [1] 2
+## [1] 3
+## [1] 4
+## [1] 5
+## [1] 6
+## [1] 7
+## [1] 8
+## [1] 9
+## [1] 10</code></pre>
+<p>注意这里的{}，其实没有也行,{}的作用是新创建一个空间，就是把一整段代码变成看起来只有一段代码。</p>
+<div class="sourceCode" id="cb154"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb154-1"><a href="r的基础和特征.html#cb154-1" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>) <span class="fu">print</span>(i)</span></code></pre></div>
+<pre><code>## [1] 1
+## [1] 2
+## [1] 3
+## [1] 4
+## [1] 5
+## [1] 6
+## [1] 7
+## [1] 8
+## [1] 9
+## [1] 10</code></pre>
+<p>匿名函数就是这个原理，有花括号的地方都可以这么省。</p>
+<div class="sourceCode" id="cb156"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb156-1"><a href="r的基础和特征.html#cb156-1" tabindex="-1"></a><span class="fu">sapply</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>, <span class="cf">function</span>(x) x <span class="sc">+</span> <span class="dv">1</span>)</span></code></pre></div>
+<pre><code>##  [1]  2  3  4  5  6  7  8  9 10 11</code></pre>
+<div class="sourceCode" id="cb158"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb158-1"><a href="r的基础和特征.html#cb158-1" tabindex="-1"></a><span class="cf">if</span> (T) <span class="fu">print</span>(<span class="st">&quot;TRUE&quot;</span>)</span></code></pre></div>
+<pre><code>## [1] &quot;TRUE&quot;</code></pre>
+</div>
+<div id="for的向量化" class="section level2 hasAnchor" number="3.4">
+<h2><span class="header-section-number">3.4</span> for的向量化<a href="r的基础和特征.html#for的向量化" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div class="sourceCode" id="cb160"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb160-1"><a href="r的基础和特征.html#cb160-1" tabindex="-1"></a>result <span class="ot">=</span> <span class="fu">c</span>()</span>
+<span id="cb160-2"><a href="r的基础和特征.html#cb160-2" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">ncol</span>(data_exp)) {</span>
+<span id="cb160-3"><a href="r的基础和特征.html#cb160-3" tabindex="-1"></a>  result[i] <span class="ot">=</span> <span class="fu">length</span>(data_exp[[i]])</span>
+<span id="cb160-4"><a href="r的基础和特征.html#cb160-4" tabindex="-1"></a>}</span>
+<span id="cb160-5"><a href="r的基础和特征.html#cb160-5" tabindex="-1"></a>result</span></code></pre></div>
+<pre><code>## [1] 2 2</code></pre>
+<p>哪些情况用for循环，哪些情况用apply，随你便，但是apply在简单情形可以少写几行代码，而且apply函数簇更容易并行加速，因为apply的操作单位有且只有单个对象。</p>
+</div>
+<div id="标准化" class="section level2 hasAnchor" number="3.5">
+<h2><span class="header-section-number">3.5</span> 标准化<a href="r的基础和特征.html#标准化" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div class="sourceCode" id="cb162"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb162-1"><a href="r的基础和特征.html#cb162-1" tabindex="-1"></a>iris <span class="sc">%&gt;%</span></span>
+<span id="cb162-2"><a href="r的基础和特征.html#cb162-2" tabindex="-1"></a>  <span class="fu">select</span>(<span class="fu">where</span>(is.numeric)) <span class="sc">%&gt;%</span> </span>
+<span id="cb162-3"><a href="r的基础和特征.html#cb162-3" tabindex="-1"></a>  <span class="fu">apply</span>(<span class="dv">2</span>, scale)</span></code></pre></div>
+<pre><code>##        Sepal.Length Sepal.Width Petal.Length   Petal.Width
+##   [1,]  -0.89767388  1.01560199  -1.33575163 -1.3110521482
+##   [2,]  -1.13920048 -0.13153881  -1.33575163 -1.3110521482
+##   [3,]  -1.38072709  0.32731751  -1.39239929 -1.3110521482
+##   [4,]  -1.50149039  0.09788935  -1.27910398 -1.3110521482
+##   [5,]  -1.01843718  1.24503015  -1.33575163 -1.3110521482
+##   [6,]  -0.53538397  1.93331463  -1.16580868 -1.0486667950
+##   [7,]  -1.50149039  0.78617383  -1.33575163 -1.1798594716
+##   [8,]  -1.01843718  0.78617383  -1.27910398 -1.3110521482
+##   [9,]  -1.74301699 -0.36096697  -1.33575163 -1.3110521482
+##  [10,]  -1.13920048  0.09788935  -1.27910398 -1.4422448248
+##  [11,]  -0.53538397  1.47445831  -1.27910398 -1.3110521482
+##  [12,]  -1.25996379  0.78617383  -1.22245633 -1.3110521482
+##  [13,]  -1.25996379 -0.13153881  -1.33575163 -1.4422448248
+##  [14,]  -1.86378030 -0.13153881  -1.50569459 -1.4422448248
+##  [15,]  -0.05233076  2.16274279  -1.44904694 -1.3110521482
+##  [16,]  -0.17309407  3.08045544  -1.27910398 -1.0486667950
+##  [17,]  -0.53538397  1.93331463  -1.39239929 -1.0486667950
+##  [18,]  -0.89767388  1.01560199  -1.33575163 -1.1798594716
+##  [19,]  -0.17309407  1.70388647  -1.16580868 -1.1798594716
+##  [20,]  -0.89767388  1.70388647  -1.27910398 -1.1798594716
+##  [21,]  -0.53538397  0.78617383  -1.16580868 -1.3110521482
+##  [22,]  -0.89767388  1.47445831  -1.27910398 -1.0486667950
+##  [23,]  -1.50149039  1.24503015  -1.56234224 -1.3110521482
+##  [24,]  -0.89767388  0.55674567  -1.16580868 -0.9174741184
+##  [25,]  -1.25996379  0.78617383  -1.05251337 -1.3110521482
+##  [26,]  -1.01843718 -0.13153881  -1.22245633 -1.3110521482
+##  [27,]  -1.01843718  0.78617383  -1.22245633 -1.0486667950
+##  [28,]  -0.77691058  1.01560199  -1.27910398 -1.3110521482
+##  [29,]  -0.77691058  0.78617383  -1.33575163 -1.3110521482
+##  [30,]  -1.38072709  0.32731751  -1.22245633 -1.3110521482
+##  [31,]  -1.25996379  0.09788935  -1.22245633 -1.3110521482
+##  [32,]  -0.53538397  0.78617383  -1.27910398 -1.0486667950
+##  [33,]  -0.77691058  2.39217095  -1.27910398 -1.4422448248
+##  [34,]  -0.41462067  2.62159911  -1.33575163 -1.3110521482
+##  [35,]  -1.13920048  0.09788935  -1.27910398 -1.3110521482
+##  [36,]  -1.01843718  0.32731751  -1.44904694 -1.3110521482
+##  [37,]  -0.41462067  1.01560199  -1.39239929 -1.3110521482
+##  [38,]  -1.13920048  1.24503015  -1.33575163 -1.4422448248
+##  [39,]  -1.74301699 -0.13153881  -1.39239929 -1.3110521482
+##  [40,]  -0.89767388  0.78617383  -1.27910398 -1.3110521482
+##  [41,]  -1.01843718  1.01560199  -1.39239929 -1.1798594716
+##  [42,]  -1.62225369 -1.73753594  -1.39239929 -1.1798594716
+##  [43,]  -1.74301699  0.32731751  -1.39239929 -1.3110521482
+##  [44,]  -1.01843718  1.01560199  -1.22245633 -0.7862814418
+##  [45,]  -0.89767388  1.70388647  -1.05251337 -1.0486667950
+##  [46,]  -1.25996379 -0.13153881  -1.33575163 -1.1798594716
+##  [47,]  -0.89767388  1.70388647  -1.22245633 -1.3110521482
+##  [48,]  -1.50149039  0.32731751  -1.33575163 -1.3110521482
+##  [49,]  -0.65614727  1.47445831  -1.27910398 -1.3110521482
+##  [50,]  -1.01843718  0.55674567  -1.33575163 -1.3110521482
+##  [51,]   1.39682886  0.32731751   0.53362088  0.2632599711
+##  [52,]   0.67224905  0.32731751   0.42032558  0.3944526477
+##  [53,]   1.27606556  0.09788935   0.64691619  0.3944526477
+##  [54,]  -0.41462067 -1.73753594   0.13708732  0.1320672944
+##  [55,]   0.79301235 -0.59039513   0.47697323  0.3944526477
+##  [56,]  -0.17309407 -0.59039513   0.42032558  0.1320672944
+##  [57,]   0.55148575  0.55674567   0.53362088  0.5256453243
+##  [58,]  -1.13920048 -1.50810778  -0.25944625 -0.2615107354
+##  [59,]   0.91377565 -0.36096697   0.47697323  0.1320672944
+##  [60,]  -0.77691058 -0.81982329   0.08043967  0.2632599711
+##  [61,]  -1.01843718 -2.42582042  -0.14615094 -0.2615107354
+##  [62,]   0.06843254 -0.13153881   0.25038262  0.3944526477
+##  [63,]   0.18919584 -1.96696410   0.13708732 -0.2615107354
+##  [64,]   0.30995914 -0.36096697   0.53362088  0.2632599711
+##  [65,]  -0.29385737 -0.36096697  -0.08950329  0.1320672944
+##  [66,]   1.03453895  0.09788935   0.36367793  0.2632599711
+##  [67,]  -0.29385737 -0.13153881   0.42032558  0.3944526477
+##  [68,]  -0.05233076 -0.81982329   0.19373497 -0.2615107354
+##  [69,]   0.43072244 -1.96696410   0.42032558  0.3944526477
+##  [70,]  -0.29385737 -1.27867961   0.08043967 -0.1303180588
+##  [71,]   0.06843254  0.32731751   0.59026853  0.7880306775
+##  [72,]   0.30995914 -0.59039513   0.13708732  0.1320672944
+##  [73,]   0.55148575 -1.27867961   0.64691619  0.3944526477
+##  [74,]   0.30995914 -0.59039513   0.53362088  0.0008746178
+##  [75,]   0.67224905 -0.36096697   0.30703027  0.1320672944
+##  [76,]   0.91377565 -0.13153881   0.36367793  0.2632599711
+##  [77,]   1.15530226 -0.59039513   0.59026853  0.2632599711
+##  [78,]   1.03453895 -0.13153881   0.70356384  0.6568380009
+##  [79,]   0.18919584 -0.36096697   0.42032558  0.3944526477
+##  [80,]  -0.17309407 -1.04925145  -0.14615094 -0.2615107354
+##  [81,]  -0.41462067 -1.50810778   0.02379201 -0.1303180588
+##  [82,]  -0.41462067 -1.50810778  -0.03285564 -0.2615107354
+##  [83,]  -0.05233076 -0.81982329   0.08043967  0.0008746178
+##  [84,]   0.18919584 -0.81982329   0.76021149  0.5256453243
+##  [85,]  -0.53538397 -0.13153881   0.42032558  0.3944526477
+##  [86,]   0.18919584  0.78617383   0.42032558  0.5256453243
+##  [87,]   1.03453895  0.09788935   0.53362088  0.3944526477
+##  [88,]   0.55148575 -1.73753594   0.36367793  0.1320672944
+##  [89,]  -0.29385737 -0.13153881   0.19373497  0.1320672944
+##  [90,]  -0.41462067 -1.27867961   0.13708732  0.1320672944
+##  [91,]  -0.41462067 -1.04925145   0.36367793  0.0008746178
+##  [92,]   0.30995914 -0.13153881   0.47697323  0.2632599711
+##  [93,]  -0.05233076 -1.04925145   0.13708732  0.0008746178
+##  [94,]  -1.01843718 -1.73753594  -0.25944625 -0.2615107354
+##  [95,]  -0.29385737 -0.81982329   0.25038262  0.1320672944
+##  [96,]  -0.17309407 -0.13153881   0.25038262  0.0008746178
+##  [97,]  -0.17309407 -0.36096697   0.25038262  0.1320672944
+##  [98,]   0.43072244 -0.36096697   0.30703027  0.1320672944
+##  [99,]  -0.89767388 -1.27867961  -0.42938920 -0.1303180588
+## [100,]  -0.17309407 -0.59039513   0.19373497  0.1320672944
+## [101,]   0.55148575  0.55674567   1.27004036  1.7063794137
+## [102,]  -0.05233076 -0.81982329   0.76021149  0.9192233541
+## [103,]   1.51759216 -0.13153881   1.21339271  1.1816087073
+## [104,]   0.55148575 -0.36096697   1.04344975  0.7880306775
+## [105,]   0.79301235 -0.13153881   1.15674505  1.3128013839
+## [106,]   2.12140867 -0.13153881   1.60992627  1.1816087073
+## [107,]  -1.13920048 -1.27867961   0.42032558  0.6568380009
+## [108,]   1.75911877 -0.36096697   1.43998331  0.7880306775
+## [109,]   1.03453895 -1.27867961   1.15674505  0.7880306775
+## [110,]   1.63835547  1.24503015   1.32668801  1.7063794137
+## [111,]   0.79301235  0.32731751   0.76021149  1.0504160307
+## [112,]   0.67224905 -0.81982329   0.87350679  0.9192233541
+## [113,]   1.15530226 -0.13153881   0.98680210  1.1816087073
+## [114,]  -0.17309407 -1.27867961   0.70356384  1.0504160307
+## [115,]  -0.05233076 -0.59039513   0.76021149  1.5751867371
+## [116,]   0.67224905  0.32731751   0.87350679  1.4439940605
+## [117,]   0.79301235 -0.13153881   0.98680210  0.7880306775
+## [118,]   2.24217198  1.70388647   1.66657392  1.3128013839
+## [119,]   2.24217198 -1.04925145   1.77986923  1.4439940605
+## [120,]   0.18919584 -1.96696410   0.70356384  0.3944526477
+## [121,]   1.27606556  0.32731751   1.10009740  1.4439940605
+## [122,]  -0.29385737 -0.59039513   0.64691619  1.0504160307
+## [123,]   2.24217198 -0.59039513   1.66657392  1.0504160307
+## [124,]   0.55148575 -0.81982329   0.64691619  0.7880306775
+## [125,]   1.03453895  0.55674567   1.10009740  1.1816087073
+## [126,]   1.63835547  0.32731751   1.27004036  0.7880306775
+## [127,]   0.43072244 -0.59039513   0.59026853  0.7880306775
+## [128,]   0.30995914 -0.13153881   0.64691619  0.7880306775
+## [129,]   0.67224905 -0.59039513   1.04344975  1.1816087073
+## [130,]   1.63835547 -0.13153881   1.15674505  0.5256453243
+## [131,]   1.87988207 -0.59039513   1.32668801  0.9192233541
+## [132,]   2.48369858  1.70388647   1.49663097  1.0504160307
+## [133,]   0.67224905 -0.59039513   1.04344975  1.3128013839
+## [134,]   0.55148575 -0.59039513   0.76021149  0.3944526477
+## [135,]   0.30995914 -1.04925145   1.04344975  0.2632599711
+## [136,]   2.24217198 -0.13153881   1.32668801  1.4439940605
+## [137,]   0.55148575  0.78617383   1.04344975  1.5751867371
+## [138,]   0.67224905  0.09788935   0.98680210  0.7880306775
+## [139,]   0.18919584 -0.13153881   0.59026853  0.7880306775
+## [140,]   1.27606556  0.09788935   0.93015445  1.1816087073
+## [141,]   1.03453895  0.09788935   1.04344975  1.5751867371
+## [142,]   1.27606556  0.09788935   0.76021149  1.4439940605
+## [143,]  -0.05233076 -0.81982329   0.76021149  0.9192233541
+## [144,]   1.15530226  0.32731751   1.21339271  1.4439940605
+## [145,]   1.03453895  0.55674567   1.10009740  1.7063794137
+## [146,]   1.03453895 -0.13153881   0.81685914  1.4439940605
+## [147,]   0.55148575 -1.27867961   0.70356384  0.9192233541
+## [148,]   0.79301235 -0.13153881   0.81685914  1.0504160307
+## [149,]   0.43072244  0.78617383   0.93015445  1.4439940605
+## [150,]   0.06843254 -0.13153881   0.76021149  0.7880306775</code></pre>
+</div>
+<div id="求单个变量和其它变量的相关性" class="section level2 hasAnchor" number="3.6">
+<h2><span class="header-section-number">3.6</span> 求单个变量和其它变量的相关性<a href="r的基础和特征.html#求单个变量和其它变量的相关性" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div class="sourceCode" id="cb164"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb164-1"><a href="r的基础和特征.html#cb164-1" tabindex="-1"></a>Sepal_Length <span class="ot">=</span> iris<span class="sc">$</span>Sepal.Length</span>
+<span id="cb164-2"><a href="r的基础和特征.html#cb164-2" tabindex="-1"></a>iris <span class="sc">%&gt;%</span> </span>
+<span id="cb164-3"><a href="r的基础和特征.html#cb164-3" tabindex="-1"></a>  <span class="fu">select</span>(<span class="fu">where</span>(is.numeric), <span class="sc">-</span>Sepal.Length) <span class="sc">%&gt;%</span> </span>
+<span id="cb164-4"><a href="r的基础和特征.html#cb164-4" tabindex="-1"></a>  <span class="fu">apply</span>(<span class="dv">2</span>, \(vec) <span class="fu">cor</span>(vec, Sepal_Length))</span></code></pre></div>
+<pre><code>##  Sepal.Width Petal.Length  Petal.Width 
+##   -0.1175698    0.8717538    0.8179411</code></pre>
+<p>但是在多重循环中，最好不要使用apply函数或者显式套用apply函数。比如我们想求变量间两两的相关性，看起来非常乱。</p>
+<div class="sourceCode" id="cb166"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb166-1"><a href="r的基础和特征.html#cb166-1" tabindex="-1"></a>data_num <span class="ot">=</span> <span class="fu">select</span>(iris, <span class="fu">where</span>(is.numeric))</span>
+<span id="cb166-2"><a href="r的基础和特征.html#cb166-2" tabindex="-1"></a><span class="fu">apply</span>(data_num, <span class="dv">2</span>, \(vec1) <span class="fu">apply</span>(data_num, <span class="dv">2</span>, \(vec2) <span class="fu">cor</span>(vec1, vec2)))</span></code></pre></div>
+<pre><code>##              Sepal.Length Sepal.Width Petal.Length Petal.Width
+## Sepal.Length    1.0000000  -0.1175698    0.8717538   0.8179411
+## Sepal.Width    -0.1175698   1.0000000   -0.4284401  -0.3661259
+## Petal.Length    0.8717538  -0.4284401    1.0000000   0.9628654
+## Petal.Width     0.8179411  -0.3661259    0.9628654   1.0000000</code></pre>
+<p>双层嵌套，看起来不是很美观。</p>
+<div class="sourceCode" id="cb168"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb168-1"><a href="r的基础和特征.html#cb168-1" tabindex="-1"></a>result <span class="ot">=</span> <span class="fu">data.frame</span>(<span class="fu">matrix</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">16</span>, <span class="at">nrow =</span> <span class="dv">4</span>))</span>
+<span id="cb168-2"><a href="r的基础和特征.html#cb168-2" tabindex="-1"></a><span class="cf">for</span> (a <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">ncol</span>(data_num)) {</span>
+<span id="cb168-3"><a href="r的基础和特征.html#cb168-3" tabindex="-1"></a>  <span class="cf">for</span> (b <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">ncol</span>(data_num)) {</span>
+<span id="cb168-4"><a href="r的基础和特征.html#cb168-4" tabindex="-1"></a>    result[a, b] <span class="ot">=</span> <span class="fu">cor</span>(data_num[[a]], data_num[[b]])</span>
+<span id="cb168-5"><a href="r的基础和特征.html#cb168-5" tabindex="-1"></a>  }</span>
+<span id="cb168-6"><a href="r的基础和特征.html#cb168-6" tabindex="-1"></a>}</span>
+<span id="cb168-7"><a href="r的基础和特征.html#cb168-7" tabindex="-1"></a>result</span></code></pre></div>
+<pre><code>##           X1         X2         X3         X4
+## 1  1.0000000 -0.1175698  0.8717538  0.8179411
+## 2 -0.1175698  1.0000000 -0.4284401 -0.3661259
+## 3  0.8717538 -0.4284401  1.0000000  0.9628654
+## 4  0.8179411 -0.3661259  0.9628654  1.0000000</code></pre>
+<p>我们可以结合for循环和apply减少一层嵌套。</p>
+<div class="sourceCode" id="cb170"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb170-1"><a href="r的基础和特征.html#cb170-1" tabindex="-1"></a>result <span class="ot">=</span> <span class="fu">data.frame</span>(<span class="fu">matrix</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">16</span>, <span class="at">nrow =</span> <span class="dv">4</span>))</span>
+<span id="cb170-2"><a href="r的基础和特征.html#cb170-2" tabindex="-1"></a><span class="cf">for</span> (a <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">ncol</span>(data_num)) {</span>
+<span id="cb170-3"><a href="r的基础和特征.html#cb170-3" tabindex="-1"></a>  result[[a]] <span class="ot">=</span> <span class="fu">apply</span>(data_num, <span class="dv">2</span>, \(vec) <span class="fu">cor</span>(data_num[[a]], vec))</span>
+<span id="cb170-4"><a href="r的基础和特征.html#cb170-4" tabindex="-1"></a>}</span>
+<span id="cb170-5"><a href="r的基础和特征.html#cb170-5" tabindex="-1"></a>result</span></code></pre></div>
+<pre><code>##           X1         X2         X3         X4
+## 1  1.0000000 -0.1175698  0.8717538  0.8179411
+## 2 -0.1175698  1.0000000 -0.4284401 -0.3661259
+## 3  0.8717538 -0.4284401  1.0000000  0.9628654
+## 4  0.8179411 -0.3661259  0.9628654  1.0000000</code></pre>
+</div>
+<div id="函数式编程" class="section level2 hasAnchor" number="3.7">
+<h2><span class="header-section-number">3.7</span> 函数式编程<a href="r的基础和特征.html#函数式编程" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>函数式编程是R的另一大特点，也有可能是因R的面向对象太难用了…
+简单求个定积分</p>
+<div class="sourceCode" id="cb172"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb172-1"><a href="r的基础和特征.html#cb172-1" tabindex="-1"></a><span class="fu">integrate</span>(\(x) x<span class="sc">**</span><span class="dv">3</span> <span class="sc">+</span> x, <span class="dv">0</span>, <span class="dv">1</span>)</span></code></pre></div>
+<pre><code>## 0.75 with absolute error &lt; 8.3e-15</code></pre>
+</div>
+<div id="实例和小测验" class="section level2 hasAnchor" number="3.8">
+<h2><span class="header-section-number">3.8</span> 实例和小测验<a href="r的基础和特征.html#实例和小测验" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div class="sourceCode" id="cb174"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb174-1"><a href="r的基础和特征.html#cb174-1" tabindex="-1"></a><span class="co"># data_exp = as_tibble(data_train_merged[1:100, ])</span></span>
+<span id="cb174-2"><a href="r的基础和特征.html#cb174-2" tabindex="-1"></a><span class="co"># saveRDS(data_exp, &quot;示例数据.Rds&quot;)</span></span>
+<span id="cb174-3"><a href="r的基础和特征.html#cb174-3" tabindex="-1"></a>data_task <span class="ot">=</span> <span class="fu">readRDS</span>(<span class="st">&quot;示例及任务</span><span class="sc">\\</span><span class="st">data</span><span class="sc">\\</span><span class="st">示例数据.Rds&quot;</span>)</span>
+<span id="cb174-4"><a href="r的基础和特征.html#cb174-4" tabindex="-1"></a>data_task</span></code></pre></div>
+<pre><code>## # A tibble: 100 × 14
+##    A6    A5    A4    A3    A2    A1    G6    G5    G4    G3    G2    G1   
+##    &lt;fct&gt; &lt;fct&gt; &lt;fct&gt; &lt;fct&gt; &lt;fct&gt; &lt;fct&gt; &lt;fct&gt; &lt;fct&gt; &lt;fct&gt; &lt;fct&gt; &lt;fct&gt; &lt;fct&gt;
+##  1 R     A     Q     L     S     Q     X     A     X     L     S     X    
+##  2 A     A     Q     L     S     Q     A     A     X     L     S     X    
+##  3 C     A     Q     L     S     Q     S     A     X     L     S     X    
+##  4 D     A     Q     L     S     Q     N     A     X     L     S     X    
+##  5 E     A     Q     L     S     Q     X     A     X     L     S     X    
+##  6 F     A     Q     L     S     Q     F     A     X     L     S     X    
+##  7 G     A     Q     L     S     Q     G     A     X     L     S     X    
+##  8 H     A     Q     L     S     Q     S     A     X     L     S     X    
+##  9 I     A     Q     L     S     Q     I     A     X     L     S     X    
+## 10 K     A     Q     L     S     Q     X     A     X     L     S     X    
+## # ℹ 90 more rows
+## # ℹ 2 more variables: Activity &lt;dbl&gt;, Selectivity &lt;dbl&gt;</code></pre>
+<div class="sourceCode" id="cb176"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb176-1"><a href="r的基础和特征.html#cb176-1" tabindex="-1"></a>generator_1 <span class="ot">=</span> <span class="cf">function</span>(sample_space, num) {</span>
+<span id="cb176-2"><a href="r的基础和特征.html#cb176-2" tabindex="-1"></a>  </span>
+<span id="cb176-3"><a href="r的基础和特征.html#cb176-3" tabindex="-1"></a>  <span class="co"># 计算类别A中每个种类的构成</span></span>
+<span id="cb176-4"><a href="r的基础和特征.html#cb176-4" tabindex="-1"></a>  sample_list_1 <span class="ot">=</span> sample_space <span class="sc">%&gt;%</span> </span>
+<span id="cb176-5"><a href="r的基础和特征.html#cb176-5" tabindex="-1"></a>    <span class="fu">select</span>(<span class="fu">matches</span>(<span class="st">&quot;A&quot;</span>), <span class="sc">-</span>Activity) <span class="sc">%&gt;%</span> </span>
+<span id="cb176-6"><a href="r的基础和特征.html#cb176-6" tabindex="-1"></a>    <span class="fu">lapply</span>(\(vec) <span class="fu">table</span>(vec)<span class="sc">/</span><span class="fu">length</span>(vec))</span>
+<span id="cb176-7"><a href="r的基础和特征.html#cb176-7" tabindex="-1"></a>  </span>
+<span id="cb176-8"><a href="r的基础和特征.html#cb176-8" tabindex="-1"></a>  <span class="co"># 计算类别G中每个种类的构成</span></span>
+<span id="cb176-9"><a href="r的基础和特征.html#cb176-9" tabindex="-1"></a>  sample_list_2 <span class="ot">=</span> sample_space <span class="sc">%&gt;%</span> </span>
+<span id="cb176-10"><a href="r的基础和特征.html#cb176-10" tabindex="-1"></a>    <span class="fu">select</span>(<span class="fu">matches</span>(<span class="st">&quot;G&quot;</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb176-11"><a href="r的基础和特征.html#cb176-11" tabindex="-1"></a>    <span class="fu">lapply</span>(\(vec) <span class="fu">table</span>(vec)<span class="sc">/</span><span class="fu">length</span>(vec)) </span>
+<span id="cb176-12"><a href="r的基础和特征.html#cb176-12" tabindex="-1"></a>  </span>
+<span id="cb176-13"><a href="r的基础和特征.html#cb176-13" tabindex="-1"></a>  <span class="co"># 采用递归方法连接字符串</span></span>
+<span id="cb176-14"><a href="r的基础和特征.html#cb176-14" tabindex="-1"></a>  seq1 <span class="ot">=</span> <span class="fu">Reduce</span>(paste0, <span class="fu">lapply</span>(sample_list_1, \(.x) <span class="fu">sample</span>(<span class="fu">names</span>(.x), num, T, .x)))</span>
+<span id="cb176-15"><a href="r的基础和特征.html#cb176-15" tabindex="-1"></a>  seq2 <span class="ot">=</span> <span class="fu">Reduce</span>(paste0, <span class="fu">lapply</span>(sample_list_2, \(.x) <span class="fu">sample</span>(<span class="fu">names</span>(.x), num, T, .x)))</span>
+<span id="cb176-16"><a href="r的基础和特征.html#cb176-16" tabindex="-1"></a>  </span>
+<span id="cb176-17"><a href="r的基础和特征.html#cb176-17" tabindex="-1"></a>  <span class="fu">list</span>(<span class="at">Sequence1 =</span> seq1, <span class="at">Sequnce2 =</span> seq2)</span>
+<span id="cb176-18"><a href="r的基础和特征.html#cb176-18" tabindex="-1"></a>  </span>
+<span id="cb176-19"><a href="r的基础和特征.html#cb176-19" tabindex="-1"></a>}</span>
+<span id="cb176-20"><a href="r的基础和特征.html#cb176-20" tabindex="-1"></a></span>
+<span id="cb176-21"><a href="r的基础和特征.html#cb176-21" tabindex="-1"></a><span class="fu">generator_1</span>(data_task, <span class="dv">100</span>)</span></code></pre></div>
+<pre><code>## $Sequence1
+##   [1] &quot;RAWLSV&quot; &quot;IYQLSQ&quot; &quot;KASLSQ&quot; &quot;NAQLSQ&quot; &quot;RAQLSQ&quot; &quot;RAQLSQ&quot; &quot;RAQLSQ&quot; &quot;RRQLSQ&quot;
+##   [9] &quot;RAQLSS&quot; &quot;RAQLSQ&quot; &quot;RAQLSQ&quot; &quot;RAQLST&quot; &quot;RAQLRQ&quot; &quot;RAQLSK&quot; &quot;RAQLSQ&quot; &quot;EAQLSQ&quot;
+##  [17] &quot;RAALFQ&quot; &quot;RVQLSQ&quot; &quot;RAQLSQ&quot; &quot;RTSKLV&quot; &quot;RAQLSQ&quot; &quot;KAQLSQ&quot; &quot;RAQLSQ&quot; &quot;RAQQSQ&quot;
+##  [25] &quot;RALLSQ&quot; &quot;RATLSQ&quot; &quot;RAQLSQ&quot; &quot;RAQLSQ&quot; &quot;SAQLSQ&quot; &quot;RAQLWS&quot; &quot;RTQWSQ&quot; &quot;TAQLSQ&quot;
+##  [33] &quot;RALLSD&quot; &quot;RAQLSQ&quot; &quot;RAQTSQ&quot; &quot;RAQLSQ&quot; &quot;RAQLSQ&quot; &quot;VAQLSE&quot; &quot;RAQLHQ&quot; &quot;RAFLSQ&quot;
+##  [41] &quot;RAPISQ&quot; &quot;RAQLSQ&quot; &quot;RAQLPK&quot; &quot;RAQLDD&quot; &quot;RAQLSQ&quot; &quot;RAWLSQ&quot; &quot;RAQLKQ&quot; &quot;RAQLST&quot;
+##  [49] &quot;RAQLSV&quot; &quot;GAQLSQ&quot; &quot;RAQLSE&quot; &quot;RAQLSQ&quot; &quot;RAVLSQ&quot; &quot;RAQWSQ&quot; &quot;RAQLSQ&quot; &quot;RAQLDQ&quot;
+##  [57] &quot;QLQLSQ&quot; &quot;RAQTSQ&quot; &quot;RLQRSQ&quot; &quot;RAQIYQ&quot; &quot;RGQLSQ&quot; &quot;RAELSQ&quot; &quot;RRALTQ&quot; &quot;RAQLSQ&quot;
+##  [65] &quot;TAQWSQ&quot; &quot;RAQLSP&quot; &quot;RAQLNH&quot; &quot;RAQLSQ&quot; &quot;RAQLSQ&quot; &quot;RNQASQ&quot; &quot;RAQLSQ&quot; &quot;RAQLST&quot;
+##  [73] &quot;RAQLQQ&quot; &quot;RAQLSQ&quot; &quot;RAQLRQ&quot; &quot;RMQLSQ&quot; &quot;AAQPSQ&quot; &quot;RAQLSQ&quot; &quot;RAQLSQ&quot; &quot;RAQFSQ&quot;
+##  [81] &quot;RAQLSQ&quot; &quot;RAQLQQ&quot; &quot;LAQWVW&quot; &quot;RSQLSQ&quot; &quot;RAQLKQ&quot; &quot;RAQLSQ&quot; &quot;RAQLSQ&quot; &quot;PAFLSH&quot;
+##  [89] &quot;WAQLEQ&quot; &quot;RASLSQ&quot; &quot;RAQVSQ&quot; &quot;RAQLFT&quot; &quot;RAQLSQ&quot; &quot;RAQLSQ&quot; &quot;RAQKSQ&quot; &quot;YAQLSQ&quot;
+##  [97] &quot;GNQLSQ&quot; &quot;RAQLLQ&quot; &quot;RAQLSK&quot; &quot;RAQLSQ&quot;
+## 
+## $Sequnce2
+##   [1] &quot;SAXLSX&quot; &quot;XAXPGX&quot; &quot;XAXLSN&quot; &quot;GANLSX&quot; &quot;XAXLSX&quot; &quot;XAXLSX&quot; &quot;XAXLSX&quot; &quot;XAALSX&quot;
+##   [9] &quot;XAXLSX&quot; &quot;SASPFX&quot; &quot;SAXLSS&quot; &quot;XAXLSX&quot; &quot;XAXLSX&quot; &quot;NAXSSX&quot; &quot;XAXLSX&quot; &quot;XAXSSX&quot;
+##  [17] &quot;XAXLSX&quot; &quot;XAXLSF&quot; &quot;XSXLSX&quot; &quot;NGXLSX&quot; &quot;NAXLSX&quot; &quot;XAXLSS&quot; &quot;XAXLSX&quot; &quot;XAXLFX&quot;
+##  [25] &quot;NAGLSI&quot; &quot;SAXLSX&quot; &quot;XAXLSX&quot; &quot;XAXLXX&quot; &quot;XASLSX&quot; &quot;XAXLSX&quot; &quot;XAXLFX&quot; &quot;XAXLNX&quot;
+##  [33] &quot;XAXLLX&quot; &quot;XAXLNX&quot; &quot;XAXLSX&quot; &quot;FAXLSX&quot; &quot;XAXLSN&quot; &quot;AAXLSN&quot; &quot;XAXLSX&quot; &quot;XAXLSS&quot;
+##  [41] &quot;XASLSX&quot; &quot;XAXLSX&quot; &quot;XAXLSX&quot; &quot;XAFLSX&quot; &quot;SAXLSX&quot; &quot;XAXLSX&quot; &quot;XXXLNX&quot; &quot;FAXLFX&quot;
+##  [49] &quot;XAXXSX&quot; &quot;XAXLSI&quot; &quot;XAXASX&quot; &quot;IAXLSX&quot; &quot;XAXLSX&quot; &quot;XAXLSS&quot; &quot;XAXLSX&quot; &quot;XAXLSA&quot;
+##  [57] &quot;XAXLSX&quot; &quot;XAXLSX&quot; &quot;XAXISX&quot; &quot;XAXLSX&quot; &quot;XAXLSX&quot; &quot;ALPLSX&quot; &quot;XAXLAX&quot; &quot;XAXLSX&quot;
+##  [65] &quot;XAXLSX&quot; &quot;XAXLSX&quot; &quot;FFXLSX&quot; &quot;XAXLSX&quot; &quot;XAXLSX&quot; &quot;XAXLSX&quot; &quot;XAXSSX&quot; &quot;XAXLSX&quot;
+##  [73] &quot;XAXFSX&quot; &quot;XAXLSX&quot; &quot;XLXLSX&quot; &quot;SNXLSX&quot; &quot;XAXLSX&quot; &quot;XAXLSX&quot; &quot;XAXFSX&quot; &quot;XXXLXX&quot;
+##  [81] &quot;XAXLSX&quot; &quot;XAXISX&quot; &quot;SAGLNX&quot; &quot;XAXLSX&quot; &quot;XAXXSX&quot; &quot;XAXLSX&quot; &quot;XAIXSX&quot; &quot;XAXLXX&quot;
+##  [89] &quot;XAXLSX&quot; &quot;XAXLSI&quot; &quot;XAXLSX&quot; &quot;XAXSSG&quot; &quot;XAXLSX&quot; &quot;XAXLSX&quot; &quot;GANLSX&quot; &quot;XAXXSX&quot;
+##  [97] &quot;SAXLSX&quot; &quot;XAXLSX&quot; &quot;XAXLSX&quot; &quot;XAXLSX&quot;</code></pre>
+<p>为什么1能运行2运行不了呢？</p>
+<div class="sourceCode" id="cb178"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb178-1"><a href="r的基础和特征.html#cb178-1" tabindex="-1"></a>generator_2 <span class="ot">=</span> <span class="cf">function</span>(sample_space, num) {</span>
+<span id="cb178-2"><a href="r的基础和特征.html#cb178-2" tabindex="-1"></a>  </span>
+<span id="cb178-3"><a href="r的基础和特征.html#cb178-3" tabindex="-1"></a>  <span class="co"># 计算类别A中每个种类的构成</span></span>
+<span id="cb178-4"><a href="r的基础和特征.html#cb178-4" tabindex="-1"></a>  sample_list_1 <span class="ot">=</span> sample_space <span class="sc">%&gt;%</span> </span>
+<span id="cb178-5"><a href="r的基础和特征.html#cb178-5" tabindex="-1"></a>    <span class="fu">select</span>(<span class="fu">matches</span>(<span class="st">&quot;A&quot;</span>), <span class="sc">-</span>Activity) <span class="sc">%&gt;%</span> </span>
+<span id="cb178-6"><a href="r的基础和特征.html#cb178-6" tabindex="-1"></a>    <span class="fu">apply</span>(<span class="dv">2</span>, \(vec) <span class="fu">table</span>(vec)<span class="sc">/</span><span class="fu">length</span>(vec))</span>
+<span id="cb178-7"><a href="r的基础和特征.html#cb178-7" tabindex="-1"></a>  </span>
+<span id="cb178-8"><a href="r的基础和特征.html#cb178-8" tabindex="-1"></a>  <span class="co"># 计算类别G中每个种类的构成</span></span>
+<span id="cb178-9"><a href="r的基础和特征.html#cb178-9" tabindex="-1"></a>  sample_list_2 <span class="ot">=</span> sample_space <span class="sc">%&gt;%</span> </span>
+<span id="cb178-10"><a href="r的基础和特征.html#cb178-10" tabindex="-1"></a>    <span class="fu">select</span>(<span class="fu">matches</span>(<span class="st">&quot;G&quot;</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb178-11"><a href="r的基础和特征.html#cb178-11" tabindex="-1"></a>    <span class="fu">apply</span>(<span class="dv">2</span>, \(vec) <span class="fu">table</span>(vec)<span class="sc">/</span><span class="fu">length</span>(vec)) </span>
+<span id="cb178-12"><a href="r的基础和特征.html#cb178-12" tabindex="-1"></a>  </span>
+<span id="cb178-13"><a href="r的基础和特征.html#cb178-13" tabindex="-1"></a>  <span class="co"># 采用递归方法连接字符串</span></span>
+<span id="cb178-14"><a href="r的基础和特征.html#cb178-14" tabindex="-1"></a>  seq1 <span class="ot">=</span> <span class="fu">Reduce</span>(paste0, <span class="fu">lapply</span>(sample_list_1, \(.x) <span class="fu">sample</span>(<span class="fu">names</span>(.x), num, T, .x)))</span>
+<span id="cb178-15"><a href="r的基础和特征.html#cb178-15" tabindex="-1"></a>  seq2 <span class="ot">=</span> <span class="fu">Reduce</span>(paste0, <span class="fu">lapply</span>(sample_list_2, \(.x) <span class="fu">sample</span>(<span class="fu">names</span>(.x), num, T, .x)))</span>
+<span id="cb178-16"><a href="r的基础和特征.html#cb178-16" tabindex="-1"></a>  </span>
+<span id="cb178-17"><a href="r的基础和特征.html#cb178-17" tabindex="-1"></a>  <span class="fu">list</span>(<span class="at">Sequence1 =</span> seq1, <span class="at">Sequnce2 =</span> seq2)</span>
+<span id="cb178-18"><a href="r的基础和特征.html#cb178-18" tabindex="-1"></a>  </span>
+<span id="cb178-19"><a href="r的基础和特征.html#cb178-19" tabindex="-1"></a>}</span>
+<span id="cb178-20"><a href="r的基础和特征.html#cb178-20" tabindex="-1"></a></span>
+<span id="cb178-21"><a href="r的基础和特征.html#cb178-21" tabindex="-1"></a><span class="fu">generator_2</span>(data_task, <span class="dv">100</span>)</span></code></pre></div>
+
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="用tidyr读写操作文件.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="字符串操作和r进阶.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": true,
+"facebook": false,
+"twitter": false,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"whatsapp": false,
+"all": {}
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": ["CBook.pdf"],
+"search": {
+"engine": "fuse",
+"options": null
+},
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

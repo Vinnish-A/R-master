@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>11 puzzle2：初试假设检验 | R语言高手计划</title>
+  <meta name="description" content="Med-X社员手册" />
+  <meta name="generator" content="bookdown 0.36 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="11 puzzle2：初试假设检验 | R语言高手计划" />
+  <meta property="og:type" content="book" />
+  
+  <meta property="og:description" content="Med-X社员手册" />
+  <meta name="github-repo" content="Vinnish-A/R-master" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="11 puzzle2：初试假设检验 | R语言高手计划" />
+  
+  <meta name="twitter:description" content="Med-X社员手册" />
+  
+
+<meta name="author" content="Vinnish 普尔弥什" />
+
+
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="puzzle1展开折叠数据.html"/>
+
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+<script src="libs/htmlwidgets-1.6.3/htmlwidgets.js"></script>
+<link href="libs/datatables-css-0.0.0/datatables-crosstalk.css" rel="stylesheet" />
+<script src="libs/datatables-binding-0.30/datatables.js"></script>
+<link href="libs/dt-core-1.13.4/css/jquery.dataTables.min.css" rel="stylesheet" />
+<link href="libs/dt-core-1.13.4/css/jquery.dataTables.extra.css" rel="stylesheet" />
+<script src="libs/dt-core-1.13.4/js/jquery.dataTables.min.js"></script>
+<link href="libs/crosstalk-1.2.1/css/crosstalk.min.css" rel="stylesheet" />
+<script src="libs/crosstalk-1.2.1/js/crosstalk.min.js"></script>
+<link rel="stylesheet" type="text/css" href="style.css">
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-EHGBT6KMPG"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-EHGBT6KMPG');
+</script>
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  jax: ["input/TeX","output/SVG"],
+  extensions: ["tex2jax.js","MathMenu.js","MathZoom.js"],
+  TeX: {
+    extensions: ["AMSmath.js","AMSsymbols.js","noErrors.js","noUndefined.js"]
+  }
+});
+</script>
+<script type="text/javascript"
+   src="../../../MathJax/MathJax.js">
+</script>
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<style type="text/css">
+  
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+</style>
+<style type="text/css">
+/* Used with Pandoc 2.11+ new --citeproc when CSL is used */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> 预备</a>
+<ul>
+<li class="chapter" data-level="1.1" data-path="index.html"><a href="index.html#工作环境"><i class="fa fa-check"></i><b>1.1</b> 工作环境</a></li>
+<li class="chapter" data-level="1.2" data-path="index.html"><a href="index.html#使用project管理项目"><i class="fa fa-check"></i><b>1.2</b> 使用project管理项目</a></li>
+<li class="chapter" data-level="1.3" data-path="index.html"><a href="index.html#第一周"><i class="fa fa-check"></i><b>1.3</b> 第一周</a>
+<ul>
+<li class="chapter" data-level="1.3.1" data-path="index.html"><a href="index.html#目标"><i class="fa fa-check"></i><b>1.3.1</b> 目标</a></li>
+<li class="chapter" data-level="1.3.2" data-path="index.html"><a href="index.html#示例及任务"><i class="fa fa-check"></i><b>1.3.2</b> 示例及任务</a></li>
+</ul></li>
+<li class="chapter" data-level="1.4" data-path="index.html"><a href="index.html#第二周"><i class="fa fa-check"></i><b>1.4</b> 第二周</a>
+<ul>
+<li class="chapter" data-level="1.4.1" data-path="index.html"><a href="index.html#目标-1"><i class="fa fa-check"></i><b>1.4.1</b> 目标</a></li>
+<li class="chapter" data-level="1.4.2" data-path="index.html"><a href="index.html#示例及任务-1"><i class="fa fa-check"></i><b>1.4.2</b> 示例及任务</a></li>
+</ul></li>
+<li class="chapter" data-level="1.5" data-path="index.html"><a href="index.html#第三周"><i class="fa fa-check"></i><b>1.5</b> 第三周</a>
+<ul>
+<li class="chapter" data-level="1.5.1" data-path="index.html"><a href="index.html#目标-2"><i class="fa fa-check"></i><b>1.5.1</b> 目标</a></li>
+<li class="chapter" data-level="1.5.2" data-path="index.html"><a href="index.html#示例及任务-2"><i class="fa fa-check"></i><b>1.5.2</b> 示例及任务</a></li>
+</ul></li>
+<li class="chapter" data-level="1.6" data-path="index.html"><a href="index.html#第四周"><i class="fa fa-check"></i><b>1.6</b> 第四周</a>
+<ul>
+<li class="chapter" data-level="1.6.1" data-path="index.html"><a href="index.html#目标-3"><i class="fa fa-check"></i><b>1.6.1</b> 目标</a></li>
+<li class="chapter" data-level="1.6.2" data-path="index.html"><a href="index.html#示例及任务-3"><i class="fa fa-check"></i><b>1.6.2</b> 示例及任务</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="用tidyr读写操作文件.html"><a href="用tidyr读写操作文件.html"><i class="fa fa-check"></i><b>2</b> 用tidyr读写、操作文件</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="用tidyr读写操作文件.html"><a href="用tidyr读写操作文件.html#使用内置数据集iris"><i class="fa fa-check"></i><b>2.1</b> 使用内置数据集iris</a></li>
+<li class="chapter" data-level="2.2" data-path="用tidyr读写操作文件.html"><a href="用tidyr读写操作文件.html#的使用"><i class="fa fa-check"></i><b>2.2</b> %&gt;% 的使用</a></li>
+<li class="chapter" data-level="2.3" data-path="用tidyr读写操作文件.html"><a href="用tidyr读写操作文件.html#select的使用"><i class="fa fa-check"></i><b>2.3</b> select的使用</a></li>
+<li class="chapter" data-level="2.4" data-path="用tidyr读写操作文件.html"><a href="用tidyr读写操作文件.html#mutate的使用"><i class="fa fa-check"></i><b>2.4</b> mutate的使用</a></li>
+<li class="chapter" data-level="2.5" data-path="用tidyr读写操作文件.html"><a href="用tidyr读写操作文件.html#group_by-summarise"><i class="fa fa-check"></i><b>2.5</b> group_by + summarise</a></li>
+<li class="chapter" data-level="2.6" data-path="用tidyr读写操作文件.html"><a href="用tidyr读写操作文件.html#检验环节"><i class="fa fa-check"></i><b>2.6</b> 检验环节</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="r的基础和特征.html"><a href="r的基础和特征.html"><i class="fa fa-check"></i><b>3</b> R的基础和特征</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="r的基础和特征.html"><a href="r的基础和特征.html#r中的数据结构"><i class="fa fa-check"></i><b>3.1</b> R中的数据结构</a></li>
+<li class="chapter" data-level="3.2" data-path="r的基础和特征.html"><a href="r的基础和特征.html#向量化"><i class="fa fa-check"></i><b>3.2</b> 向量化</a></li>
+<li class="chapter" data-level="3.3" data-path="r的基础和特征.html"><a href="r的基础和特征.html#for循环"><i class="fa fa-check"></i><b>3.3</b> for循环</a></li>
+<li class="chapter" data-level="3.4" data-path="r的基础和特征.html"><a href="r的基础和特征.html#for的向量化"><i class="fa fa-check"></i><b>3.4</b> for的向量化</a></li>
+<li class="chapter" data-level="3.5" data-path="r的基础和特征.html"><a href="r的基础和特征.html#标准化"><i class="fa fa-check"></i><b>3.5</b> 标准化</a></li>
+<li class="chapter" data-level="3.6" data-path="r的基础和特征.html"><a href="r的基础和特征.html#求单个变量和其它变量的相关性"><i class="fa fa-check"></i><b>3.6</b> 求单个变量和其它变量的相关性</a></li>
+<li class="chapter" data-level="3.7" data-path="r的基础和特征.html"><a href="r的基础和特征.html#函数式编程"><i class="fa fa-check"></i><b>3.7</b> 函数式编程</a></li>
+<li class="chapter" data-level="3.8" data-path="r的基础和特征.html"><a href="r的基础和特征.html#实例和小测验"><i class="fa fa-check"></i><b>3.8</b> 实例和小测验</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="字符串操作和r进阶.html"><a href="字符串操作和r进阶.html"><i class="fa fa-check"></i><b>4</b> 字符串操作和R进阶</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="字符串操作和r进阶.html"><a href="字符串操作和r进阶.html#提纲"><i class="fa fa-check"></i><b>4.1</b> 提纲</a>
+<ul>
+<li class="chapter" data-level="4.1.1" data-path="字符串操作和r进阶.html"><a href="字符串操作和r进阶.html#变量掩蔽"><i class="fa fa-check"></i><b>4.1.1</b> 变量掩蔽</a></li>
+<li class="chapter" data-level="4.1.2" data-path="字符串操作和r进阶.html"><a href="字符串操作和r进阶.html#字符串操作"><i class="fa fa-check"></i><b>4.1.2</b> 字符串操作</a></li>
+<li class="chapter" data-level="4.1.3" data-path="字符串操作和r进阶.html"><a href="字符串操作和r进阶.html#grep"><i class="fa fa-check"></i><b>4.1.3</b> grep</a></li>
+<li class="chapter" data-level="4.1.4" data-path="字符串操作和r进阶.html"><a href="字符串操作和r进阶.html#substr"><i class="fa fa-check"></i><b>4.1.4</b> substr</a></li>
+<li class="chapter" data-level="4.1.5" data-path="字符串操作和r进阶.html"><a href="字符串操作和r进阶.html#正则表达式与str_extract"><i class="fa fa-check"></i><b>4.1.5</b> 正则表达式与str_extract</a></li>
+<li class="chapter" data-level="4.1.6" data-path="字符串操作和r进阶.html"><a href="字符串操作和r进阶.html#str_subset"><i class="fa fa-check"></i><b>4.1.6</b> str_subset</a></li>
+<li class="chapter" data-level="4.1.7" data-path="字符串操作和r进阶.html"><a href="字符串操作和r进阶.html#str_split"><i class="fa fa-check"></i><b>4.1.7</b> str_split</a></li>
+</ul></li>
+<li class="chapter" data-level="4.2" data-path="字符串操作和r进阶.html"><a href="字符串操作和r进阶.html#实战"><i class="fa fa-check"></i><b>4.2</b> 实战</a>
+<ul>
+<li class="chapter" data-level="4.2.1" data-path="字符串操作和r进阶.html"><a href="字符串操作和r进阶.html#向量化-1"><i class="fa fa-check"></i><b>4.2.1</b> 1. 向量化</a></li>
+<li class="chapter" data-level="4.2.2" data-path="字符串操作和r进阶.html"><a href="字符串操作和r进阶.html#tibble的nested-tibble性质"><i class="fa fa-check"></i><b>4.2.2</b> 2. tibble的nested tibble性质</a></li>
+<li class="chapter" data-level="4.2.3" data-path="字符串操作和r进阶.html"><a href="字符串操作和r进阶.html#dataframe操作"><i class="fa fa-check"></i><b>4.2.3</b> 3. dataframe操作</a></li>
+<li class="chapter" data-level="4.2.4" data-path="字符串操作和r进阶.html"><a href="字符串操作和r进阶.html#循环"><i class="fa fa-check"></i><b>4.2.4</b> 4. 循环</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="初探mlr3.html"><a href="初探mlr3.html"><i class="fa fa-check"></i><b>5</b> 初探mlr3</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="初探mlr3.html"><a href="初探mlr3.html#mlr3中使用po进行特征工程"><i class="fa fa-check"></i><b>5.1</b> mlr3中使用po()进行特征工程</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="二分类和多分类问题.html"><a href="二分类和多分类问题.html"><i class="fa fa-check"></i><b>6</b> 二分类和多分类问题</a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="二分类和多分类问题.html"><a href="二分类和多分类问题.html#二分类"><i class="fa fa-check"></i><b>6.1</b> 二分类</a></li>
+<li class="chapter" data-level="6.2" data-path="二分类和多分类问题.html"><a href="二分类和多分类问题.html#hardmax"><i class="fa fa-check"></i><b>6.2</b> hardmax</a></li>
+<li class="chapter" data-level="6.3" data-path="二分类和多分类问题.html"><a href="二分类和多分类问题.html#softmax"><i class="fa fa-check"></i><b>6.3</b> softmax</a></li>
+<li class="chapter" data-level="6.4" data-path="二分类和多分类问题.html"><a href="二分类和多分类问题.html#多分类的损失函数"><i class="fa fa-check"></i><b>6.4</b> 多分类的损失函数</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="特征工程交叉验证和超参数调优.html"><a href="特征工程交叉验证和超参数调优.html"><i class="fa fa-check"></i><b>7</b> 特征工程、交叉验证和超参数调优</a>
+<ul>
+<li class="chapter" data-level="7.1" data-path="特征工程交叉验证和超参数调优.html"><a href="特征工程交叉验证和超参数调优.html#特征工程"><i class="fa fa-check"></i><b>7.1</b> 特征工程</a>
+<ul>
+<li class="chapter" data-level="7.1.1" data-path="特征工程交叉验证和超参数调优.html"><a href="特征工程交叉验证和超参数调优.html#读入数据"><i class="fa fa-check"></i><b>7.1.1</b> 读入数据</a></li>
+<li class="chapter" data-level="7.1.2" data-path="特征工程交叉验证和超参数调优.html"><a href="特征工程交叉验证和超参数调优.html#创建任务"><i class="fa fa-check"></i><b>7.1.2</b> 创建任务</a></li>
+</ul></li>
+<li class="chapter" data-level="7.2" data-path="特征工程交叉验证和超参数调优.html"><a href="特征工程交叉验证和超参数调优.html#超参数调优"><i class="fa fa-check"></i><b>7.2</b> 超参数调优</a>
+<ul>
+<li class="chapter" data-level="7.2.1" data-path="特征工程交叉验证和超参数调优.html"><a href="特征工程交叉验证和超参数调优.html#mlr3实现"><i class="fa fa-check"></i><b>7.2.1</b> mlr3实现</a></li>
+<li class="chapter" data-level="7.2.2" data-path="特征工程交叉验证和超参数调优.html"><a href="特征工程交叉验证和超参数调优.html#使用注意"><i class="fa fa-check"></i><b>7.2.2</b> 使用注意</a></li>
+</ul></li>
+<li class="chapter" data-level="7.3" data-path="特征工程交叉验证和超参数调优.html"><a href="特征工程交叉验证和超参数调优.html#交叉验证"><i class="fa fa-check"></i><b>7.3</b> 交叉验证</a>
+<ul>
+<li class="chapter" data-level="7.3.1" data-path="特征工程交叉验证和超参数调优.html"><a href="特征工程交叉验证和超参数调优.html#模型堆叠"><i class="fa fa-check"></i><b>7.3.1</b> 模型堆叠</a></li>
+<li class="chapter" data-level="7.3.2" data-path="特征工程交叉验证和超参数调优.html"><a href="特征工程交叉验证和超参数调优.html#交叉验证失效怎么办"><i class="fa fa-check"></i><b>7.3.2</b> 交叉验证失效怎么办？</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="理解机器学习里数据不均衡.html"><a href="理解机器学习里数据不均衡.html"><i class="fa fa-check"></i><b>8</b> 理解机器学习里数据不均衡</a>
+<ul>
+<li class="chapter" data-level="8.1" data-path="理解机器学习里数据不均衡.html"><a href="理解机器学习里数据不均衡.html#data_prepare"><i class="fa fa-check"></i><b>8.1</b> data_prepare</a></li>
+<li class="chapter" data-level="8.2" data-path="理解机器学习里数据不均衡.html"><a href="理解机器学习里数据不均衡.html#model"><i class="fa fa-check"></i><b>8.2</b> model</a>
+<ul>
+<li class="chapter" data-level="8.2.1" data-path="理解机器学习里数据不均衡.html"><a href="理解机器学习里数据不均衡.html#数据均衡的模型"><i class="fa fa-check"></i><b>8.2.1</b> 数据均衡的模型</a></li>
+<li class="chapter" data-level="8.2.2" data-path="理解机器学习里数据不均衡.html"><a href="理解机器学习里数据不均衡.html#数据不均衡的模型"><i class="fa fa-check"></i><b>8.2.2</b> 数据不均衡的模型</a></li>
+<li class="chapter" data-level="8.2.3" data-path="理解机器学习里数据不均衡.html"><a href="理解机器学习里数据不均衡.html#训练集上后处理准确率的模型"><i class="fa fa-check"></i><b>8.2.3</b> 训练集上后处理准确率的模型</a></li>
+<li class="chapter" data-level="8.2.4" data-path="理解机器学习里数据不均衡.html"><a href="理解机器学习里数据不均衡.html#测试集上后处理准确率"><i class="fa fa-check"></i><b>8.2.4</b> 测试集上后处理准确率</a></li>
+<li class="chapter" data-level="8.2.5" data-path="理解机器学习里数据不均衡.html"><a href="理解机器学习里数据不均衡.html#过采样的模型"><i class="fa fa-check"></i><b>8.2.5</b> 过采样的模型</a></li>
+<li class="chapter" data-level="8.2.6" data-path="理解机器学习里数据不均衡.html"><a href="理解机器学习里数据不均衡.html#欠采样的模型"><i class="fa fa-check"></i><b>8.2.6</b> 欠采样的模型</a></li>
+<li class="chapter" data-level="8.2.7" data-path="理解机器学习里数据不均衡.html"><a href="理解机器学习里数据不均衡.html#添加权重的模型"><i class="fa fa-check"></i><b>8.2.7</b> 添加权重的模型</a></li>
+</ul></li>
+<li class="chapter" data-level="8.3" data-path="理解机器学习里数据不均衡.html"><a href="理解机器学习里数据不均衡.html#rough-edged"><i class="fa fa-check"></i><b>8.3</b> rough edged</a></li>
+</ul></li>
+<li class="chapter" data-level="9" data-path="rmarkdown中插入文献和修改引用样式.html"><a href="rmarkdown中插入文献和修改引用样式.html"><i class="fa fa-check"></i><b>9</b> （R）markdown中插入文献和修改引用样式</a>
+<ul>
+<li class="chapter" data-level="9.1" data-path="rmarkdown中插入文献和修改引用样式.html"><a href="rmarkdown中插入文献和修改引用样式.html#rmarkdown的组成"><i class="fa fa-check"></i><b>9.1</b> Rmarkdown的组成</a></li>
+<li class="chapter" data-level="9.2" data-path="rmarkdown中插入文献和修改引用样式.html"><a href="rmarkdown中插入文献和修改引用样式.html#插入参考文献"><i class="fa fa-check"></i><b>9.2</b> 插入参考文献</a></li>
+<li class="chapter" data-level="9.3" data-path="rmarkdown中插入文献和修改引用样式.html"><a href="rmarkdown中插入文献和修改引用样式.html#修改引用样式"><i class="fa fa-check"></i><b>9.3</b> 修改引用样式</a></li>
+<li class="chapter" data-level="9.4" data-path="rmarkdown中插入文献和修改引用样式.html"><a href="rmarkdown中插入文献和修改引用样式.html#其它技巧和问题"><i class="fa fa-check"></i><b>9.4</b> 其它技巧和问题</a>
+<ul>
+<li class="chapter" data-level="9.4.1" data-path="rmarkdown中插入文献和修改引用样式.html"><a href="rmarkdown中插入文献和修改引用样式.html#快捷键"><i class="fa fa-check"></i><b>9.4.1</b> 快捷键</a></li>
+<li class="chapter" data-level="9.4.2" data-path="rmarkdown中插入文献和修改引用样式.html"><a href="rmarkdown中插入文献和修改引用样式.html#引用多篇"><i class="fa fa-check"></i><b>9.4.2</b> 引用多篇</a></li>
+<li class="chapter" data-level="9.4.3" data-path="rmarkdown中插入文献和修改引用样式.html"><a href="rmarkdown中插入文献和修改引用样式.html#导出注意事项"><i class="fa fa-check"></i><b>9.4.3</b> 导出注意事项</a></li>
+</ul></li>
+<li class="chapter" data-level="9.5" data-path="rmarkdown中插入文献和修改引用样式.html"><a href="rmarkdown中插入文献和修改引用样式.html#参考文献"><i class="fa fa-check"></i><b>9.5</b> 参考文献</a></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="puzzle1展开折叠数据.html"><a href="puzzle1展开折叠数据.html"><i class="fa fa-check"></i><b>10</b> puzzle1：展开折叠数据</a>
+<ul>
+<li class="chapter" data-level="10.1" data-path="puzzle1展开折叠数据.html"><a href="puzzle1展开折叠数据.html#数据展开"><i class="fa fa-check"></i><b>10.1</b> 数据展开</a></li>
+<li class="chapter" data-level="10.2" data-path="puzzle1展开折叠数据.html"><a href="puzzle1展开折叠数据.html#模型建立"><i class="fa fa-check"></i><b>10.2</b> 模型建立</a></li>
+</ul></li>
+<li class="chapter" data-level="11" data-path="puzzle2初试假设检验.html"><a href="puzzle2初试假设检验.html"><i class="fa fa-check"></i><b>11</b> puzzle2：初试假设检验</a>
+<ul>
+<li class="chapter" data-level="11.1" data-path="puzzle2初试假设检验.html"><a href="puzzle2初试假设检验.html#示例"><i class="fa fa-check"></i><b>11.1</b> 示例</a>
+<ul>
+<li class="chapter" data-level="11.1.1" data-path="puzzle2初试假设检验.html"><a href="puzzle2初试假设检验.html#计算"><i class="fa fa-check"></i><b>11.1.1</b> 计算</a></li>
+</ul></li>
+<li class="chapter" data-level="11.2" data-path="puzzle2初试假设检验.html"><a href="puzzle2初试假设检验.html#题目"><i class="fa fa-check"></i><b>11.2</b> 题目</a></li>
+</ul></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">R语言高手计划</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="puzzle2初试假设检验" class="section level1 hasAnchor" number="11">
+<h1><span class="header-section-number">11</span> puzzle2：初试假设检验<a href="puzzle2初试假设检验.html#puzzle2初试假设检验" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<div id="示例" class="section level2 hasAnchor" number="11.1">
+<h2><span class="header-section-number">11.1</span> 示例<a href="puzzle2初试假设检验.html#示例" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>r中的rnorm函数可以生成若干符合正态分布的数。我们现生成100个总体均值未知（假装未知），总体方差为1的符合正态分布的数。但是先让我假设不知道这列数的总体参数是什么。</p>
+<div class="sourceCode" id="cb409"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb409-1"><a href="puzzle2初试假设检验.html#cb409-1" tabindex="-1"></a>x <span class="ot">=</span> <span class="dv">1</span></span>
+<span id="cb409-2"><a href="puzzle2初试假设检验.html#cb409-2" tabindex="-1"></a></span>
+<span id="cb409-3"><a href="puzzle2初试假设检验.html#cb409-3" tabindex="-1"></a>samples <span class="ot">=</span> <span class="fu">rnorm</span>(<span class="at">n =</span> <span class="dv">10000</span>, <span class="at">mean =</span> x, <span class="at">sd =</span> <span class="dv">1</span>)</span></code></pre></div>
+<p>假设这些数的总体均数均数不可能小于0，我们要检验这些数的总体均值是等于0还是大于0。</p>
+<p><span class="math display">\[
+原假设H_0: \mu = 0 \\
+备择假设H_1: \mu &gt; 0
+\]</span></p>
+<p>在<span class="math inline">\(\alpha = 0.05\)</span>的水准上：</p>
+<ol style="list-style-type: decimal">
+<li>能否拒绝<span class="math inline">\(H_0\)</span></li>
+<li>有多少的把握(power)能够拒绝<span class="math inline">\(H_0\)</span></li>
+</ol>
+<div id="计算" class="section level3 hasAnchor" number="11.1.1">
+<h3><span class="header-section-number">11.1.1</span> 计算<a href="puzzle2初试假设检验.html#计算" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>在原假设H0为真的情况下：</p>
+<p>样本服从总体均值<span class="math inline">\(\bar{\mu}\)</span>为0，总体方差<span class="math inline">\(\bar{\sigma}^2\)</span>为1的正态分布。依据中心极限定理，从总体中抽样的样本均值<span class="math inline">\(\hat{\mu}\)</span>服从</p>
+<p><span class="math display">\[
+\hat{\mu} \sim N(\bar{\mu}, \bar{\sigma}^2/n)
+\]</span></p>
+<div class="sourceCode" id="cb410"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb410-1"><a href="puzzle2初试假设检验.html#cb410-1" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="fu">tibble</span>(<span class="at">x =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="fl">1.2</span>, <span class="fl">1.2</span>)), <span class="fu">aes</span>(<span class="at">x =</span> x)) <span class="sc">+</span></span>
+<span id="cb410-2"><a href="puzzle2初试假设检验.html#cb410-2" tabindex="-1"></a>  <span class="fu">stat_function</span>(<span class="at">fun =</span> dnorm, <span class="at">args =</span> <span class="fu">list</span>(<span class="at">mean =</span> <span class="dv">0</span>, <span class="at">sd =</span> <span class="dv">1</span><span class="sc">/</span><span class="dv">10</span>), <span class="at">color =</span> <span class="st">&quot;firebrick&quot;</span>) <span class="sc">+</span></span>
+<span id="cb410-3"><a href="puzzle2初试假设检验.html#cb410-3" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">&quot;均值分布曲线&quot;</span>) <span class="sc">+</span></span>
+<span id="cb410-4"><a href="puzzle2初试假设检验.html#cb410-4" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
+<span id="cb410-5"><a href="puzzle2初试假设检验.html#cb410-5" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="fl">0.5</span>))</span></code></pre></div>
+<p><img src="puzzle2_files/figure-html/unnamed-chunk-2-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>在<span class="math inline">\(\alpha = 0.05\)</span>的水准上，拒绝域为0.95，可以用qnorm计算得给定概率0.95后的下分位点，对于标准正态分布来说是1.6448536，当样本均值<span class="math inline">\(\hat{\mu}\)</span>&gt;<span class="math inline">\(1.644 \times \bar{\sigma}/\sqrt{n}\)</span>时，认为可以拒绝<span class="math inline">\(H_0\)</span>。</p>
+<p>样本均值为0.9979786，大于0.01644，落在拒绝域</p>
+<div class="sourceCode" id="cb411"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb411-1"><a href="puzzle2初试假设检验.html#cb411-1" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="fu">tibble</span>(<span class="at">x =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="fl">1.2</span>, <span class="fl">1.2</span>)), <span class="fu">aes</span>(<span class="at">x =</span> x)) <span class="sc">+</span></span>
+<span id="cb411-2"><a href="puzzle2初试假设检验.html#cb411-2" tabindex="-1"></a>  <span class="fu">stat_function</span>(<span class="at">fun =</span> dnorm, <span class="at">args =</span> <span class="fu">list</span>(<span class="at">mean =</span> <span class="dv">0</span>, <span class="at">sd =</span> <span class="dv">1</span><span class="sc">/</span><span class="dv">10</span>), <span class="at">color =</span> <span class="st">&quot;firebrick&quot;</span>) <span class="sc">+</span> </span>
+<span id="cb411-3"><a href="puzzle2初试假设检验.html#cb411-3" tabindex="-1"></a>  <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> <span class="fu">mean</span>(samples), <span class="at">linetype =</span> <span class="dv">5</span>, <span class="at">color =</span> <span class="st">&quot;navy&quot;</span>) <span class="sc">+</span></span>
+<span id="cb411-4"><a href="puzzle2初试假设检验.html#cb411-4" tabindex="-1"></a>  <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> <span class="fu">qnorm</span>(<span class="fl">0.95</span>) <span class="sc">*</span> <span class="dv">1</span><span class="sc">/</span><span class="dv">10</span>, <span class="at">linetype =</span> <span class="dv">5</span>) <span class="sc">+</span></span>
+<span id="cb411-5"><a href="puzzle2初试假设检验.html#cb411-5" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">&quot;均值分布曲线&quot;</span>) <span class="sc">+</span></span>
+<span id="cb411-6"><a href="puzzle2初试假设检验.html#cb411-6" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
+<span id="cb411-7"><a href="puzzle2初试假设检验.html#cb411-7" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="fl">0.5</span>))</span></code></pre></div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:unnamed-chunk-3"></span>
+<img src="puzzle2_files/figure-html/unnamed-chunk-3-1.png" alt="α值就是黑色虚线后的曲线下面积" width="672" />
+<p class="caption">
+图9.3: α值就是黑色虚线后的曲线下面积
+</p>
+</div>
+<p>故在<span class="math inline">\(\alpha = 0.05\)</span>的水准上，能够拒绝<span class="math inline">\(H_0\)</span>。</p>
+<p>接下来我们计算β值。</p>
+<p>根据最大似然，样本均数最有可能服从总体均数为样本均数，标准差为1/10（由于总体方差已知）的正态分布。当<span class="math inline">\(\alpha = 0.05\)</span>时，拒绝域分位值为0.1644854。β值根据定义为犯二类错误，也就是假阴性的概率，所以可以为黑色虚线前的曲线下面积。</p>
+<div class="sourceCode" id="cb412"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb412-1"><a href="puzzle2初试假设检验.html#cb412-1" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="fu">tibble</span>(<span class="at">x =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">2</span>)), <span class="fu">aes</span>(<span class="at">x =</span> x)) <span class="sc">+</span></span>
+<span id="cb412-2"><a href="puzzle2初试假设检验.html#cb412-2" tabindex="-1"></a>  <span class="fu">stat_function</span>(<span class="at">fun =</span> dnorm, <span class="at">args =</span> <span class="fu">list</span>(<span class="at">mean =</span> <span class="fu">mean</span>(samples), <span class="at">sd =</span> <span class="dv">1</span><span class="sc">/</span><span class="dv">10</span>), <span class="at">color =</span> <span class="st">&quot;firebrick&quot;</span>) <span class="sc">+</span> </span>
+<span id="cb412-3"><a href="puzzle2初试假设检验.html#cb412-3" tabindex="-1"></a>  <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> <span class="fu">mean</span>(samples), <span class="at">linetype =</span> <span class="dv">5</span>, <span class="at">color =</span> <span class="st">&quot;navy&quot;</span>) <span class="sc">+</span></span>
+<span id="cb412-4"><a href="puzzle2初试假设检验.html#cb412-4" tabindex="-1"></a>  <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> <span class="fu">qnorm</span>(<span class="fl">0.95</span>) <span class="sc">*</span> <span class="dv">1</span><span class="sc">/</span><span class="dv">10</span>, <span class="at">linetype =</span> <span class="dv">5</span>) <span class="sc">+</span></span>
+<span id="cb412-5"><a href="puzzle2初试假设检验.html#cb412-5" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">&quot;均值分布曲线&quot;</span>) <span class="sc">+</span></span>
+<span id="cb412-6"><a href="puzzle2初试假设检验.html#cb412-6" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
+<span id="cb412-7"><a href="puzzle2初试假设检验.html#cb412-7" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="fl">0.5</span>))</span></code></pre></div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:unnamed-chunk-4"></span>
+<img src="puzzle2_files/figure-html/unnamed-chunk-4-1.png" alt="β值就是黑色虚线前的曲线下面积" width="672" />
+<p class="caption">
+图9.4: β值就是黑色虚线前的曲线下面积
+</p>
+</div>
+<p>可计算得<span class="math inline">\(\beta = 5.6e-18\)</span>，把握值接近于1。</p>
+<p>最后我们可以把两组图像画在一起，更直观的观察一下。</p>
+<div class="sourceCode" id="cb413"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb413-1"><a href="puzzle2初试假设检验.html#cb413-1" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="fu">tibble</span>(<span class="at">x =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="fl">1.2</span>, <span class="dv">2</span>)), <span class="fu">aes</span>(<span class="at">x =</span> x)) <span class="sc">+</span></span>
+<span id="cb413-2"><a href="puzzle2初试假设检验.html#cb413-2" tabindex="-1"></a>  <span class="fu">stat_function</span>(<span class="at">fun =</span> dnorm, <span class="at">args =</span> <span class="fu">list</span>(<span class="at">mean =</span> <span class="dv">0</span>, <span class="at">sd =</span> <span class="dv">1</span><span class="sc">/</span><span class="dv">10</span>), <span class="at">color =</span> <span class="st">&quot;#CD853F&quot;</span>) <span class="sc">+</span> </span>
+<span id="cb413-3"><a href="puzzle2初试假设检验.html#cb413-3" tabindex="-1"></a>  <span class="fu">stat_function</span>(<span class="at">fun =</span> dnorm, <span class="at">args =</span> <span class="fu">list</span>(<span class="at">mean =</span> <span class="fu">mean</span>(samples), <span class="at">sd =</span> <span class="dv">1</span><span class="sc">/</span><span class="dv">10</span>), <span class="at">color =</span> <span class="st">&quot;firebrick&quot;</span>) <span class="sc">+</span> </span>
+<span id="cb413-4"><a href="puzzle2初试假设检验.html#cb413-4" tabindex="-1"></a>  <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> <span class="fu">mean</span>(samples), <span class="at">linetype =</span> <span class="dv">5</span>, <span class="at">color =</span> <span class="st">&quot;navy&quot;</span>) <span class="sc">+</span></span>
+<span id="cb413-5"><a href="puzzle2初试假设检验.html#cb413-5" tabindex="-1"></a>  <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> <span class="fu">qnorm</span>(<span class="fl">0.95</span>) <span class="sc">*</span> <span class="dv">1</span><span class="sc">/</span><span class="dv">10</span>, <span class="at">linetype =</span> <span class="dv">5</span>) <span class="sc">+</span></span>
+<span id="cb413-6"><a href="puzzle2初试假设检验.html#cb413-6" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">&quot;均值分布曲线&quot;</span>) <span class="sc">+</span></span>
+<span id="cb413-7"><a href="puzzle2初试假设检验.html#cb413-7" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
+<span id="cb413-8"><a href="puzzle2初试假设检验.html#cb413-8" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="fl">0.5</span>))</span></code></pre></div>
+<p><img src="puzzle2_files/figure-html/unnamed-chunk-5-1.png" width="672" style="display: block; margin: auto;" /></p>
+</div>
+</div>
+<div id="题目" class="section level2 hasAnchor" number="11.2">
+<h2><span class="header-section-number">11.2</span> 题目<a href="puzzle2初试假设检验.html#题目" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<ul>
+<li>让我们去除这些数的总体均数均数不可能小于0的假设，现在的备择假设是双侧的。</li>
+</ul>
+<p><span class="math display">\[
+原假设H_0: \mu = 0 \\
+备择假设H_1: \mu \neq 0
+\]</span></p>
+<p>在<span class="math inline">\(\alpha = 0.05\)</span>的水准上：</p>
+<ol style="list-style-type: decimal">
+<li>能否拒绝<span class="math inline">\(H_0\)</span></li>
+<li>有多少的把握(power)能够拒绝<span class="math inline">\(H_0\)</span></li>
+</ol>
+<ul>
+<li>一个人声称自己能分辨出星巴克和瑞幸咖啡口味的分别，现有十杯咖啡请他品尝。这个人至少要分辨对多少杯，才在<span class="math inline">\(\alpha = 0.1\)</span>的水准上，拒绝这个人在胡说八道（即完全瞎猜，50%的概率预测成功）的假设？</li>
+</ul>
+
+<div id="refs" class="references csl-bib-body" line-spacing="2">
+<div class="csl-entry">
+<div class="csl-left-margin">1. </div><div class="csl-right-inline">Anderson, N. R., Minutolo, N. G., Gill, S. &amp; Klichinsky, M. <a href="https://doi.org/10.1158/0008-5472.CAN-20-2990">Macrophage-<span>Based</span> <span>Approaches</span> for <span>Cancer</span> <span>Immunotherapy</span>.</a> <em>Cancer Research</em> <strong>81</strong>, 1201–1208 (2021).</div>
+</div>
+<div class="csl-entry">
+<div class="csl-left-margin">2. </div><div class="csl-right-inline">Liu, S. <em>et al.</em> <a href="https://doi.org/10.1136/jitc-2021-002548"><span>S100A4</span> enhances protumor macrophage polarization by control of <span>PPAR</span>-γ-dependent induction of fatty acid oxidation.</a> <em>Journal For Immunotherapy of Cancer</em> <strong>9</strong>, (2021).</div>
+</div>
+</div>
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="puzzle1展开折叠数据.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": true,
+"facebook": false,
+"twitter": false,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"whatsapp": false,
+"all": {}
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": ["CBook.pdf"],
+"search": {
+"engine": "fuse",
+"options": null
+},
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

@@ -1,4 +1,80 @@
-##### 测验 #####
+##### 提纲 #####
+
+# 变量掩蔽
+
+# 正常情况下，我们需要使用索引来调用某一列
+iris$Species
+iris[["Species"]]
+# 如果需要索引的部分过多，我们可能会累死
+iris$Sepal.Length + iris$Sepal.Width + iris$Petal.Length
+# 这时候我们可以用with进行变量掩蔽，就是一种省力的办法
+with(data = iris, expr = Sepal.Length + Sepal.Width + Petal.Length)
+# 注意到tidyverse中也是基于这种原理
+library(tidyverse)
+iris %>% 
+  mutate(sum = Sepal.Length + Sepal.Width + Petal.Length)
+
+# 字符串操作
+
+# 这里只简单的演示操作
+a = c("北京", "欢迎", "你")
+b = c("为你", "开天", "辟地")
+
+# paste与stringr中的str_c等价
+paste(a, b)
+# 下二者等价
+paste(a, b, sep = "")
+paste0(a, b)
+# 下二者等价
+paste(a, collapse = "")
+paste0(a, collapse = "")
+paste(paste(a, collapse = ""), paste(b, collapse = ""), sep = ", ")
+
+str_c(a, b)
+
+# grep
+
+# grep显示匹配的位次，grepl显示每个位次是否匹配
+grep("北", a)
+grep("你", a)
+grepl("你", a)
+# 下二者等价
+grep("你", a)
+which(grepl("你", a))
+# str_detect与grepl等价，但是顺序不同，更方便tidy写法
+str_detect(a, "北")
+
+# substr
+
+# str_sub支持负数索引，更有用
+substr("北京欢迎你", start = 3, stop = 4)
+str_sub("北京欢迎你", start = 3, end = -2)
+
+# 正则表达式与str_extract
+
+c = c("《北京欢迎你》是由林夕作词，小柯作曲，百位明星共同演唱的一首以奥运为主题的歌曲，发行于2008年4月30日。", 
+      "2009年这首歌曲成为MusicRadio音乐之声点播冠军曲。")
+# 下面这两个最上面只匹配一次，下面的匹配全部
+str_extract(c, "\\d+")
+str_extract_all(c, "\\d+")
+# baseR的实现困难一些
+regmatches(c, gregexpr("\\d+", c, perl = TRUE))
+
+# str_subset
+
+# 也可以用于匹配符号条件的字符
+grep("欢", a, value = T)
+str_subset(a, "欢")
+
+# str_split
+
+genes = c("LOC441259 /// POLR2J2", "KLHDC7B", "ATAD3A /// ATAD3B /// LOC732419") 
+strsplit(genes, " /// ")
+# 简而言之，stringr中的字符串操作命名统一一点，功能多一点，没比BaseR强在功能上
+str_split(genes, " /// ")
+str_split(genes, " /// ", simplify = T)
+
+##### 实战 #####
 
 # 有数据如下
 #   type
@@ -30,7 +106,9 @@ sapply(type, \(x, invec) as.numeric(grepl(x, invec)), invec = data$type)
 # 在没有上述特定情况下，个人更喜欢以下写法
 sapply(type, \(x, invec = data$type) as.numeric(grepl(x, invec)))
 # 像下面这样写也是可以的，但是总让人觉得这段程序要崩溃
-# 在定义不严格的动态语言中（如python和R）经常看到这种写法，让人觉得很不安全
+# 在环境管理不严格的动态语言中（如python和R）经常看到这种写法，让人觉得很不安全
+# 就是说内部的环境可以使用全局环境的变量，但是全局的不能使用局部的
+# 就是说儿子能花爹的钱，爹不能找儿子借钱
 # 但是只是看着不安全，如果你理解了上述的参数传递机制和R的命名空间知识后，就会觉得没什么大不了的
 # 但是在极端情况下还是会崩溃，比如在r的shiny软件中惰性求值
 sapply(type, \(x) as.numeric(grepl(x, data$type)))

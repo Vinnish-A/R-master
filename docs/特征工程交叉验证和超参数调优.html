@@ -1,0 +1,863 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>7 特征工程、交叉验证和超参数调优 | R语言高手计划</title>
+  <meta name="description" content="Med-X社员手册" />
+  <meta name="generator" content="bookdown 0.36 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="7 特征工程、交叉验证和超参数调优 | R语言高手计划" />
+  <meta property="og:type" content="book" />
+  
+  <meta property="og:description" content="Med-X社员手册" />
+  <meta name="github-repo" content="Vinnish-A/R-master" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="7 特征工程、交叉验证和超参数调优 | R语言高手计划" />
+  
+  <meta name="twitter:description" content="Med-X社员手册" />
+  
+
+<meta name="author" content="Vinnish 普尔弥什" />
+
+
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="二分类和多分类问题.html"/>
+<link rel="next" href="理解机器学习里数据不均衡.html"/>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+<script src="libs/htmlwidgets-1.6.3/htmlwidgets.js"></script>
+<link href="libs/datatables-css-0.0.0/datatables-crosstalk.css" rel="stylesheet" />
+<script src="libs/datatables-binding-0.30/datatables.js"></script>
+<link href="libs/dt-core-1.13.4/css/jquery.dataTables.min.css" rel="stylesheet" />
+<link href="libs/dt-core-1.13.4/css/jquery.dataTables.extra.css" rel="stylesheet" />
+<script src="libs/dt-core-1.13.4/js/jquery.dataTables.min.js"></script>
+<link href="libs/crosstalk-1.2.1/css/crosstalk.min.css" rel="stylesheet" />
+<script src="libs/crosstalk-1.2.1/js/crosstalk.min.js"></script>
+<link rel="stylesheet" type="text/css" href="style.css">
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-EHGBT6KMPG"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-EHGBT6KMPG');
+</script>
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  jax: ["input/TeX","output/SVG"],
+  extensions: ["tex2jax.js","MathMenu.js","MathZoom.js"],
+  TeX: {
+    extensions: ["AMSmath.js","AMSsymbols.js","noErrors.js","noUndefined.js"]
+  }
+});
+</script>
+<script type="text/javascript"
+   src="../../../MathJax/MathJax.js">
+</script>
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<style type="text/css">
+  
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+</style>
+<style type="text/css">
+/* Used with Pandoc 2.11+ new --citeproc when CSL is used */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> 预备</a>
+<ul>
+<li class="chapter" data-level="1.1" data-path="index.html"><a href="index.html#工作环境"><i class="fa fa-check"></i><b>1.1</b> 工作环境</a></li>
+<li class="chapter" data-level="1.2" data-path="index.html"><a href="index.html#使用project管理项目"><i class="fa fa-check"></i><b>1.2</b> 使用project管理项目</a></li>
+<li class="chapter" data-level="1.3" data-path="index.html"><a href="index.html#第一周"><i class="fa fa-check"></i><b>1.3</b> 第一周</a>
+<ul>
+<li class="chapter" data-level="1.3.1" data-path="index.html"><a href="index.html#目标"><i class="fa fa-check"></i><b>1.3.1</b> 目标</a></li>
+<li class="chapter" data-level="1.3.2" data-path="index.html"><a href="index.html#示例及任务"><i class="fa fa-check"></i><b>1.3.2</b> 示例及任务</a></li>
+</ul></li>
+<li class="chapter" data-level="1.4" data-path="index.html"><a href="index.html#第二周"><i class="fa fa-check"></i><b>1.4</b> 第二周</a>
+<ul>
+<li class="chapter" data-level="1.4.1" data-path="index.html"><a href="index.html#目标-1"><i class="fa fa-check"></i><b>1.4.1</b> 目标</a></li>
+<li class="chapter" data-level="1.4.2" data-path="index.html"><a href="index.html#示例及任务-1"><i class="fa fa-check"></i><b>1.4.2</b> 示例及任务</a></li>
+</ul></li>
+<li class="chapter" data-level="1.5" data-path="index.html"><a href="index.html#第三周"><i class="fa fa-check"></i><b>1.5</b> 第三周</a>
+<ul>
+<li class="chapter" data-level="1.5.1" data-path="index.html"><a href="index.html#目标-2"><i class="fa fa-check"></i><b>1.5.1</b> 目标</a></li>
+<li class="chapter" data-level="1.5.2" data-path="index.html"><a href="index.html#示例及任务-2"><i class="fa fa-check"></i><b>1.5.2</b> 示例及任务</a></li>
+</ul></li>
+<li class="chapter" data-level="1.6" data-path="index.html"><a href="index.html#第四周"><i class="fa fa-check"></i><b>1.6</b> 第四周</a>
+<ul>
+<li class="chapter" data-level="1.6.1" data-path="index.html"><a href="index.html#目标-3"><i class="fa fa-check"></i><b>1.6.1</b> 目标</a></li>
+<li class="chapter" data-level="1.6.2" data-path="index.html"><a href="index.html#示例及任务-3"><i class="fa fa-check"></i><b>1.6.2</b> 示例及任务</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="用tidyr读写操作文件.html"><a href="用tidyr读写操作文件.html"><i class="fa fa-check"></i><b>2</b> 用tidyr读写、操作文件</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="用tidyr读写操作文件.html"><a href="用tidyr读写操作文件.html#使用内置数据集iris"><i class="fa fa-check"></i><b>2.1</b> 使用内置数据集iris</a></li>
+<li class="chapter" data-level="2.2" data-path="用tidyr读写操作文件.html"><a href="用tidyr读写操作文件.html#的使用"><i class="fa fa-check"></i><b>2.2</b> %&gt;% 的使用</a></li>
+<li class="chapter" data-level="2.3" data-path="用tidyr读写操作文件.html"><a href="用tidyr读写操作文件.html#select的使用"><i class="fa fa-check"></i><b>2.3</b> select的使用</a></li>
+<li class="chapter" data-level="2.4" data-path="用tidyr读写操作文件.html"><a href="用tidyr读写操作文件.html#mutate的使用"><i class="fa fa-check"></i><b>2.4</b> mutate的使用</a></li>
+<li class="chapter" data-level="2.5" data-path="用tidyr读写操作文件.html"><a href="用tidyr读写操作文件.html#group_by-summarise"><i class="fa fa-check"></i><b>2.5</b> group_by + summarise</a></li>
+<li class="chapter" data-level="2.6" data-path="用tidyr读写操作文件.html"><a href="用tidyr读写操作文件.html#检验环节"><i class="fa fa-check"></i><b>2.6</b> 检验环节</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="r的基础和特征.html"><a href="r的基础和特征.html"><i class="fa fa-check"></i><b>3</b> R的基础和特征</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="r的基础和特征.html"><a href="r的基础和特征.html#r中的数据结构"><i class="fa fa-check"></i><b>3.1</b> R中的数据结构</a></li>
+<li class="chapter" data-level="3.2" data-path="r的基础和特征.html"><a href="r的基础和特征.html#向量化"><i class="fa fa-check"></i><b>3.2</b> 向量化</a></li>
+<li class="chapter" data-level="3.3" data-path="r的基础和特征.html"><a href="r的基础和特征.html#for循环"><i class="fa fa-check"></i><b>3.3</b> for循环</a></li>
+<li class="chapter" data-level="3.4" data-path="r的基础和特征.html"><a href="r的基础和特征.html#for的向量化"><i class="fa fa-check"></i><b>3.4</b> for的向量化</a></li>
+<li class="chapter" data-level="3.5" data-path="r的基础和特征.html"><a href="r的基础和特征.html#标准化"><i class="fa fa-check"></i><b>3.5</b> 标准化</a></li>
+<li class="chapter" data-level="3.6" data-path="r的基础和特征.html"><a href="r的基础和特征.html#求单个变量和其它变量的相关性"><i class="fa fa-check"></i><b>3.6</b> 求单个变量和其它变量的相关性</a></li>
+<li class="chapter" data-level="3.7" data-path="r的基础和特征.html"><a href="r的基础和特征.html#函数式编程"><i class="fa fa-check"></i><b>3.7</b> 函数式编程</a></li>
+<li class="chapter" data-level="3.8" data-path="r的基础和特征.html"><a href="r的基础和特征.html#实例和小测验"><i class="fa fa-check"></i><b>3.8</b> 实例和小测验</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="字符串操作和r进阶.html"><a href="字符串操作和r进阶.html"><i class="fa fa-check"></i><b>4</b> 字符串操作和R进阶</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="字符串操作和r进阶.html"><a href="字符串操作和r进阶.html#提纲"><i class="fa fa-check"></i><b>4.1</b> 提纲</a>
+<ul>
+<li class="chapter" data-level="4.1.1" data-path="字符串操作和r进阶.html"><a href="字符串操作和r进阶.html#变量掩蔽"><i class="fa fa-check"></i><b>4.1.1</b> 变量掩蔽</a></li>
+<li class="chapter" data-level="4.1.2" data-path="字符串操作和r进阶.html"><a href="字符串操作和r进阶.html#字符串操作"><i class="fa fa-check"></i><b>4.1.2</b> 字符串操作</a></li>
+<li class="chapter" data-level="4.1.3" data-path="字符串操作和r进阶.html"><a href="字符串操作和r进阶.html#grep"><i class="fa fa-check"></i><b>4.1.3</b> grep</a></li>
+<li class="chapter" data-level="4.1.4" data-path="字符串操作和r进阶.html"><a href="字符串操作和r进阶.html#substr"><i class="fa fa-check"></i><b>4.1.4</b> substr</a></li>
+<li class="chapter" data-level="4.1.5" data-path="字符串操作和r进阶.html"><a href="字符串操作和r进阶.html#正则表达式与str_extract"><i class="fa fa-check"></i><b>4.1.5</b> 正则表达式与str_extract</a></li>
+<li class="chapter" data-level="4.1.6" data-path="字符串操作和r进阶.html"><a href="字符串操作和r进阶.html#str_subset"><i class="fa fa-check"></i><b>4.1.6</b> str_subset</a></li>
+<li class="chapter" data-level="4.1.7" data-path="字符串操作和r进阶.html"><a href="字符串操作和r进阶.html#str_split"><i class="fa fa-check"></i><b>4.1.7</b> str_split</a></li>
+</ul></li>
+<li class="chapter" data-level="4.2" data-path="字符串操作和r进阶.html"><a href="字符串操作和r进阶.html#实战"><i class="fa fa-check"></i><b>4.2</b> 实战</a>
+<ul>
+<li class="chapter" data-level="4.2.1" data-path="字符串操作和r进阶.html"><a href="字符串操作和r进阶.html#向量化-1"><i class="fa fa-check"></i><b>4.2.1</b> 1. 向量化</a></li>
+<li class="chapter" data-level="4.2.2" data-path="字符串操作和r进阶.html"><a href="字符串操作和r进阶.html#tibble的nested-tibble性质"><i class="fa fa-check"></i><b>4.2.2</b> 2. tibble的nested tibble性质</a></li>
+<li class="chapter" data-level="4.2.3" data-path="字符串操作和r进阶.html"><a href="字符串操作和r进阶.html#dataframe操作"><i class="fa fa-check"></i><b>4.2.3</b> 3. dataframe操作</a></li>
+<li class="chapter" data-level="4.2.4" data-path="字符串操作和r进阶.html"><a href="字符串操作和r进阶.html#循环"><i class="fa fa-check"></i><b>4.2.4</b> 4. 循环</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="初探mlr3.html"><a href="初探mlr3.html"><i class="fa fa-check"></i><b>5</b> 初探mlr3</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="初探mlr3.html"><a href="初探mlr3.html#mlr3中使用po进行特征工程"><i class="fa fa-check"></i><b>5.1</b> mlr3中使用po()进行特征工程</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="二分类和多分类问题.html"><a href="二分类和多分类问题.html"><i class="fa fa-check"></i><b>6</b> 二分类和多分类问题</a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="二分类和多分类问题.html"><a href="二分类和多分类问题.html#二分类"><i class="fa fa-check"></i><b>6.1</b> 二分类</a></li>
+<li class="chapter" data-level="6.2" data-path="二分类和多分类问题.html"><a href="二分类和多分类问题.html#hardmax"><i class="fa fa-check"></i><b>6.2</b> hardmax</a></li>
+<li class="chapter" data-level="6.3" data-path="二分类和多分类问题.html"><a href="二分类和多分类问题.html#softmax"><i class="fa fa-check"></i><b>6.3</b> softmax</a></li>
+<li class="chapter" data-level="6.4" data-path="二分类和多分类问题.html"><a href="二分类和多分类问题.html#多分类的损失函数"><i class="fa fa-check"></i><b>6.4</b> 多分类的损失函数</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="特征工程交叉验证和超参数调优.html"><a href="特征工程交叉验证和超参数调优.html"><i class="fa fa-check"></i><b>7</b> 特征工程、交叉验证和超参数调优</a>
+<ul>
+<li class="chapter" data-level="7.1" data-path="特征工程交叉验证和超参数调优.html"><a href="特征工程交叉验证和超参数调优.html#特征工程"><i class="fa fa-check"></i><b>7.1</b> 特征工程</a>
+<ul>
+<li class="chapter" data-level="7.1.1" data-path="特征工程交叉验证和超参数调优.html"><a href="特征工程交叉验证和超参数调优.html#读入数据"><i class="fa fa-check"></i><b>7.1.1</b> 读入数据</a></li>
+<li class="chapter" data-level="7.1.2" data-path="特征工程交叉验证和超参数调优.html"><a href="特征工程交叉验证和超参数调优.html#创建任务"><i class="fa fa-check"></i><b>7.1.2</b> 创建任务</a></li>
+</ul></li>
+<li class="chapter" data-level="7.2" data-path="特征工程交叉验证和超参数调优.html"><a href="特征工程交叉验证和超参数调优.html#超参数调优"><i class="fa fa-check"></i><b>7.2</b> 超参数调优</a>
+<ul>
+<li class="chapter" data-level="7.2.1" data-path="特征工程交叉验证和超参数调优.html"><a href="特征工程交叉验证和超参数调优.html#mlr3实现"><i class="fa fa-check"></i><b>7.2.1</b> mlr3实现</a></li>
+<li class="chapter" data-level="7.2.2" data-path="特征工程交叉验证和超参数调优.html"><a href="特征工程交叉验证和超参数调优.html#使用注意"><i class="fa fa-check"></i><b>7.2.2</b> 使用注意</a></li>
+</ul></li>
+<li class="chapter" data-level="7.3" data-path="特征工程交叉验证和超参数调优.html"><a href="特征工程交叉验证和超参数调优.html#交叉验证"><i class="fa fa-check"></i><b>7.3</b> 交叉验证</a>
+<ul>
+<li class="chapter" data-level="7.3.1" data-path="特征工程交叉验证和超参数调优.html"><a href="特征工程交叉验证和超参数调优.html#模型堆叠"><i class="fa fa-check"></i><b>7.3.1</b> 模型堆叠</a></li>
+<li class="chapter" data-level="7.3.2" data-path="特征工程交叉验证和超参数调优.html"><a href="特征工程交叉验证和超参数调优.html#交叉验证失效怎么办"><i class="fa fa-check"></i><b>7.3.2</b> 交叉验证失效怎么办？</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="理解机器学习里数据不均衡.html"><a href="理解机器学习里数据不均衡.html"><i class="fa fa-check"></i><b>8</b> 理解机器学习里数据不均衡</a>
+<ul>
+<li class="chapter" data-level="8.1" data-path="理解机器学习里数据不均衡.html"><a href="理解机器学习里数据不均衡.html#data_prepare"><i class="fa fa-check"></i><b>8.1</b> data_prepare</a></li>
+<li class="chapter" data-level="8.2" data-path="理解机器学习里数据不均衡.html"><a href="理解机器学习里数据不均衡.html#model"><i class="fa fa-check"></i><b>8.2</b> model</a>
+<ul>
+<li class="chapter" data-level="8.2.1" data-path="理解机器学习里数据不均衡.html"><a href="理解机器学习里数据不均衡.html#数据均衡的模型"><i class="fa fa-check"></i><b>8.2.1</b> 数据均衡的模型</a></li>
+<li class="chapter" data-level="8.2.2" data-path="理解机器学习里数据不均衡.html"><a href="理解机器学习里数据不均衡.html#数据不均衡的模型"><i class="fa fa-check"></i><b>8.2.2</b> 数据不均衡的模型</a></li>
+<li class="chapter" data-level="8.2.3" data-path="理解机器学习里数据不均衡.html"><a href="理解机器学习里数据不均衡.html#训练集上后处理准确率的模型"><i class="fa fa-check"></i><b>8.2.3</b> 训练集上后处理准确率的模型</a></li>
+<li class="chapter" data-level="8.2.4" data-path="理解机器学习里数据不均衡.html"><a href="理解机器学习里数据不均衡.html#测试集上后处理准确率"><i class="fa fa-check"></i><b>8.2.4</b> 测试集上后处理准确率</a></li>
+<li class="chapter" data-level="8.2.5" data-path="理解机器学习里数据不均衡.html"><a href="理解机器学习里数据不均衡.html#过采样的模型"><i class="fa fa-check"></i><b>8.2.5</b> 过采样的模型</a></li>
+<li class="chapter" data-level="8.2.6" data-path="理解机器学习里数据不均衡.html"><a href="理解机器学习里数据不均衡.html#欠采样的模型"><i class="fa fa-check"></i><b>8.2.6</b> 欠采样的模型</a></li>
+<li class="chapter" data-level="8.2.7" data-path="理解机器学习里数据不均衡.html"><a href="理解机器学习里数据不均衡.html#添加权重的模型"><i class="fa fa-check"></i><b>8.2.7</b> 添加权重的模型</a></li>
+</ul></li>
+<li class="chapter" data-level="8.3" data-path="理解机器学习里数据不均衡.html"><a href="理解机器学习里数据不均衡.html#rough-edged"><i class="fa fa-check"></i><b>8.3</b> rough edged</a></li>
+</ul></li>
+<li class="chapter" data-level="9" data-path="rmarkdown中插入文献和修改引用样式.html"><a href="rmarkdown中插入文献和修改引用样式.html"><i class="fa fa-check"></i><b>9</b> （R）markdown中插入文献和修改引用样式</a>
+<ul>
+<li class="chapter" data-level="9.1" data-path="rmarkdown中插入文献和修改引用样式.html"><a href="rmarkdown中插入文献和修改引用样式.html#rmarkdown的组成"><i class="fa fa-check"></i><b>9.1</b> Rmarkdown的组成</a></li>
+<li class="chapter" data-level="9.2" data-path="rmarkdown中插入文献和修改引用样式.html"><a href="rmarkdown中插入文献和修改引用样式.html#插入参考文献"><i class="fa fa-check"></i><b>9.2</b> 插入参考文献</a></li>
+<li class="chapter" data-level="9.3" data-path="rmarkdown中插入文献和修改引用样式.html"><a href="rmarkdown中插入文献和修改引用样式.html#修改引用样式"><i class="fa fa-check"></i><b>9.3</b> 修改引用样式</a></li>
+<li class="chapter" data-level="9.4" data-path="rmarkdown中插入文献和修改引用样式.html"><a href="rmarkdown中插入文献和修改引用样式.html#其它技巧和问题"><i class="fa fa-check"></i><b>9.4</b> 其它技巧和问题</a>
+<ul>
+<li class="chapter" data-level="9.4.1" data-path="rmarkdown中插入文献和修改引用样式.html"><a href="rmarkdown中插入文献和修改引用样式.html#快捷键"><i class="fa fa-check"></i><b>9.4.1</b> 快捷键</a></li>
+<li class="chapter" data-level="9.4.2" data-path="rmarkdown中插入文献和修改引用样式.html"><a href="rmarkdown中插入文献和修改引用样式.html#引用多篇"><i class="fa fa-check"></i><b>9.4.2</b> 引用多篇</a></li>
+<li class="chapter" data-level="9.4.3" data-path="rmarkdown中插入文献和修改引用样式.html"><a href="rmarkdown中插入文献和修改引用样式.html#导出注意事项"><i class="fa fa-check"></i><b>9.4.3</b> 导出注意事项</a></li>
+</ul></li>
+<li class="chapter" data-level="9.5" data-path="rmarkdown中插入文献和修改引用样式.html"><a href="rmarkdown中插入文献和修改引用样式.html#参考文献"><i class="fa fa-check"></i><b>9.5</b> 参考文献</a></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="puzzle1展开折叠数据.html"><a href="puzzle1展开折叠数据.html"><i class="fa fa-check"></i><b>10</b> puzzle1：展开折叠数据</a>
+<ul>
+<li class="chapter" data-level="10.1" data-path="puzzle1展开折叠数据.html"><a href="puzzle1展开折叠数据.html#数据展开"><i class="fa fa-check"></i><b>10.1</b> 数据展开</a></li>
+<li class="chapter" data-level="10.2" data-path="puzzle1展开折叠数据.html"><a href="puzzle1展开折叠数据.html#模型建立"><i class="fa fa-check"></i><b>10.2</b> 模型建立</a></li>
+</ul></li>
+<li class="chapter" data-level="11" data-path="puzzle2初试假设检验.html"><a href="puzzle2初试假设检验.html"><i class="fa fa-check"></i><b>11</b> puzzle2：初试假设检验</a>
+<ul>
+<li class="chapter" data-level="11.1" data-path="puzzle2初试假设检验.html"><a href="puzzle2初试假设检验.html#示例"><i class="fa fa-check"></i><b>11.1</b> 示例</a>
+<ul>
+<li class="chapter" data-level="11.1.1" data-path="puzzle2初试假设检验.html"><a href="puzzle2初试假设检验.html#计算"><i class="fa fa-check"></i><b>11.1.1</b> 计算</a></li>
+</ul></li>
+<li class="chapter" data-level="11.2" data-path="puzzle2初试假设检验.html"><a href="puzzle2初试假设检验.html#题目"><i class="fa fa-check"></i><b>11.2</b> 题目</a></li>
+</ul></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">R语言高手计划</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="特征工程交叉验证和超参数调优" class="section level1 hasAnchor" number="7">
+<h1><span class="header-section-number">7</span> 特征工程、交叉验证和超参数调优<a href="特征工程交叉验证和超参数调优.html#特征工程交叉验证和超参数调优" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<div id="特征工程" class="section level2 hasAnchor" number="7.1">
+<h2><span class="header-section-number">7.1</span> 特征工程<a href="特征工程交叉验证和超参数调优.html#特征工程" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>被纳入模型中的变量称为数据的特征。特征工程就是对特征进行操作。在建模技巧相近的情况下，特征工程能给模型带来较大的提升。特征工程的方法有，清洗数据、尝试从复杂的变量（如姓名）中提取模型能够利用的信息、探索两特征的交互项等。</p>
+<div id="读入数据" class="section level3 hasAnchor" number="7.1.1">
+<h3><span class="header-section-number">7.1.1</span> 读入数据<a href="特征工程交叉验证和超参数调优.html#读入数据" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>首先请读入数据，包括<a href="https://www.kaggle.com/competitions/tabular-playground-series-jan-2021/overview">playground的回归数据</a>和<a href="https://www.kaggle.com/competitions/titanic/overview">泰坦尼克号生存预测的二分类数据</a>，这里分别缩写为pg和tt。由于泰坦尼克早已有完整的数据，为了方便测试，直接读取。</p>
+<div class="sourceCode" id="cb320"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb320-1"><a href="特征工程交叉验证和超参数调优.html#cb320-1" tabindex="-1"></a>data_pg_train_raw <span class="ot">=</span> <span class="fu">read_csv</span>(<span class="st">&quot;../playground-regression/data/train.csv&quot;</span>)</span>
+<span id="cb320-2"><a href="特征工程交叉验证和超参数调优.html#cb320-2" tabindex="-1"></a>data_pg_test_raw  <span class="ot">=</span> <span class="fu">read_csv</span>(<span class="st">&quot;../playground-regression/data/test.csv&quot;</span>)</span>
+<span id="cb320-3"><a href="特征工程交叉验证和超参数调优.html#cb320-3" tabindex="-1"></a></span>
+<span id="cb320-4"><a href="特征工程交叉验证和超参数调优.html#cb320-4" tabindex="-1"></a>data_tt_train_raw <span class="ot">=</span> <span class="fu">read_csv</span>(<span class="st">&quot;../twoclass/data/train.csv&quot;</span>)</span>
+<span id="cb320-5"><a href="特征工程交叉验证和超参数调优.html#cb320-5" tabindex="-1"></a>data_tt_test_raw  <span class="ot">=</span> <span class="fu">read_csv</span>(<span class="st">&quot;../twoclass/data/test.csv&quot;</span>)</span>
+<span id="cb320-6"><a href="特征工程交叉验证和超参数调优.html#cb320-6" tabindex="-1"></a>data_tt_test_leak <span class="ot">=</span> <span class="fu">read_csv</span>(<span class="st">&quot;../twoclass/data/titanic.csv&quot;</span>)</span></code></pre></div>
+<p>操作一下数据。</p>
+<div class="sourceCode" id="cb321"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb321-1"><a href="特征工程交叉验证和超参数调优.html#cb321-1" tabindex="-1"></a>data_tt_test_raw <span class="ot">=</span> data_tt_test_raw <span class="sc">%&gt;%</span> </span>
+<span id="cb321-2"><a href="特征工程交叉验证和超参数调优.html#cb321-2" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Name =</span> <span class="fu">str_replace</span>(Name, <span class="st">&quot;</span><span class="sc">\&quot;</span><span class="st">&quot;</span>, <span class="st">&quot;&quot;</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb321-3"><a href="特征工程交叉验证和超参数调优.html#cb321-3" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Name =</span> <span class="fu">str_replace</span>(Name, <span class="st">&quot;</span><span class="sc">\\\&quot;</span><span class="st">&quot;</span>, <span class="st">&quot;&quot;</span>))</span>
+<span id="cb321-4"><a href="特征工程交叉验证和超参数调优.html#cb321-4" tabindex="-1"></a>data_tt_test_leak <span class="ot">=</span> data_tt_test_leak <span class="sc">%&gt;%</span> </span>
+<span id="cb321-5"><a href="特征工程交叉验证和超参数调优.html#cb321-5" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">name =</span> <span class="fu">str_replace</span>(name, <span class="st">&quot;</span><span class="sc">\&quot;</span><span class="st">&quot;</span>, <span class="st">&quot;&quot;</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb321-6"><a href="特征工程交叉验证和超参数调优.html#cb321-6" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">name =</span> <span class="fu">str_replace</span>(name, <span class="st">&quot;</span><span class="sc">\\\&quot;</span><span class="st">&quot;</span>, <span class="st">&quot;&quot;</span>))</span>
+<span id="cb321-7"><a href="特征工程交叉验证和超参数调优.html#cb321-7" tabindex="-1"></a></span>
+<span id="cb321-8"><a href="特征工程交叉验证和超参数调优.html#cb321-8" tabindex="-1"></a>data_tt_test_raw <span class="ot">=</span> </span>
+<span id="cb321-9"><a href="特征工程交叉验证和超参数调优.html#cb321-9" tabindex="-1"></a>  <span class="fu">inner_join</span>(data_tt_test_raw, <span class="fu">select</span>(data_tt_test_leak, survived, name), <span class="at">by =</span> <span class="fu">c</span>(<span class="st">&quot;Name&quot;</span> <span class="ot">=</span> <span class="st">&quot;name&quot;</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb321-10"><a href="特征工程交叉验证和超参数调优.html#cb321-10" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">Survived =</span> survived) <span class="sc">%&gt;%</span> </span>
+<span id="cb321-11"><a href="特征工程交叉验证和超参数调优.html#cb321-11" tabindex="-1"></a>  <span class="fu">distinct</span>(Name, <span class="at">.keep_all =</span> T)</span>
+<span id="cb321-12"><a href="特征工程交叉验证和超参数调优.html#cb321-12" tabindex="-1"></a></span>
+<span id="cb321-13"><a href="特征工程交叉验证和超参数调优.html#cb321-13" tabindex="-1"></a><span class="co"># load(&quot;./data/example6.Rdata&quot;)</span></span></code></pre></div>
+</div>
+<div id="创建任务" class="section level3 hasAnchor" number="7.1.2">
+<h3><span class="header-section-number">7.1.2</span> 创建任务<a href="特征工程交叉验证和超参数调优.html#创建任务" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>首先查看数据形式，将无需特征工程的pg数据转为mlr3中的任务。</p>
+<div class="datatables html-widget html-fill-item" id="htmlwidget-e69247d6a1a29c893735" style="width:100%;height:auto;"></div>
+<script type="application/json" data-for="htmlwidget-e69247d6a1a29c893735">{"x":{"filter":"none","vertical":false,"data":[["1","2","3","4","5","6"],[0,2,6,7,10,14],[0.3536003960677555,0.9072220265000728,0.1792871822942601,0.3593847738079436,0.3357908000487838,0.2564137750232814],[0.7387802758490386,0.1897563814383315,0.3553530531578394,0.1810492738729861,0.6826067981433357,0.6218345103984074],[0.6009390681938437,0.2155307618999737,0.6239720943689671,0.5513678956221049,0.6764807780727788,0.9594412434388164],[0.2933767919383172,0.8699151545898112,0.4378122234293921,0.2063863808638486,0.2194650387083545,0.9130515343428716],[0.2856911626758361,0.3013333859421893,0.2824757730595917,0.2807625823956033,0.2828612800430481,0.3875106958060037],[0.4580063448350751,0.5289578658101766,0.3208258655352028,0.4820755220283451,0.581720896787479,0.3146198579785045],[0.620703563617202,0.3903509900795343,0.3867886527820846,0.5066773482428131,0.7486392593895049,0.3220138464767012],[0.4222487709348951,0.5211120354698421,0.7764221942761969,0.3627925784349201,0.3501581270242251,0.6146734121171415],[0.3692033022080026,0.7947789056868737,0.2222678530279728,0.3797373249796229,0.4489147019808153,0.2925482322080151],[0.4357272439789657,0.7985798582024258,0.2291024516222432,0.3456862953272163,0.5068780191444434,0.8995779618918661],[0.5505403961577522,0.446474708967044,0.2119128422170466,0.4452762341441973,0.8177212559561028,0.2781041527161341],[0.6991335909021472,0.449036640790115,0.2226510870920123,0.5184848432528382,0.8058953761128491,0.2740855067711794],[0.2868640602821669,0.9169642649918256,0.3271640908368328,0.2990276136574325,0.7905910038399755,0.4181779141030444],[0.3645148370303677,0.5130024430753199,0.8279407835393642,0.5981657741216913,0.2492753526923788,0.715105694180321]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>id<\/th>\n      <th>cont1<\/th>\n      <th>cont2<\/th>\n      <th>cont3<\/th>\n      <th>cont4<\/th>\n      <th>cont5<\/th>\n      <th>cont6<\/th>\n      <th>cont7<\/th>\n      <th>cont8<\/th>\n      <th>cont9<\/th>\n      <th>cont10<\/th>\n      <th>cont11<\/th>\n      <th>cont12<\/th>\n      <th>cont13<\/th>\n      <th>cont14<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"scrollX":true,"columnDefs":[{"className":"dt-right","targets":[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15]},{"orderable":false,"targets":0}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
+<p>不知道你们从哪学的Task$new()的方法，尽量少用。</p>
+<div class="sourceCode" id="cb322"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb322-1"><a href="特征工程交叉验证和超参数调优.html#cb322-1" tabindex="-1"></a>task_pg_train <span class="ot">=</span> <span class="fu">as_task_regr</span>(data_pg_train_raw[, <span class="sc">-</span><span class="dv">1</span>], <span class="at">target =</span> <span class="st">&quot;target&quot;</span>)</span>
+<span id="cb322-2"><a href="特征工程交叉验证和超参数调优.html#cb322-2" tabindex="-1"></a>task_pg_test  <span class="ot">=</span> <span class="fu">as_task_regr</span>(<span class="fu">mutate</span>(data_pg_test_raw[, <span class="sc">-</span><span class="dv">1</span>], <span class="at">target =</span> <span class="dv">1</span>), <span class="at">target =</span> <span class="st">&quot;target&quot;</span>)</span></code></pre></div>
+<p>接下来是大头。然后观察tt数据的形式。</p>
+<div class="datatables html-widget html-fill-item" id="htmlwidget-d9e8f3480776b7503c87" style="width:100%;height:auto;"></div>
+<script type="application/json" data-for="htmlwidget-d9e8f3480776b7503c87">{"x":{"filter":"none","vertical":false,"data":[["1","2","3","4","5","6"],[1,2,3,4,5,6],[0,1,1,1,0,0],[3,1,3,1,3,3],["Braund, Mr. Owen Harris","Cumings, Mrs. John Bradley (Florence Briggs Thayer)","Heikkinen, Miss. Laina","Futrelle, Mrs. Jacques Heath (Lily May Peel)","Allen, Mr. William Henry","Moran, Mr. James"],["male","female","female","female","male","male"],[22,38,26,35,35,null],[1,1,0,1,0,0],[0,0,0,0,0,0],["A/5 21171","PC 17599","STON/O2. 3101282","113803","373450","330877"],[7.25,71.2833,7.925,53.1,8.050000000000001,8.458299999999999],[null,"C85",null,"C123",null,null],["S","C","S","S","S","Q"]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>PassengerId<\/th>\n      <th>Survived<\/th>\n      <th>Pclass<\/th>\n      <th>Name<\/th>\n      <th>Sex<\/th>\n      <th>Age<\/th>\n      <th>SibSp<\/th>\n      <th>Parch<\/th>\n      <th>Ticket<\/th>\n      <th>Fare<\/th>\n      <th>Cabin<\/th>\n      <th>Embarked<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"scrollX":true,"columnDefs":[{"className":"dt-right","targets":[1,2,3,6,7,8,10]},{"orderable":false,"targets":0}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
+<p>计算缺失值。r中有用于专业分析缺失值分布规律的包，如mice。但是缺失值的处理一般从简即可。</p>
+<pre><code>## PassengerId    Survived      Pclass        Name         Sex         Age 
+##           0           0           0           0           0         177 
+##       SibSp       Parch      Ticket        Fare       Cabin    Embarked 
+##           0           0           0           0         687           2</code></pre>
+<p>有关泰坦尼克生存预测的具体特征处理方法，请参考<a href="https://zhuanlan.zhihu.com/p/50194676">超复杂的特征处理</a>。我这里简化了部分，包括将name列中的的称呼提取并概括为若干类，然后将含有大量的缺失的列中的缺失值填充为未知类，然后将Cabin列中的首字母提取，其意义是客舱，具有一定价值，删除ID、Embarked等列。plural_names这部分没用，但我懒得删。</p>
+<div class="sourceCode" id="cb324"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb324-1"><a href="特征工程交叉验证和超参数调优.html#cb324-1" tabindex="-1"></a>data_train_mediated1 <span class="ot">=</span> data_tt_train_raw <span class="sc">%&gt;%</span> </span>
+<span id="cb324-2"><a href="特征工程交叉验证和超参数调优.html#cb324-2" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Family =</span> <span class="fu">str_extract</span>(Name, <span class="st">&quot;^[^,]+&quot;</span>), </span>
+<span id="cb324-3"><a href="特征工程交叉验证和超参数调优.html#cb324-3" tabindex="-1"></a>         <span class="at">Appellation =</span> <span class="fu">str_sub</span>(<span class="fu">str_extract</span>(Name, <span class="st">&quot;,</span><span class="sc">\\</span><span class="st">s(</span><span class="sc">\\</span><span class="st">w+)(?=</span><span class="sc">\\</span><span class="st">.)&quot;</span>), <span class="at">start =</span> <span class="dv">3</span>), </span>
+<span id="cb324-4"><a href="特征工程交叉验证和超参数调优.html#cb324-4" tabindex="-1"></a>         <span class="at">Seat =</span> <span class="fu">str_sub</span>(Cabin, <span class="at">end =</span> <span class="dv">1</span>))</span>
+<span id="cb324-5"><a href="特征工程交叉验证和超参数调优.html#cb324-5" tabindex="-1"></a></span>
+<span id="cb324-6"><a href="特征工程交叉验证和超参数调优.html#cb324-6" tabindex="-1"></a>a <span class="ot">=</span> <span class="fu">table</span>(data_train_mediated1<span class="sc">$</span>Family)</span>
+<span id="cb324-7"><a href="特征工程交叉验证和超参数调优.html#cb324-7" tabindex="-1"></a>plural_names <span class="ot">=</span> <span class="fu">names</span>(a)[a <span class="sc">!=</span> <span class="dv">1</span>]</span>
+<span id="cb324-8"><a href="特征工程交叉验证和超参数调优.html#cb324-8" tabindex="-1"></a></span>
+<span id="cb324-9"><a href="特征工程交叉验证和超参数调优.html#cb324-9" tabindex="-1"></a>b <span class="ot">=</span> <span class="fu">table</span>(data_train_mediated1<span class="sc">$</span>Appellation)</span>
+<span id="cb324-10"><a href="特征工程交叉验证和超参数调优.html#cb324-10" tabindex="-1"></a>TitleDict <span class="ot">=</span> <span class="fu">c</span>(<span class="at">Mr =</span> <span class="st">&quot;Mr&quot;</span>,</span>
+<span id="cb324-11"><a href="特征工程交叉验证和超参数调优.html#cb324-11" tabindex="-1"></a>  <span class="at">Mlle =</span> <span class="st">&quot;Miss&quot;</span>, <span class="at">Miss =</span> <span class="st">&quot;Miss&quot;</span>,</span>
+<span id="cb324-12"><a href="特征工程交叉验证和超参数调优.html#cb324-12" tabindex="-1"></a>  <span class="at">Master =</span> <span class="st">&quot;Master&quot;</span>, <span class="at">Jonkheer =</span> <span class="st">&quot;Master&quot;</span>,</span>
+<span id="cb324-13"><a href="特征工程交叉验证和超参数调优.html#cb324-13" tabindex="-1"></a>  <span class="at">Mme =</span> <span class="st">&quot;Mrs&quot;</span>, <span class="at">Ms =</span> <span class="st">&quot;Mrs&quot;</span>, <span class="at">Mrs =</span> <span class="st">&quot;Mrs&quot;</span>,</span>
+<span id="cb324-14"><a href="特征工程交叉验证和超参数调优.html#cb324-14" tabindex="-1"></a>  <span class="at">Don =</span> <span class="st">&quot;Master&quot;</span>, <span class="at">Sir =</span> <span class="st">&quot;Master&quot;</span>,</span>
+<span id="cb324-15"><a href="特征工程交叉验证和超参数调优.html#cb324-15" tabindex="-1"></a>  <span class="at">Lady =</span> <span class="st">&quot;Miss&quot;</span>,</span>
+<span id="cb324-16"><a href="特征工程交叉验证和超参数调优.html#cb324-16" tabindex="-1"></a>  <span class="at">Capt =</span> <span class="st">&quot;Officer&quot;</span>, <span class="at">Col =</span> <span class="st">&quot;Officer&quot;</span>, <span class="at">Major =</span> <span class="st">&quot;Officer&quot;</span>, <span class="at">Dr =</span> <span class="st">&quot;Officer&quot;</span>, <span class="at">Rev =</span> <span class="st">&quot;Officer&quot;</span>)</span>
+<span id="cb324-17"><a href="特征工程交叉验证和超参数调优.html#cb324-17" tabindex="-1"></a></span>
+<span id="cb324-18"><a href="特征工程交叉验证和超参数调优.html#cb324-18" tabindex="-1"></a>Seats <span class="ot">=</span> LETTERS[<span class="dv">1</span><span class="sc">:</span><span class="dv">7</span>]</span>
+<span id="cb324-19"><a href="特征工程交叉验证和超参数调优.html#cb324-19" tabindex="-1"></a></span>
+<span id="cb324-20"><a href="特征工程交叉验证和超参数调优.html#cb324-20" tabindex="-1"></a>lst_par <span class="ot">=</span> <span class="fu">list</span>(plural_names, TitleDict, Seats)</span>
+<span id="cb324-21"><a href="特征工程交叉验证和超参数调优.html#cb324-21" tabindex="-1"></a>preprocess <span class="ot">=</span> <span class="cf">function</span> (pars, data_raw) {</span>
+<span id="cb324-22"><a href="特征工程交叉验证和超参数调优.html#cb324-22" tabindex="-1"></a>  judge <span class="ot">=</span> <span class="st">&quot;Survived&quot;</span> <span class="sc">%in%</span> <span class="fu">colnames</span>(data_raw)</span>
+<span id="cb324-23"><a href="特征工程交叉验证和超参数调优.html#cb324-23" tabindex="-1"></a>  </span>
+<span id="cb324-24"><a href="特征工程交叉验证和超参数调优.html#cb324-24" tabindex="-1"></a>  <span class="cf">if</span> (judge) {</span>
+<span id="cb324-25"><a href="特征工程交叉验证和超参数调优.html#cb324-25" tabindex="-1"></a>    data_raw <span class="sc">%&gt;%</span> </span>
+<span id="cb324-26"><a href="特征工程交叉验证和超参数调优.html#cb324-26" tabindex="-1"></a>      <span class="fu">mutate</span>(<span class="at">Name =</span> <span class="fu">str_replace</span>(Name, <span class="st">&quot;</span><span class="sc">\&quot;</span><span class="st">&quot;</span>, <span class="st">&quot;&quot;</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb324-27"><a href="特征工程交叉验证和超参数调优.html#cb324-27" tabindex="-1"></a>      <span class="fu">mutate</span>(<span class="at">Name =</span> <span class="fu">str_replace</span>(Name, <span class="st">&quot;</span><span class="sc">\\\&quot;</span><span class="st">&quot;</span>, <span class="st">&quot;&quot;</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb324-28"><a href="特征工程交叉验证和超参数调优.html#cb324-28" tabindex="-1"></a>      <span class="fu">mutate</span>(<span class="at">Family =</span> <span class="fu">str_extract</span>(Name, <span class="st">&quot;^[^,]+&quot;</span>), </span>
+<span id="cb324-29"><a href="特征工程交叉验证和超参数调优.html#cb324-29" tabindex="-1"></a>             <span class="at">Appellation =</span> <span class="fu">str_sub</span>(<span class="fu">str_extract</span>(Name, <span class="st">&quot;,</span><span class="sc">\\</span><span class="st">s(</span><span class="sc">\\</span><span class="st">w+)(?=</span><span class="sc">\\</span><span class="st">.)&quot;</span>), <span class="at">start =</span> <span class="dv">3</span>), </span>
+<span id="cb324-30"><a href="特征工程交叉验证和超参数调优.html#cb324-30" tabindex="-1"></a>             <span class="at">Seat =</span> <span class="fu">str_sub</span>(Cabin, <span class="at">end =</span> <span class="dv">1</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb324-31"><a href="特征工程交叉验证和超参数调优.html#cb324-31" tabindex="-1"></a>      <span class="fu">select</span>(<span class="sc">-</span>Name, <span class="sc">-</span>Cabin, <span class="sc">-</span>PassengerId, <span class="sc">-</span>Ticket) <span class="sc">%&gt;%</span> </span>
+<span id="cb324-32"><a href="特征工程交叉验证和超参数调优.html#cb324-32" tabindex="-1"></a>      <span class="fu">mutate</span>(<span class="at">Seat =</span> <span class="fu">ifelse</span>(Seat <span class="sc">%in%</span> lst_par[[<span class="dv">3</span>]], Seat, <span class="st">&quot;Unknown&quot;</span>), </span>
+<span id="cb324-33"><a href="特征工程交叉验证和超参数调优.html#cb324-33" tabindex="-1"></a>             <span class="co"># Family = ifelse(Family %in% lst_par[[1]], &quot;pairs&quot;, &quot;Single&quot;), </span></span>
+<span id="cb324-34"><a href="特征工程交叉验证和超参数调优.html#cb324-34" tabindex="-1"></a>             <span class="at">Appellation =</span> lst_par[[<span class="dv">2</span>]][Appellation], </span>
+<span id="cb324-35"><a href="特征工程交叉验证和超参数调优.html#cb324-35" tabindex="-1"></a>             <span class="fu">across</span>(<span class="fu">where</span>(is.character), factor), </span>
+<span id="cb324-36"><a href="特征工程交叉验证和超参数调优.html#cb324-36" tabindex="-1"></a>             <span class="at">Sex =</span> <span class="fu">as.integer</span>(Sex) <span class="sc">-</span> <span class="dv">1</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb324-37"><a href="特征工程交叉验证和超参数调优.html#cb324-37" tabindex="-1"></a>      <span class="fu">select</span>(<span class="sc">-</span>Family, <span class="sc">-</span>Embarked)</span>
+<span id="cb324-38"><a href="特征工程交叉验证和超参数调优.html#cb324-38" tabindex="-1"></a>  } <span class="cf">else</span> {</span>
+<span id="cb324-39"><a href="特征工程交叉验证和超参数调优.html#cb324-39" tabindex="-1"></a>    data_raw <span class="sc">%&gt;%</span> </span>
+<span id="cb324-40"><a href="特征工程交叉验证和超参数调优.html#cb324-40" tabindex="-1"></a>      <span class="fu">mutate</span>(<span class="at">Name =</span> <span class="fu">str_replace</span>(Name, <span class="st">&quot;</span><span class="sc">\&quot;</span><span class="st">&quot;</span>, <span class="st">&quot;&quot;</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb324-41"><a href="特征工程交叉验证和超参数调优.html#cb324-41" tabindex="-1"></a>      <span class="fu">mutate</span>(<span class="at">Name =</span> <span class="fu">str_replace</span>(Name, <span class="st">&quot;</span><span class="sc">\\\&quot;</span><span class="st">&quot;</span>, <span class="st">&quot;&quot;</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb324-42"><a href="特征工程交叉验证和超参数调优.html#cb324-42" tabindex="-1"></a>      <span class="fu">mutate</span>(<span class="at">Family =</span> <span class="fu">str_extract</span>(Name, <span class="st">&quot;^[^,]+&quot;</span>), </span>
+<span id="cb324-43"><a href="特征工程交叉验证和超参数调优.html#cb324-43" tabindex="-1"></a>             <span class="at">Appellation =</span> <span class="fu">str_sub</span>(<span class="fu">str_extract</span>(Name, <span class="st">&quot;,</span><span class="sc">\\</span><span class="st">s(</span><span class="sc">\\</span><span class="st">w+)(?=</span><span class="sc">\\</span><span class="st">.)&quot;</span>), <span class="at">start =</span> <span class="dv">3</span>), </span>
+<span id="cb324-44"><a href="特征工程交叉验证和超参数调优.html#cb324-44" tabindex="-1"></a>             <span class="at">Seat =</span> <span class="fu">str_sub</span>(Cabin, <span class="at">end =</span> <span class="dv">1</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb324-45"><a href="特征工程交叉验证和超参数调优.html#cb324-45" tabindex="-1"></a>      <span class="fu">select</span>(<span class="sc">-</span>Name, <span class="sc">-</span>Cabin, <span class="sc">-</span>PassengerId, <span class="sc">-</span>Ticket) <span class="sc">%&gt;%</span> </span>
+<span id="cb324-46"><a href="特征工程交叉验证和超参数调优.html#cb324-46" tabindex="-1"></a>      <span class="fu">mutate</span>(<span class="at">Seat =</span> <span class="fu">ifelse</span>(Seat <span class="sc">%in%</span> lst_par[[<span class="dv">3</span>]], Seat, <span class="st">&quot;Unknown&quot;</span>), </span>
+<span id="cb324-47"><a href="特征工程交叉验证和超参数调优.html#cb324-47" tabindex="-1"></a>             <span class="co"># Family = ifelse(Family %in% lst_par[[1]], &quot;pairs&quot;, &quot;Single&quot;), </span></span>
+<span id="cb324-48"><a href="特征工程交叉验证和超参数调优.html#cb324-48" tabindex="-1"></a>             <span class="at">Appellation =</span> lst_par[[<span class="dv">2</span>]][Appellation], </span>
+<span id="cb324-49"><a href="特征工程交叉验证和超参数调优.html#cb324-49" tabindex="-1"></a>             <span class="fu">across</span>(<span class="fu">where</span>(is.character), factor), </span>
+<span id="cb324-50"><a href="特征工程交叉验证和超参数调优.html#cb324-50" tabindex="-1"></a>             <span class="at">Sex =</span> <span class="fu">as.integer</span>(Sex) <span class="sc">-</span> <span class="dv">1</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb324-51"><a href="特征工程交叉验证和超参数调优.html#cb324-51" tabindex="-1"></a>      <span class="fu">select</span>(<span class="sc">-</span>Family, <span class="sc">-</span>Embarked) <span class="sc">%&gt;%</span> </span>
+<span id="cb324-52"><a href="特征工程交叉验证和超参数调优.html#cb324-52" tabindex="-1"></a>      <span class="fu">mutate</span>(<span class="at">Survived =</span> <span class="fu">c</span>(<span class="fu">rep</span>(<span class="dv">0</span>, <span class="fu">nrow</span>(.)<span class="sc">-</span><span class="dv">1</span>), <span class="dv">1</span>))</span>
+<span id="cb324-53"><a href="特征工程交叉验证和超参数调优.html#cb324-53" tabindex="-1"></a>  }</span>
+<span id="cb324-54"><a href="特征工程交叉验证和超参数调优.html#cb324-54" tabindex="-1"></a>}</span>
+<span id="cb324-55"><a href="特征工程交叉验证和超参数调优.html#cb324-55" tabindex="-1"></a></span>
+<span id="cb324-56"><a href="特征工程交叉验证和超参数调优.html#cb324-56" tabindex="-1"></a>data_tt_train <span class="ot">=</span> <span class="fu">preprocess</span>(lst_par, data_tt_train_raw)</span>
+<span id="cb324-57"><a href="特征工程交叉验证和超参数调优.html#cb324-57" tabindex="-1"></a>data_tt_test  <span class="ot">=</span> <span class="fu">preprocess</span>(lst_par, data_tt_test_raw)</span>
+<span id="cb324-58"><a href="特征工程交叉验证和超参数调优.html#cb324-58" tabindex="-1"></a></span>
+<span id="cb324-59"><a href="特征工程交叉验证和超参数调优.html#cb324-59" tabindex="-1"></a>task_tt_train_raw <span class="ot">=</span> <span class="fu">as_task_classif</span>(data_tt_train, <span class="at">target =</span> <span class="st">&quot;Survived&quot;</span>)</span>
+<span id="cb324-60"><a href="特征工程交叉验证和超参数调优.html#cb324-60" tabindex="-1"></a>task_tt_test_raw  <span class="ot">=</span> <span class="fu">as_task_classif</span>(data_tt_test, <span class="at">target =</span> <span class="st">&quot;Survived&quot;</span>)</span></code></pre></div>
+<p>然后对泰坦尼克生存数据中的数据进行进一步处理，包括对含少量缺失值的特征进行插补、将因子型特征进行独热编码。</p>
+<p>泰坦尼克生存数据属于分类任务，分类任务需要注意的一点是各个类别的数量要均等，否则会导致模型比较偏好一部分类别，这时候如果还以0.5作为阈值，预测结果就会偏向占比较多的类别。这一现象称作类别不均衡。对此要进行抽样或生成假样本以平衡数据。</p>
+<p>但是这个任务十分特殊，即训练集、测试集数据分布不一致。这时候进行抽样或者生成假样本会导致模型错误的重视某一部分样本，导致模型效果反而变差。考虑到样本不均衡其实并不严重，所以我们也不进行平衡样本，只在后面改阈值。</p>
+<p>这里为了分辨效果，我们做一组平衡的，做一组不平衡的。</p>
+<div class="sourceCode" id="cb325"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb325-1"><a href="特征工程交叉验证和超参数调优.html#cb325-1" tabindex="-1"></a>preprocess_pipe <span class="ot">=</span> </span>
+<span id="cb325-2"><a href="特征工程交叉验证和超参数调优.html#cb325-2" tabindex="-1"></a>  <span class="fu">po</span>(<span class="st">&quot;imputelearner&quot;</span>, <span class="at">id =</span> <span class="st">&quot;num&quot;</span>, <span class="fu">lrn</span>(<span class="st">&quot;regr.lightgbm&quot;</span>), <span class="at">affect_columns =</span> <span class="fu">selector_type</span>(<span class="st">&quot;numeric&quot;</span>)) <span class="sc">%&gt;&gt;%</span> </span>
+<span id="cb325-3"><a href="特征工程交叉验证和超参数调优.html#cb325-3" tabindex="-1"></a>  <span class="fu">po</span>(<span class="st">&quot;imputelearner&quot;</span>, <span class="at">id =</span> <span class="st">&quot;fct&quot;</span>, <span class="fu">lrn</span>(<span class="st">&quot;classif.rpart&quot;</span>), <span class="at">affect_columns =</span> <span class="fu">selector_type</span>(<span class="st">&quot;factor&quot;</span>)) <span class="sc">%&gt;&gt;%</span> </span>
+<span id="cb325-4"><a href="特征工程交叉验证和超参数调优.html#cb325-4" tabindex="-1"></a>  <span class="fu">po</span>(<span class="st">&quot;encode&quot;</span>, <span class="at">method =</span> <span class="st">&quot;one-hot&quot;</span>)</span>
+<span id="cb325-5"><a href="特征工程交叉验证和超参数调优.html#cb325-5" tabindex="-1"></a>up_sp <span class="ot">=</span> <span class="fu">po</span>(<span class="st">&quot;classbalancing&quot;</span>, <span class="at">reference =</span> <span class="st">&quot;minor&quot;</span>,</span>
+<span id="cb325-6"><a href="特征工程交叉验证和超参数调优.html#cb325-6" tabindex="-1"></a>           <span class="at">adjust =</span> <span class="st">&quot;major&quot;</span>)</span>
+<span id="cb325-7"><a href="特征工程交叉验证和超参数调优.html#cb325-7" tabindex="-1"></a></span>
+<span id="cb325-8"><a href="特征工程交叉验证和超参数调优.html#cb325-8" tabindex="-1"></a>preprocess_pipe<span class="sc">$</span><span class="fu">train</span>(task_tt_train_raw)</span></code></pre></div>
+<pre><code>## $encode.output
+## &lt;TaskClassif:data_tt_train&gt; (891 x 21)
+## * Target: Survived
+## * Properties: twoclass
+## * Features (20):
+##   - dbl (20): Age, Appellation.Master, Appellation.Miss,
+##     Appellation.Mr, Appellation.Mrs, Appellation.Officer,
+##     Appellation.factor, Fare, Parch, Pclass, Seat.A, Seat.B, Seat.C,
+##     Seat.D, Seat.E, Seat.F, Seat.G, Seat.Unknown, Sex, SibSp</code></pre>
+<div class="sourceCode" id="cb327"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb327-1"><a href="特征工程交叉验证和超参数调优.html#cb327-1" tabindex="-1"></a>task_tt_train_nob <span class="ot">=</span> preprocess_pipe<span class="sc">$</span><span class="fu">predict</span>(task_tt_train_raw)[[<span class="dv">1</span>]]</span>
+<span id="cb327-2"><a href="特征工程交叉验证和超参数调优.html#cb327-2" tabindex="-1"></a>task_tt_train <span class="ot">=</span> up_sp<span class="sc">$</span><span class="fu">train</span>(<span class="fu">list</span>(preprocess_pipe<span class="sc">$</span><span class="fu">predict</span>(task_tt_train_raw)[[<span class="dv">1</span>]]))[[<span class="dv">1</span>]]</span>
+<span id="cb327-3"><a href="特征工程交叉验证和超参数调优.html#cb327-3" tabindex="-1"></a>task_tt_test  <span class="ot">=</span> preprocess_pipe<span class="sc">$</span><span class="fu">predict</span>(task_tt_test_raw)[[<span class="dv">1</span>]]</span></code></pre></div>
+<p>处理好了以后我们使用简单的学习器进行拟合。</p>
+<div class="sourceCode" id="cb328"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb328-1"><a href="特征工程交叉验证和超参数调优.html#cb328-1" tabindex="-1"></a>toylrn_r <span class="ot">=</span> <span class="fu">lrn</span>(<span class="st">&quot;regr.lightgbm&quot;</span>) <span class="co"># 用lightgbm的原因是因为它收敛的快</span></span>
+<span id="cb328-2"><a href="特征工程交叉验证和超参数调优.html#cb328-2" tabindex="-1"></a>toylrn_r<span class="sc">$</span><span class="fu">train</span>(task_pg_train)</span>
+<span id="cb328-3"><a href="特征工程交叉验证和超参数调优.html#cb328-3" tabindex="-1"></a>toypre_r <span class="ot">=</span> toylrn_r<span class="sc">$</span><span class="fu">predict</span>(task_pg_test)</span>
+<span id="cb328-4"><a href="特征工程交叉验证和超参数调优.html#cb328-4" tabindex="-1"></a></span>
+<span id="cb328-5"><a href="特征工程交叉验证和超参数调优.html#cb328-5" tabindex="-1"></a>toylrn_c <span class="ot">=</span> <span class="fu">lrn</span>(<span class="st">&quot;classif.lightgbm&quot;</span>)</span>
+<span id="cb328-6"><a href="特征工程交叉验证和超参数调优.html#cb328-6" tabindex="-1"></a>toylrn_c<span class="sc">$</span><span class="fu">train</span>(task_tt_train)</span>
+<span id="cb328-7"><a href="特征工程交叉验证和超参数调优.html#cb328-7" tabindex="-1"></a>toypre_c <span class="ot">=</span> toylrn_c<span class="sc">$</span><span class="fu">predict</span>(task_tt_test)</span></code></pre></div>
+<p>设计一个小函数用于汇总结果提交</p>
+<div class="sourceCode" id="cb329"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb329-1"><a href="特征工程交叉验证和超参数调优.html#cb329-1" tabindex="-1"></a>summary_of <span class="ot">=</span> <span class="cf">function</span>(pre, <span class="at">is_titanic =</span> F) {</span>
+<span id="cb329-2"><a href="特征工程交叉验证和超参数调优.html#cb329-2" tabindex="-1"></a>  <span class="cf">if</span> (is_titanic) {</span>
+<span id="cb329-3"><a href="特征工程交叉验证和超参数调优.html#cb329-3" tabindex="-1"></a>    <span class="fu">tibble</span>(</span>
+<span id="cb329-4"><a href="特征工程交叉验证和超参数调优.html#cb329-4" tabindex="-1"></a>      <span class="at">PassengerId =</span> data_tt_test_raw<span class="sc">$</span>PassengerId, </span>
+<span id="cb329-5"><a href="特征工程交叉验证和超参数调优.html#cb329-5" tabindex="-1"></a>      <span class="at">Survived =</span> pre<span class="sc">$</span>response</span>
+<span id="cb329-6"><a href="特征工程交叉验证和超参数调优.html#cb329-6" tabindex="-1"></a>    )</span>
+<span id="cb329-7"><a href="特征工程交叉验证和超参数调优.html#cb329-7" tabindex="-1"></a>  } <span class="cf">else</span> {</span>
+<span id="cb329-8"><a href="特征工程交叉验证和超参数调优.html#cb329-8" tabindex="-1"></a>    <span class="fu">tibble</span>(</span>
+<span id="cb329-9"><a href="特征工程交叉验证和超参数调优.html#cb329-9" tabindex="-1"></a>      <span class="at">id =</span> data_pg_test_raw<span class="sc">$</span>id, </span>
+<span id="cb329-10"><a href="特征工程交叉验证和超参数调优.html#cb329-10" tabindex="-1"></a>      <span class="at">target =</span> pre<span class="sc">$</span>response</span>
+<span id="cb329-11"><a href="特征工程交叉验证和超参数调优.html#cb329-11" tabindex="-1"></a>    )</span>
+<span id="cb329-12"><a href="特征工程交叉验证和超参数调优.html#cb329-12" tabindex="-1"></a>  }</span>
+<span id="cb329-13"><a href="特征工程交叉验证和超参数调优.html#cb329-13" tabindex="-1"></a>}</span>
+<span id="cb329-14"><a href="特征工程交叉验证和超参数调优.html#cb329-14" tabindex="-1"></a></span>
+<span id="cb329-15"><a href="特征工程交叉验证和超参数调优.html#cb329-15" tabindex="-1"></a><span class="fu">write_csv</span>(<span class="fu">summary_of</span>(toypre_r), <span class="st">&quot;temp/submission.csv&quot;</span>)</span></code></pre></div>
+<p>playground的结果为0.7031，模型偏差已经十分逼近随机误差了，再看一下泰坦尼克的结果。</p>
+<div class="sourceCode" id="cb330"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb330-1"><a href="特征工程交叉验证和超参数调优.html#cb330-1" tabindex="-1"></a>toypre_c<span class="sc">$</span><span class="fu">score</span>(<span class="fu">msr</span>(<span class="st">&quot;classif.acc&quot;</span>))</span></code></pre></div>
+<pre><code>## classif.acc 
+##   0.7296651</code></pre>
+<p>不好也不坏，接下来我们想一下如何优化这两个结果。</p>
+</div>
+</div>
+<div id="超参数调优" class="section level2 hasAnchor" number="7.2">
+<h2><span class="header-section-number">7.2</span> 超参数调优<a href="特征工程交叉验证和超参数调优.html#超参数调优" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>模型参数是模型内部的配置变量，需要用数据估计模型参数的值，随数据变化而变化；模型超参数是模型外部的配置，需要人为设定，不随数据变化而变化。</p>
+<p>举深度学习中最简单的多层感知机的例子可能更好懂，参数是每个具体节点的斜率和偏置，超参数是模型的层数和节点数。</p>
+<p>下图中的线就是节点中斜率，表示节点之间的联系，节点数和层数就是模型的超参数。</p>
+<p><img src="pic/6-dp.jpg" width="237" style="display: block; margin: auto;" /></p>
+<p>除了这些有形的超参数以外，还有许多更多无形的超参数。模型在不同的超参数下对数据的学习程度也不同。合适的超参数能加速模型收敛、增强模型泛化能力或者对数据的学习程度，不合适的超参数会导致模型压根没法训练。比如knn中如果把k设的过大，会发现所有数据都被分成了一个类。梯度提升时如果学习率设的过高，那模型效果反而会越训练越差。</p>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:unnamed-chunk-13"></span>
+<img src="pic/6-lr1.jpg" alt="较小的学习率能够正确拟合模型（左图）；过大的学习率会发生剧烈的震荡，越来越偏离目标（右图）" width="33%" /><img src="pic/6-lr2.jpg" alt="较小的学习率能够正确拟合模型（左图）；过大的学习率会发生剧烈的震荡，越来越偏离目标（右图）" width="33%" />
+<p class="caption">
+图7.1: 较小的学习率能够正确拟合模型（左图）；过大的学习率会发生剧烈的震荡，越来越偏离目标（右图）
+</p>
+</div>
+<p>所以，就此意义上说，超参数最重要的意义是让模型能够训练起来，大多数情况下，一组经过测验的甚至默认固定超参数即可满足需求。超参数调优本质上就是对每一种超参数组合拟合一个模型，以期模型在交叉验证中性能提升。根据调优过程中使用的数值优化的方式不同可分为若干类，常用的策略如下：</p>
+<ol style="list-style-type: decimal">
+<li>网格搜索：对每种超参数组合进行评估，在超参数个数较少的模型上适用，精确度最高。</li>
+<li>随机搜索：随机组合超参数，有一定的局部最优的风险，耗时短。</li>
+<li>贝叶斯优化：记录每次组合的结果，在以往结果的基础上进行优化。耗时长。由于假设较强，实际套用效果并不佳。</li>
+<li>hyperband：综合随机搜索和贝叶斯优化，逐渐缩小搜索空间。实际使用较多。</li>
+</ol>
+<p>可以设置若干个超参数组合的效果不如此前最优的超参数组合后终止搜索。</p>
+<blockquote>
+<p>如果一个模型需要调参才能得到某个结果，大概率已经过拟合了。如果调参都得不到某个结果，那只能说明结果本就不存在。另外，模型本身不会保证结果对错，只能给出在模型假设下的推断，但很多模型不但是错的，还没有用。</p>
+<p>—于淼</p>
+</blockquote>
+<p>须知，超参数调优只能略微提升训练集上交叉验证的结果，如果超参数搜索区间比较离谱，甚至会比默认参数更差。如果训练集、测试集分布不一致，调优后的结果在测试集上的表现甚至会更差。</p>
+<div id="mlr3实现" class="section level3 hasAnchor" number="7.2.1">
+<h3><span class="header-section-number">7.2.1</span> mlr3实现<a href="特征工程交叉验证和超参数调优.html#mlr3实现" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>mlr3中使用to_tune()为学习器的超参数指定搜索空间，使用ti()将任务、学习器、指标、终止条件等内容绑定为一个instance（实例），调用tnr()进行调参。</p>
+<p>搜索空间与设置普通参数的形式无异：</p>
+<div class="sourceCode" id="cb332"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb332-1"><a href="特征工程交叉验证和超参数调优.html#cb332-1" tabindex="-1"></a>learner_lgb_r <span class="ot">=</span> <span class="fu">lrn</span>(<span class="st">&quot;regr.lightgbm&quot;</span>)</span>
+<span id="cb332-2"><a href="特征工程交叉验证和超参数调优.html#cb332-2" tabindex="-1"></a>learner_lgb_r<span class="sc">$</span>param_set<span class="sc">$</span><span class="fu">set_values</span>(</span>
+<span id="cb332-3"><a href="特征工程交叉验证和超参数调优.html#cb332-3" tabindex="-1"></a>  <span class="at">learning_rate =</span> <span class="fu">to_tune</span>(<span class="fl">0.001</span>, <span class="fl">0.1</span>),</span>
+<span id="cb332-4"><a href="特征工程交叉验证和超参数调优.html#cb332-4" tabindex="-1"></a>  <span class="at">num_iterations =</span> <span class="fu">to_tune</span>(<span class="fu">p_int</span>(<span class="dv">256</span>, <span class="dv">1024</span>, <span class="at">tags =</span> <span class="st">&quot;budget&quot;</span>)),</span>
+<span id="cb332-5"><a href="特征工程交叉验证和超参数调优.html#cb332-5" tabindex="-1"></a>  <span class="at">max_depth =</span> <span class="fu">to_tune</span>(<span class="dv">1</span>, <span class="dv">10</span>),</span>
+<span id="cb332-6"><a href="特征工程交叉验证和超参数调优.html#cb332-6" tabindex="-1"></a>  <span class="at">num_leaves =</span> <span class="fu">to_tune</span>(<span class="dv">5</span>, <span class="dv">53</span>),</span>
+<span id="cb332-7"><a href="特征工程交叉验证和超参数调优.html#cb332-7" tabindex="-1"></a>  <span class="at">bagging_fraction =</span> <span class="fu">to_tune</span>(<span class="fl">0.75</span>, <span class="dv">1</span>)</span>
+<span id="cb332-8"><a href="特征工程交叉验证和超参数调优.html#cb332-8" tabindex="-1"></a>)</span></code></pre></div>
+<p>然后与任务绑定到同一个实例里后使用tnr搜索。也可以使用auto_tuner等函数绑定搜索。</p>
+<p>对于决策树、随机森林、xgboost这种著名模型，mlr3在mlr3tuningspace中收集了常用的搜索空间，只需要用lts()括起来就不需要手动设置值了。如下。</p>
+<div class="sourceCode" id="cb333"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb333-1"><a href="特征工程交叉验证和超参数调优.html#cb333-1" tabindex="-1"></a>learner_xgb_r <span class="ot">=</span> <span class="fu">lts</span>(<span class="fu">lrn</span>(<span class="st">&quot;regr.xgboost&quot;</span>))</span></code></pre></div>
+<p>超参数搜索空间一般只用一套固定的经过验证的超参数搜索空间和调参器。只有在复杂的任务上才需要灵活做出调整。</p>
+<p>下面的超参数我之前搜索过了，十分耗时，就不再搜索了。</p>
+<div class="sourceCode" id="cb334"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb334-1"><a href="特征工程交叉验证和超参数调优.html#cb334-1" tabindex="-1"></a><span class="co"># learner_lgb_r = lrn(&quot;regr.lightgbm&quot;)</span></span>
+<span id="cb334-2"><a href="特征工程交叉验证和超参数调优.html#cb334-2" tabindex="-1"></a><span class="co"># learner_lgb_r$param_set$set_values(</span></span>
+<span id="cb334-3"><a href="特征工程交叉验证和超参数调优.html#cb334-3" tabindex="-1"></a><span class="co">#   learning_rate = to_tune(0.001, 0.1),</span></span>
+<span id="cb334-4"><a href="特征工程交叉验证和超参数调优.html#cb334-4" tabindex="-1"></a><span class="co">#   num_iterations = to_tune(p_int(256, 1024, tags = &quot;budget&quot;)),</span></span>
+<span id="cb334-5"><a href="特征工程交叉验证和超参数调优.html#cb334-5" tabindex="-1"></a><span class="co">#   max_depth = to_tune(1, 10),</span></span>
+<span id="cb334-6"><a href="特征工程交叉验证和超参数调优.html#cb334-6" tabindex="-1"></a><span class="co">#   num_leaves = to_tune(5, 53),</span></span>
+<span id="cb334-7"><a href="特征工程交叉验证和超参数调优.html#cb334-7" tabindex="-1"></a><span class="co">#   bagging_fraction = to_tune(0.75, 1)</span></span>
+<span id="cb334-8"><a href="特征工程交叉验证和超参数调优.html#cb334-8" tabindex="-1"></a><span class="co"># )</span></span>
+<span id="cb334-9"><a href="特征工程交叉验证和超参数调优.html#cb334-9" tabindex="-1"></a><span class="co"># </span></span>
+<span id="cb334-10"><a href="特征工程交叉验证和超参数调优.html#cb334-10" tabindex="-1"></a><span class="co"># instance = ti(</span></span>
+<span id="cb334-11"><a href="特征工程交叉验证和超参数调优.html#cb334-11" tabindex="-1"></a><span class="co">#   task = task_pg_train,</span></span>
+<span id="cb334-12"><a href="特征工程交叉验证和超参数调优.html#cb334-12" tabindex="-1"></a><span class="co">#   learner = learner_lgb_r,</span></span>
+<span id="cb334-13"><a href="特征工程交叉验证和超参数调优.html#cb334-13" tabindex="-1"></a><span class="co">#   resampling = rsmp(&quot;holdout&quot;),</span></span>
+<span id="cb334-14"><a href="特征工程交叉验证和超参数调优.html#cb334-14" tabindex="-1"></a><span class="co">#   measures = msr(&quot;regr.rmse&quot;),</span></span>
+<span id="cb334-15"><a href="特征工程交叉验证和超参数调优.html#cb334-15" tabindex="-1"></a><span class="co">#   terminator = trm(&quot;evals&quot;, n_evals = 50)</span></span>
+<span id="cb334-16"><a href="特征工程交叉验证和超参数调优.html#cb334-16" tabindex="-1"></a><span class="co"># )</span></span>
+<span id="cb334-17"><a href="特征工程交叉验证和超参数调优.html#cb334-17" tabindex="-1"></a><span class="co"># </span></span>
+<span id="cb334-18"><a href="特征工程交叉验证和超参数调优.html#cb334-18" tabindex="-1"></a><span class="co"># tuner = tnr(&quot;hyperband&quot;, eta = 2, repetitions = 2)</span></span>
+<span id="cb334-19"><a href="特征工程交叉验证和超参数调优.html#cb334-19" tabindex="-1"></a><span class="co"># tuner$optimize(instance)</span></span>
+<span id="cb334-20"><a href="特征工程交叉验证和超参数调优.html#cb334-20" tabindex="-1"></a></span>
+<span id="cb334-21"><a href="特征工程交叉验证和超参数调优.html#cb334-21" tabindex="-1"></a>learner_lgb_r <span class="ot">=</span> <span class="fu">lrn</span>(<span class="st">&quot;regr.lightgbm&quot;</span>)</span>
+<span id="cb334-22"><a href="特征工程交叉验证和超参数调优.html#cb334-22" tabindex="-1"></a></span>
+<span id="cb334-23"><a href="特征工程交叉验证和超参数调优.html#cb334-23" tabindex="-1"></a><span class="co"># 这是我之前搜索过的结果</span></span>
+<span id="cb334-24"><a href="特征工程交叉验证和超参数调优.html#cb334-24" tabindex="-1"></a>learner_lgb_r<span class="sc">$</span>param_set<span class="sc">$</span><span class="fu">set_values</span>(</span>
+<span id="cb334-25"><a href="特征工程交叉验证和超参数调优.html#cb334-25" tabindex="-1"></a>  <span class="at">learning_rate =</span> <span class="fl">0.0539276</span>, </span>
+<span id="cb334-26"><a href="特征工程交叉验证和超参数调优.html#cb334-26" tabindex="-1"></a>  <span class="at">num_iterations =</span> <span class="dv">256</span>, </span>
+<span id="cb334-27"><a href="特征工程交叉验证和超参数调优.html#cb334-27" tabindex="-1"></a>  <span class="at">max_depth =</span> <span class="dv">3</span>, </span>
+<span id="cb334-28"><a href="特征工程交叉验证和超参数调优.html#cb334-28" tabindex="-1"></a>  <span class="at">num_leaves =</span> <span class="dv">5</span>, </span>
+<span id="cb334-29"><a href="特征工程交叉验证和超参数调优.html#cb334-29" tabindex="-1"></a>  <span class="at">bagging_fraction =</span> <span class="fl">0.82</span></span>
+<span id="cb334-30"><a href="特征工程交叉验证和超参数调优.html#cb334-30" tabindex="-1"></a>)</span>
+<span id="cb334-31"><a href="特征工程交叉验证和超参数调优.html#cb334-31" tabindex="-1"></a></span>
+<span id="cb334-32"><a href="特征工程交叉验证和超参数调优.html#cb334-32" tabindex="-1"></a>learner_lgb_r<span class="sc">$</span><span class="fu">train</span>(task_pg_train)</span>
+<span id="cb334-33"><a href="特征工程交叉验证和超参数调优.html#cb334-33" tabindex="-1"></a></span>
+<span id="cb334-34"><a href="特征工程交叉验证和超参数调优.html#cb334-34" tabindex="-1"></a>prediction_lgb_r <span class="ot">=</span> learner_lgb_r<span class="sc">$</span><span class="fu">predict</span>(task_pg_test)</span>
+<span id="cb334-35"><a href="特征工程交叉验证和超参数调优.html#cb334-35" tabindex="-1"></a><span class="fu">write_csv</span>(<span class="fu">summary_of</span>(prediction_lgb_r), <span class="st">&quot;temp/submission.csv&quot;</span>)</span></code></pre></div>
+<p>超参数调优后的结果是0.6994。</p>
+<p>一鼓作气，我们再试试在泰坦尼克生存预测数据中测试集上的表现。</p>
+<div class="sourceCode" id="cb335"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb335-1"><a href="特征工程交叉验证和超参数调优.html#cb335-1" tabindex="-1"></a>learner_lgb_c <span class="ot">=</span> <span class="fu">lrn</span>(<span class="st">&quot;classif.lightgbm&quot;</span>)</span>
+<span id="cb335-2"><a href="特征工程交叉验证和超参数调优.html#cb335-2" tabindex="-1"></a>learner_lgb_c<span class="sc">$</span>param_set<span class="sc">$</span><span class="fu">set_values</span>(</span>
+<span id="cb335-3"><a href="特征工程交叉验证和超参数调优.html#cb335-3" tabindex="-1"></a>  <span class="at">learning_rate =</span> <span class="fu">to_tune</span>(<span class="fl">0.001</span>, <span class="fl">0.1</span>),</span>
+<span id="cb335-4"><a href="特征工程交叉验证和超参数调优.html#cb335-4" tabindex="-1"></a>  <span class="at">num_iterations =</span> <span class="fu">to_tune</span>(<span class="fu">p_int</span>(<span class="dv">256</span>, <span class="dv">1024</span>, <span class="at">tags =</span> <span class="st">&quot;budget&quot;</span>)),</span>
+<span id="cb335-5"><a href="特征工程交叉验证和超参数调优.html#cb335-5" tabindex="-1"></a>  <span class="at">max_depth =</span> <span class="fu">to_tune</span>(<span class="dv">1</span>, <span class="dv">10</span>),</span>
+<span id="cb335-6"><a href="特征工程交叉验证和超参数调优.html#cb335-6" tabindex="-1"></a>  <span class="at">num_leaves =</span> <span class="fu">to_tune</span>(<span class="dv">5</span>, <span class="dv">53</span>),</span>
+<span id="cb335-7"><a href="特征工程交叉验证和超参数调优.html#cb335-7" tabindex="-1"></a>  <span class="at">bagging_fraction =</span> <span class="fu">to_tune</span>(<span class="fl">0.75</span>, <span class="dv">1</span>)</span>
+<span id="cb335-8"><a href="特征工程交叉验证和超参数调优.html#cb335-8" tabindex="-1"></a>  <span class="co"># early_stopping = TRUE, </span></span>
+<span id="cb335-9"><a href="特征工程交叉验证和超参数调优.html#cb335-9" tabindex="-1"></a>  <span class="co"># early_stopping_rounds = to_tune(128, 256)</span></span>
+<span id="cb335-10"><a href="特征工程交叉验证和超参数调优.html#cb335-10" tabindex="-1"></a>)</span>
+<span id="cb335-11"><a href="特征工程交叉验证和超参数调优.html#cb335-11" tabindex="-1"></a></span>
+<span id="cb335-12"><a href="特征工程交叉验证和超参数调优.html#cb335-12" tabindex="-1"></a>instance <span class="ot">=</span> <span class="fu">ti</span>(</span>
+<span id="cb335-13"><a href="特征工程交叉验证和超参数调优.html#cb335-13" tabindex="-1"></a>  <span class="at">task =</span> task_tt_train,</span>
+<span id="cb335-14"><a href="特征工程交叉验证和超参数调优.html#cb335-14" tabindex="-1"></a>  <span class="at">learner =</span> learner_lgb_c,</span>
+<span id="cb335-15"><a href="特征工程交叉验证和超参数调优.html#cb335-15" tabindex="-1"></a>  <span class="at">resampling =</span> <span class="fu">rsmp</span>(<span class="st">&quot;holdout&quot;</span>),</span>
+<span id="cb335-16"><a href="特征工程交叉验证和超参数调优.html#cb335-16" tabindex="-1"></a>  <span class="at">measures =</span> <span class="fu">msr</span>(<span class="st">&quot;classif.acc&quot;</span>),</span>
+<span id="cb335-17"><a href="特征工程交叉验证和超参数调优.html#cb335-17" tabindex="-1"></a>  <span class="at">terminator =</span> <span class="fu">trm</span>(<span class="st">&quot;evals&quot;</span>, <span class="at">n_evals =</span> <span class="dv">20</span>)</span>
+<span id="cb335-18"><a href="特征工程交叉验证和超参数调优.html#cb335-18" tabindex="-1"></a>)</span>
+<span id="cb335-19"><a href="特征工程交叉验证和超参数调优.html#cb335-19" tabindex="-1"></a></span>
+<span id="cb335-20"><a href="特征工程交叉验证和超参数调优.html#cb335-20" tabindex="-1"></a>tuner <span class="ot">=</span> <span class="fu">tnr</span>(<span class="st">&quot;mbo&quot;</span>) <span class="co"># 贝叶斯优化</span></span>
+<span id="cb335-21"><a href="特征工程交叉验证和超参数调优.html#cb335-21" tabindex="-1"></a>tuner<span class="sc">$</span><span class="fu">optimize</span>(instance)</span>
+<span id="cb335-22"><a href="特征工程交叉验证和超参数调优.html#cb335-22" tabindex="-1"></a></span>
+<span id="cb335-23"><a href="特征工程交叉验证和超参数调优.html#cb335-23" tabindex="-1"></a>learner_lgb_c<span class="sc">$</span>param_set<span class="sc">$</span>values <span class="ot">=</span> instance<span class="sc">$</span>result_learner_param_vals</span>
+<span id="cb335-24"><a href="特征工程交叉验证和超参数调优.html#cb335-24" tabindex="-1"></a>learner_lgb_c<span class="sc">$</span><span class="fu">train</span>(task_tt_train)</span>
+<span id="cb335-25"><a href="特征工程交叉验证和超参数调优.html#cb335-25" tabindex="-1"></a></span>
+<span id="cb335-26"><a href="特征工程交叉验证和超参数调优.html#cb335-26" tabindex="-1"></a>prediction_lgb_c <span class="ot">=</span> learner_lgb_c<span class="sc">$</span><span class="fu">predict</span>(task_tt_test)</span></code></pre></div>
+<div class="sourceCode" id="cb336"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb336-1"><a href="特征工程交叉验证和超参数调优.html#cb336-1" tabindex="-1"></a>prediction_lgb_c<span class="sc">$</span><span class="fu">score</span>(<span class="fu">msr</span>(<span class="st">&quot;classif.acc&quot;</span>))</span></code></pre></div>
+<pre><code>## classif.acc 
+##   0.7416268</code></pre>
+<p>效果反而变差了（如果文档上显示没有变差，那就是碰巧了，下同理）。我们来进一步分析原因。</p>
+<div class="sourceCode" id="cb338"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb338-1"><a href="特征工程交叉验证和超参数调优.html#cb338-1" tabindex="-1"></a>cv5_lgb_c <span class="ot">=</span> <span class="fu">resample</span>(task_tt_train, toylrn_c, <span class="fu">rsmp</span>(<span class="st">&quot;cv&quot;</span>, <span class="at">folds =</span> <span class="dv">5</span>))</span>
+<span id="cb338-2"><a href="特征工程交叉验证和超参数调优.html#cb338-2" tabindex="-1"></a>cv5_lgb_c_tuned <span class="ot">=</span> <span class="fu">resample</span>(task_tt_train, learner_lgb_c, <span class="fu">rsmp</span>(<span class="st">&quot;cv&quot;</span>, <span class="at">folds =</span> <span class="dv">5</span>))</span>
+<span id="cb338-3"><a href="特征工程交叉验证和超参数调优.html#cb338-3" tabindex="-1"></a></span>
+<span id="cb338-4"><a href="特征工程交叉验证和超参数调优.html#cb338-4" tabindex="-1"></a>cv5_lgb_c<span class="sc">$</span><span class="fu">aggregate</span>(<span class="fu">msr</span>(<span class="st">&quot;classif.acc&quot;</span>)); cv5_lgb_c_tuned<span class="sc">$</span><span class="fu">aggregate</span>(<span class="fu">msr</span>(<span class="st">&quot;classif.acc&quot;</span>))</span></code></pre></div>
+<pre><code>## classif.acc 
+##   0.7996458</code></pre>
+<pre><code>## classif.acc 
+##   0.8026191</code></pre>
+<p>调参的结果在训练集上的交叉验证更好，这是再自然不过的。但是如果训练集和测试集的分布不一致，那就会导致调参的结果在测试集上变差。</p>
+</div>
+<div id="使用注意" class="section level3 hasAnchor" number="7.2.2">
+<h3><span class="header-section-number">7.2.2</span> 使用注意<a href="特征工程交叉验证和超参数调优.html#使用注意" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div id="hyperband" class="section level4 hasAnchor" number="7.2.2.1">
+<h4><span class="header-section-number">7.2.2.1</span> hyperband<a href="特征工程交叉验证和超参数调优.html#hyperband" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>使用hyperband调参时，需要为某个参数指定budget标签，意指控制计算资源的超参数，一般设置在GBDT的迭代轮数或树的深度上。</p>
+</div>
+<div id="early-stop" class="section level4 hasAnchor" number="7.2.2.2">
+<h4><span class="header-section-number">7.2.2.2</span> early stop<a href="特征工程交叉验证和超参数调优.html#early-stop" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>我们再来看几个对比。</p>
+<p>简单模型在未经平衡的数据上表现较好。</p>
+<div class="sourceCode" id="cb341"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb341-1"><a href="特征工程交叉验证和超参数调优.html#cb341-1" tabindex="-1"></a><span class="fu">lrn</span>(<span class="st">&quot;classif.rpart&quot;</span>)<span class="sc">$</span><span class="fu">train</span>(task_tt_train)<span class="sc">$</span><span class="fu">predict</span>(task_tt_test)<span class="sc">$</span><span class="fu">score</span>(<span class="fu">msr</span>(<span class="st">&quot;classif.acc&quot;</span>))</span></code></pre></div>
+<pre><code>## classif.acc 
+##   0.7368421</code></pre>
+<div class="sourceCode" id="cb343"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb343-1"><a href="特征工程交叉验证和超参数调优.html#cb343-1" tabindex="-1"></a><span class="fu">lrn</span>(<span class="st">&quot;classif.rpart&quot;</span>)<span class="sc">$</span><span class="fu">train</span>(task_tt_train_nob)<span class="sc">$</span><span class="fu">predict</span>(task_tt_test)<span class="sc">$</span><span class="fu">score</span>(<span class="fu">msr</span>(<span class="st">&quot;classif.acc&quot;</span>))</span></code></pre></div>
+<pre><code>## classif.acc 
+##    0.777512</code></pre>
+<div class="sourceCode" id="cb345"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb345-1"><a href="特征工程交叉验证和超参数调优.html#cb345-1" tabindex="-1"></a>learner_rpart_c <span class="ot">=</span> <span class="fu">lts</span>(<span class="fu">lrn</span>(<span class="st">&quot;classif.rpart&quot;</span>))</span>
+<span id="cb345-2"><a href="特征工程交叉验证和超参数调优.html#cb345-2" tabindex="-1"></a></span>
+<span id="cb345-3"><a href="特征工程交叉验证和超参数调优.html#cb345-3" tabindex="-1"></a>instance <span class="ot">=</span> <span class="fu">ti</span>(</span>
+<span id="cb345-4"><a href="特征工程交叉验证和超参数调优.html#cb345-4" tabindex="-1"></a>  <span class="at">task =</span> task_tt_train_nob,</span>
+<span id="cb345-5"><a href="特征工程交叉验证和超参数调优.html#cb345-5" tabindex="-1"></a>  <span class="at">learner =</span> learner_rpart_c,</span>
+<span id="cb345-6"><a href="特征工程交叉验证和超参数调优.html#cb345-6" tabindex="-1"></a>  <span class="at">resampling =</span> <span class="fu">rsmp</span>(<span class="st">&quot;holdout&quot;</span>),</span>
+<span id="cb345-7"><a href="特征工程交叉验证和超参数调优.html#cb345-7" tabindex="-1"></a>  <span class="at">measures =</span> <span class="fu">msr</span>(<span class="st">&quot;classif.acc&quot;</span>),</span>
+<span id="cb345-8"><a href="特征工程交叉验证和超参数调优.html#cb345-8" tabindex="-1"></a>  <span class="at">terminator =</span> <span class="fu">trm</span>(<span class="st">&quot;evals&quot;</span>, <span class="at">n_evals =</span> <span class="dv">20</span>)</span>
+<span id="cb345-9"><a href="特征工程交叉验证和超参数调优.html#cb345-9" tabindex="-1"></a>)</span>
+<span id="cb345-10"><a href="特征工程交叉验证和超参数调优.html#cb345-10" tabindex="-1"></a></span>
+<span id="cb345-11"><a href="特征工程交叉验证和超参数调优.html#cb345-11" tabindex="-1"></a>tuner <span class="ot">=</span> <span class="fu">tnr</span>(<span class="st">&quot;grid_search&quot;</span>)</span>
+<span id="cb345-12"><a href="特征工程交叉验证和超参数调优.html#cb345-12" tabindex="-1"></a>tuner<span class="sc">$</span><span class="fu">optimize</span>(instance)</span>
+<span id="cb345-13"><a href="特征工程交叉验证和超参数调优.html#cb345-13" tabindex="-1"></a></span>
+<span id="cb345-14"><a href="特征工程交叉验证和超参数调优.html#cb345-14" tabindex="-1"></a>learner_rpart_c<span class="sc">$</span>param_set<span class="sc">$</span>values <span class="ot">=</span> instance<span class="sc">$</span>result_learner_param_vals</span>
+<span id="cb345-15"><a href="特征工程交叉验证和超参数调优.html#cb345-15" tabindex="-1"></a>learner_rpart_c<span class="sc">$</span><span class="fu">train</span>(task_tt_train_nob)</span></code></pre></div>
+<p>调参后的决策树表现变差。</p>
+<div class="sourceCode" id="cb346"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb346-1"><a href="特征工程交叉验证和超参数调优.html#cb346-1" tabindex="-1"></a>learner_rpart_c<span class="sc">$</span><span class="fu">predict</span>(task_tt_test)<span class="sc">$</span><span class="fu">score</span>(<span class="fu">msr</span>(<span class="st">&quot;classif.acc&quot;</span>))</span></code></pre></div>
+<pre><code>## classif.acc 
+##   0.7631579</code></pre>
+<p>复杂模型在相同的数据上表现劣于简单模型。</p>
+<div class="sourceCode" id="cb348"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb348-1"><a href="特征工程交叉验证和超参数调优.html#cb348-1" tabindex="-1"></a><span class="fu">lrn</span>(<span class="st">&quot;classif.lightgbm&quot;</span>)<span class="sc">$</span><span class="fu">train</span>(task_tt_train_nob)<span class="sc">$</span><span class="fu">predict</span>(task_tt_test)<span class="sc">$</span><span class="fu">score</span>(<span class="fu">msr</span>(<span class="st">&quot;classif.acc&quot;</span>))</span></code></pre></div>
+<pre><code>## classif.acc 
+##   0.7440191</code></pre>
+<p>这些都离不开我们所说的训练集测试集分布不一致的问题。模型学习了过多训练集中的特征，部分特征在测试集中并不存在，也可以称之为过拟合的一种（但也未必是过拟合，有可能是由于测试集样本数量较少，不具有代表性）。这种现象在过采样中十分常见。</p>
+<p>所以面对这种做法，我们需要尽量减小模型的学习能力。</p>
+<p>对于简单模型，提供未经平衡的数据或欠采样的数据；对于GBDT等需要迭代的复杂模型，采用及早终止的方法。设置及早终止，需要将一部分数据划分为验证集，即标签已知但不用于训练只用于评价模型能力的样本。</p>
+<p>下面采用及早终止，略微减轻了过拟合，但还是劣于简单的决策树。</p>
+<div class="sourceCode" id="cb350"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb350-1"><a href="特征工程交叉验证和超参数调优.html#cb350-1" tabindex="-1"></a>split <span class="ot">=</span> <span class="fu">partition</span>(task_tt_train_nob)</span>
+<span id="cb350-2"><a href="特征工程交叉验证和超参数调优.html#cb350-2" tabindex="-1"></a>task_tt_train_nob_e <span class="ot">=</span> task_tt_train_nob<span class="sc">$</span><span class="fu">clone</span>(<span class="at">deep =</span> T)<span class="sc">$</span><span class="fu">set_row_roles</span>(split<span class="sc">$</span>test, <span class="st">&quot;test&quot;</span>)</span>
+<span id="cb350-3"><a href="特征工程交叉验证和超参数调优.html#cb350-3" tabindex="-1"></a></span>
+<span id="cb350-4"><a href="特征工程交叉验证和超参数调优.html#cb350-4" tabindex="-1"></a>learner_lgb_c <span class="ot">=</span> <span class="fu">lrn</span>(<span class="st">&quot;classif.lightgbm&quot;</span>)</span>
+<span id="cb350-5"><a href="特征工程交叉验证和超参数调优.html#cb350-5" tabindex="-1"></a>learner_lgb_c<span class="sc">$</span>param_set<span class="sc">$</span><span class="fu">set_values</span>(</span>
+<span id="cb350-6"><a href="特征工程交叉验证和超参数调优.html#cb350-6" tabindex="-1"></a>  <span class="at">early_stopping =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb350-7"><a href="特征工程交叉验证和超参数调优.html#cb350-7" tabindex="-1"></a>  <span class="at">early_stopping_rounds =</span> <span class="dv">128</span></span>
+<span id="cb350-8"><a href="特征工程交叉验证和超参数调优.html#cb350-8" tabindex="-1"></a>)</span>
+<span id="cb350-9"><a href="特征工程交叉验证和超参数调优.html#cb350-9" tabindex="-1"></a></span>
+<span id="cb350-10"><a href="特征工程交叉验证和超参数调优.html#cb350-10" tabindex="-1"></a>pre_test <span class="ot">=</span> learner_lgb_c<span class="sc">$</span><span class="fu">train</span>(task_tt_train_nob_e)<span class="sc">$</span><span class="fu">predict</span>(task_tt_test)</span>
+<span id="cb350-11"><a href="特征工程交叉验证和超参数调优.html#cb350-11" tabindex="-1"></a>pre_test<span class="sc">$</span><span class="fu">score</span>(<span class="fu">msr</span>(<span class="st">&quot;classif.acc&quot;</span>))</span></code></pre></div>
+<pre><code>## classif.acc 
+##    0.784689</code></pre>
+<p>须知，不是任何场合都适用早停。如果用于验证的数据过少，很可能导致模型受到这部分数据的约束，从而欠拟合。如果划分的数据过多，那么又会损失宝贵的训练数据。早停只适用于复杂的数据分布上。</p>
+<p>由于使用了不平衡数据，我们采用另一种策略平衡模型，调整阈值，也是后处理的一种。</p>
+<div class="sourceCode" id="cb352"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb352-1"><a href="特征工程交叉验证和超参数调优.html#cb352-1" tabindex="-1"></a><span class="co"># 注意一定要在训练集上找阈值</span></span>
+<span id="cb352-2"><a href="特征工程交叉验证和超参数调优.html#cb352-2" tabindex="-1"></a>pre_train <span class="ot">=</span> learner_lgb_c<span class="sc">$</span><span class="fu">train</span>(task_tt_train_nob_e)<span class="sc">$</span><span class="fu">predict</span>(task_tt_train_nob_e)</span>
+<span id="cb352-3"><a href="特征工程交叉验证和超参数调优.html#cb352-3" tabindex="-1"></a></span>
+<span id="cb352-4"><a href="特征工程交叉验证和超参数调优.html#cb352-4" tabindex="-1"></a><span class="co"># optimize是一种一维优化函数，用于使目标函数的值最小</span></span>
+<span id="cb352-5"><a href="特征工程交叉验证和超参数调优.html#cb352-5" tabindex="-1"></a><span class="co"># 我们的目标使得acc最大，也就是使得acc的负值最小</span></span>
+<span id="cb352-6"><a href="特征工程交叉验证和超参数调优.html#cb352-6" tabindex="-1"></a>to_optim <span class="ot">=</span> <span class="cf">function</span>(pre_train, num) {</span>
+<span id="cb352-7"><a href="特征工程交叉验证和超参数调优.html#cb352-7" tabindex="-1"></a>  pre_train<span class="sc">$</span><span class="fu">set_threshold</span>(num)</span>
+<span id="cb352-8"><a href="特征工程交叉验证和超参数调优.html#cb352-8" tabindex="-1"></a>  <span class="sc">-</span>pre_train<span class="sc">$</span><span class="fu">score</span>(<span class="fu">msr</span>(<span class="st">&quot;classif.acc&quot;</span>))</span>
+<span id="cb352-9"><a href="特征工程交叉验证和超参数调优.html#cb352-9" tabindex="-1"></a>}</span>
+<span id="cb352-10"><a href="特征工程交叉验证和超参数调优.html#cb352-10" tabindex="-1"></a></span>
+<span id="cb352-11"><a href="特征工程交叉验证和超参数调优.html#cb352-11" tabindex="-1"></a>for_thres <span class="ot">=</span> <span class="cf">function</span>(pre_train) {</span>
+<span id="cb352-12"><a href="特征工程交叉验证和超参数调优.html#cb352-12" tabindex="-1"></a>  thres <span class="ot">=</span> <span class="fu">optimize</span>(\(x) <span class="fu">to_optim</span>(pre_train, x), <span class="at">lower =</span> <span class="dv">0</span>, <span class="at">upper =</span> <span class="dv">1</span>)<span class="sc">$</span>minimum</span>
+<span id="cb352-13"><a href="特征工程交叉验证和超参数调优.html#cb352-13" tabindex="-1"></a>  </span>
+<span id="cb352-14"><a href="特征工程交叉验证和超参数调优.html#cb352-14" tabindex="-1"></a>  <span class="fu">cat</span>(<span class="st">&quot;before: &quot;</span>, pre_train<span class="sc">$</span><span class="fu">set_threshold</span>(<span class="fl">0.5</span>)<span class="sc">$</span><span class="fu">score</span>(<span class="fu">msr</span>(<span class="st">&quot;classif.acc&quot;</span>)),</span>
+<span id="cb352-15"><a href="特征工程交叉验证和超参数调优.html#cb352-15" tabindex="-1"></a>      <span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span>,</span>
+<span id="cb352-16"><a href="特征工程交叉验证和超参数调优.html#cb352-16" tabindex="-1"></a>      <span class="st">&quot;after: &quot;</span>, pre_train<span class="sc">$</span><span class="fu">set_threshold</span>(thres)<span class="sc">$</span><span class="fu">score</span>(<span class="fu">msr</span>(<span class="st">&quot;classif.acc&quot;</span>)))</span>
+<span id="cb352-17"><a href="特征工程交叉验证和超参数调优.html#cb352-17" tabindex="-1"></a>  </span>
+<span id="cb352-18"><a href="特征工程交叉验证和超参数调优.html#cb352-18" tabindex="-1"></a>  thres</span>
+<span id="cb352-19"><a href="特征工程交叉验证和超参数调优.html#cb352-19" tabindex="-1"></a>}</span>
+<span id="cb352-20"><a href="特征工程交叉验证和超参数调优.html#cb352-20" tabindex="-1"></a></span>
+<span id="cb352-21"><a href="特征工程交叉验证和超参数调优.html#cb352-21" tabindex="-1"></a>thres <span class="ot">=</span> <span class="fu">for_thres</span>(pre_train)</span></code></pre></div>
+<pre><code>## before:  0.8710218 
+##  after:  0.879397</code></pre>
+<div class="sourceCode" id="cb354"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb354-1"><a href="特征工程交叉验证和超参数调优.html#cb354-1" tabindex="-1"></a><span class="co"># 这个方法仅供尝试，未必总是能取得好效果。</span></span>
+<span id="cb354-2"><a href="特征工程交叉验证和超参数调优.html#cb354-2" tabindex="-1"></a>pre_test<span class="sc">$</span><span class="fu">set_threshold</span>(thres)<span class="sc">$</span><span class="fu">score</span>(<span class="fu">msr</span>(<span class="st">&quot;classif.acc&quot;</span>))</span></code></pre></div>
+<pre><code>## classif.acc 
+##   0.7799043</code></pre>
+</div>
+</div>
+</div>
+<div id="交叉验证" class="section level2 hasAnchor" number="7.3">
+<h2><span class="header-section-number">7.3</span> 交叉验证<a href="特征工程交叉验证和超参数调优.html#交叉验证" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>交叉验证是一种抽样策略，k折交叉验证意为将数据随机分为均等的k份，每次用k-1折的数据训练一个模型，再剩下一折上验证，反复k次。k个模型在各自验证集上评价指标取平均，可以相对正确的反映模型的泛化能力。假如训练集和测试集分布一致，交叉验证的结果与在测试集上的表现趋势相同。</p>
+<p>上述方法中我们已经看到了用resample和rsmp进行不同策略的抽样以评价模型的实现。下面我们以提升交叉验证表现的方式尝试对playground的结果作进一步优化。</p>
+<div id="模型堆叠" class="section level3 hasAnchor" number="7.3.1">
+<h3><span class="header-section-number">7.3.1</span> 模型堆叠<a href="特征工程交叉验证和超参数调优.html#模型堆叠" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>stack（堆叠）是表格型数据的一种策略，在baseline几乎能完全解释模型方差的当下，其能给模型带来0.1%到1%的提升，这一点点差距就可以在排名上把其它人甩开。但是这种提升是一种双刃剑，以降低模型解释性为代价。</p>
+<p>有关stack的介绍可以参考<a href="https://www.bilibili.com/video/BV11L411j7sX?p=29&amp;vd_source=9c83e948ccfc954778d90b01f0a653d4">视频</a>和<a href="https://zhuanlan.zhihu.com/p/75411512">文解</a>。</p>
+<p>简而言之，堆叠就是在预测数据的基础上用一个弱学习器综合多个强预测的结果。</p>
+<div class="sourceCode" id="cb356"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb356-1"><a href="特征工程交叉验证和超参数调优.html#cb356-1" tabindex="-1"></a><span class="fu">load</span>(<span class="st">&quot;./data/hps.Rdata&quot;</span>)</span>
+<span id="cb356-2"><a href="特征工程交叉验证和超参数调优.html#cb356-2" tabindex="-1"></a></span>
+<span id="cb356-3"><a href="特征工程交叉验证和超参数调优.html#cb356-3" tabindex="-1"></a>learner_xgb_r <span class="ot">=</span> <span class="fu">lrn</span>(<span class="st">&quot;regr.xgboost&quot;</span>);  learner_xgb_r<span class="sc">$</span>param_set<span class="sc">$</span>values <span class="ot">=</span> hp_xgb</span>
+<span id="cb356-4"><a href="特征工程交叉验证和超参数调优.html#cb356-4" tabindex="-1"></a>learner_lgb_r <span class="ot">=</span> <span class="fu">lrn</span>(<span class="st">&quot;regr.lightgbm&quot;</span>); learner_lgb_r<span class="sc">$</span>param_set<span class="sc">$</span>values <span class="ot">=</span> hp_lgb</span>
+<span id="cb356-5"><a href="特征工程交叉验证和超参数调优.html#cb356-5" tabindex="-1"></a>learner_ctb_r <span class="ot">=</span> <span class="fu">lrn</span>(<span class="st">&quot;regr.catboost&quot;</span>); learner_ctb_r<span class="sc">$</span>param_set<span class="sc">$</span>values <span class="ot">=</span> hp_ctb</span>
+<span id="cb356-6"><a href="特征工程交叉验证和超参数调优.html#cb356-6" tabindex="-1"></a></span>
+<span id="cb356-7"><a href="特征工程交叉验证和超参数调优.html#cb356-7" tabindex="-1"></a><span class="co"># 我们可以使用以下两种方式创建交叉验证的预测结果</span></span>
+<span id="cb356-8"><a href="特征工程交叉验证和超参数调优.html#cb356-8" tabindex="-1"></a><span class="co"># learner_cv默认是3折且无法显式修改，只能通过改源码的方法修改</span></span>
+<span id="cb356-9"><a href="特征工程交叉验证和超参数调优.html#cb356-9" tabindex="-1"></a>gstack_test <span class="ot">=</span> <span class="fu">gunion</span>(<span class="fu">list</span>(</span>
+<span id="cb356-10"><a href="特征工程交叉验证和超参数调优.html#cb356-10" tabindex="-1"></a>  <span class="fu">po</span>(<span class="st">&quot;learner_cv&quot;</span>, learner_xgb_r, <span class="at">id =</span> <span class="st">&quot;xgb&quot;</span>),</span>
+<span id="cb356-11"><a href="特征工程交叉验证和超参数调优.html#cb356-11" tabindex="-1"></a>  <span class="fu">po</span>(<span class="st">&quot;learner_cv&quot;</span>, learner_lgb_r, <span class="at">id =</span> <span class="st">&quot;lgb&quot;</span>),</span>
+<span id="cb356-12"><a href="特征工程交叉验证和超参数调优.html#cb356-12" tabindex="-1"></a>  <span class="fu">po</span>(<span class="st">&quot;learner_cv&quot;</span>, learner_ctb_r, <span class="at">id =</span> <span class="st">&quot;ctb&quot;</span>))) <span class="sc">%&gt;&gt;%</span></span>
+<span id="cb356-13"><a href="特征工程交叉验证和超参数调优.html#cb356-13" tabindex="-1"></a>  <span class="fu">po</span>(<span class="st">&quot;featureunion&quot;</span>)</span>
+<span id="cb356-14"><a href="特征工程交叉验证和超参数调优.html#cb356-14" tabindex="-1"></a></span>
+<span id="cb356-15"><a href="特征工程交叉验证和超参数调优.html#cb356-15" tabindex="-1"></a>resampled_1 <span class="ot">=</span> gstack_test<span class="sc">$</span><span class="fu">train</span>(task_pg_train)[[<span class="dv">1</span>]] <span class="co"># 此为task对象</span></span>
+<span id="cb356-16"><a href="特征工程交叉验证和超参数调优.html#cb356-16" tabindex="-1"></a></span>
+<span id="cb356-17"><a href="特征工程交叉验证和超参数调优.html#cb356-17" tabindex="-1"></a>cv5_lgb <span class="ot">=</span> <span class="fu">resample</span>(task_pg_train, learner_lgb_r, <span class="fu">rsmp</span>(<span class="st">&quot;cv&quot;</span>, <span class="at">folds =</span> <span class="dv">5</span>)) <span class="co"># 如此重复三次即可</span></span>
+<span id="cb356-18"><a href="特征工程交叉验证和超参数调优.html#cb356-18" tabindex="-1"></a>resampled_lgb_2 <span class="ot">=</span> cv5_lgb<span class="sc">$</span><span class="fu">prediction</span>() <span class="co"># 此为prediction对象</span></span></code></pre></div>
+<p>接下来我们训练一个基学习器。岭回归的较为常用的基学习器。</p>
+<div class="sourceCode" id="cb357"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb357-1"><a href="特征工程交叉验证和超参数调优.html#cb357-1" tabindex="-1"></a>learner_base <span class="ot">=</span> <span class="fu">lrn</span>(<span class="st">&quot;regr.glmnet&quot;</span>, <span class="at">alpha =</span> <span class="dv">0</span>)</span>
+<span id="cb357-2"><a href="特征工程交叉验证和超参数调优.html#cb357-2" tabindex="-1"></a></span>
+<span id="cb357-3"><a href="特征工程交叉验证和超参数调优.html#cb357-3" tabindex="-1"></a>search_space <span class="ot">=</span> <span class="fu">ps</span>(</span>
+<span id="cb357-4"><a href="特征工程交叉验证和超参数调优.html#cb357-4" tabindex="-1"></a>  <span class="at">s =</span> <span class="fu">p_dbl</span>(<span class="at">lower =</span> <span class="fl">0.001</span>, <span class="at">upper =</span> <span class="dv">2</span>)</span>
+<span id="cb357-5"><a href="特征工程交叉验证和超参数调优.html#cb357-5" tabindex="-1"></a>)</span>
+<span id="cb357-6"><a href="特征工程交叉验证和超参数调优.html#cb357-6" tabindex="-1"></a></span>
+<span id="cb357-7"><a href="特征工程交叉验证和超参数调优.html#cb357-7" tabindex="-1"></a>at <span class="ot">=</span> <span class="fu">auto_tuner</span>(</span>
+<span id="cb357-8"><a href="特征工程交叉验证和超参数调优.html#cb357-8" tabindex="-1"></a>  <span class="at">tuner =</span> <span class="fu">tnr</span>(<span class="st">&quot;grid_search&quot;</span>),</span>
+<span id="cb357-9"><a href="特征工程交叉验证和超参数调优.html#cb357-9" tabindex="-1"></a>  <span class="at">learner =</span> learner_base,</span>
+<span id="cb357-10"><a href="特征工程交叉验证和超参数调优.html#cb357-10" tabindex="-1"></a>  <span class="at">resampling =</span> <span class="fu">rsmp</span>(<span class="st">&quot;cv&quot;</span>, <span class="at">folds =</span> <span class="dv">5</span>), </span>
+<span id="cb357-11"><a href="特征工程交叉验证和超参数调优.html#cb357-11" tabindex="-1"></a>  <span class="at">measure =</span> <span class="fu">msr</span>(<span class="st">&quot;regr.rmse&quot;</span>), </span>
+<span id="cb357-12"><a href="特征工程交叉验证和超参数调优.html#cb357-12" tabindex="-1"></a>  <span class="at">search_space =</span> search_space, </span>
+<span id="cb357-13"><a href="特征工程交叉验证和超参数调优.html#cb357-13" tabindex="-1"></a>  <span class="at">terminator =</span> <span class="fu">trm</span>(<span class="st">&quot;evals&quot;</span>, <span class="at">n_evals =</span> <span class="dv">50</span>)</span>
+<span id="cb357-14"><a href="特征工程交叉验证和超参数调优.html#cb357-14" tabindex="-1"></a>)</span>
+<span id="cb357-15"><a href="特征工程交叉验证和超参数调优.html#cb357-15" tabindex="-1"></a></span>
+<span id="cb357-16"><a href="特征工程交叉验证和超参数调优.html#cb357-16" tabindex="-1"></a>at<span class="sc">$</span><span class="fu">train</span>(resampled_1)</span>
+<span id="cb357-17"><a href="特征工程交叉验证和超参数调优.html#cb357-17" tabindex="-1"></a></span>
+<span id="cb357-18"><a href="特征工程交叉验证和超参数调优.html#cb357-18" tabindex="-1"></a>hp_base <span class="ot">=</span> at<span class="sc">$</span>tuning_result<span class="sc">$</span>learner_param_vals[[<span class="dv">1</span>]]</span>
+<span id="cb357-19"><a href="特征工程交叉验证和超参数调优.html#cb357-19" tabindex="-1"></a>learner_base<span class="sc">$</span>param_set<span class="sc">$</span>values <span class="ot">=</span> hp_base</span>
+<span id="cb357-20"><a href="特征工程交叉验证和超参数调优.html#cb357-20" tabindex="-1"></a></span>
+<span id="cb357-21"><a href="特征工程交叉验证和超参数调优.html#cb357-21" tabindex="-1"></a><span class="co"># 用po链接还是一个po，所以最后要转成一个learner</span></span>
+<span id="cb357-22"><a href="特征工程交叉验证和超参数调优.html#cb357-22" tabindex="-1"></a>glearner <span class="ot">=</span> <span class="fu">gunion</span>(<span class="fu">list</span>(</span>
+<span id="cb357-23"><a href="特征工程交叉验证和超参数调优.html#cb357-23" tabindex="-1"></a>  <span class="fu">po</span>(<span class="st">&quot;learner_cv&quot;</span>, learner_xgb_r, <span class="at">id =</span> <span class="st">&quot;xgb&quot;</span>),</span>
+<span id="cb357-24"><a href="特征工程交叉验证和超参数调优.html#cb357-24" tabindex="-1"></a>  <span class="fu">po</span>(<span class="st">&quot;learner_cv&quot;</span>, learner_lgb_r, <span class="at">id =</span> <span class="st">&quot;lgb&quot;</span>),</span>
+<span id="cb357-25"><a href="特征工程交叉验证和超参数调优.html#cb357-25" tabindex="-1"></a>  <span class="fu">po</span>(<span class="st">&quot;learner_cv&quot;</span>, learner_ctb_r, <span class="at">id =</span> <span class="st">&quot;ctb&quot;</span>))) <span class="sc">%&gt;&gt;%</span></span>
+<span id="cb357-26"><a href="特征工程交叉验证和超参数调优.html#cb357-26" tabindex="-1"></a>  <span class="fu">po</span>(<span class="st">&quot;featureunion&quot;</span>) <span class="sc">%&gt;&gt;%</span></span>
+<span id="cb357-27"><a href="特征工程交叉验证和超参数调优.html#cb357-27" tabindex="-1"></a>  learner_base <span class="sc">%&gt;%</span> </span>
+<span id="cb357-28"><a href="特征工程交叉验证和超参数调优.html#cb357-28" tabindex="-1"></a>  <span class="fu">as_learner</span>()</span>
+<span id="cb357-29"><a href="特征工程交叉验证和超参数调优.html#cb357-29" tabindex="-1"></a></span>
+<span id="cb357-30"><a href="特征工程交叉验证和超参数调优.html#cb357-30" tabindex="-1"></a><span class="co"># 再用相同的方法重抽样看效果</span></span>
+<span id="cb357-31"><a href="特征工程交叉验证和超参数调优.html#cb357-31" tabindex="-1"></a>cv_stack <span class="ot">=</span> <span class="fu">resample</span>(task_pg_train, glearner, <span class="fu">rsmp</span>(<span class="st">&quot;cv&quot;</span>, <span class="at">folds =</span> <span class="dv">5</span>))</span>
+<span id="cb357-32"><a href="特征工程交叉验证和超参数调优.html#cb357-32" tabindex="-1"></a>cv_stack<span class="sc">$</span><span class="fu">aggregate</span>()</span></code></pre></div>
+<p>计算速度太慢了，不在文档里计算了。总之cv是要低一点，然后再榜上成绩也达到了0.696。还可以用cv优化超参数进一步提升排名。但是没啥收益，就不卷了。</p>
+</div>
+<div id="交叉验证失效怎么办" class="section level3 hasAnchor" number="7.3.2">
+<h3><span class="header-section-number">7.3.2</span> 交叉验证失效怎么办？<a href="特征工程交叉验证和超参数调优.html#交叉验证失效怎么办" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>在真实数据中，能够用于训练的数据少，数据的复杂度高。如果交叉验证和在测试集上的表现趋势不明显，主要可能有以下情况：</p>
+<ol style="list-style-type: decimal">
+<li>训练集不具有代表性，测试集的分布与训练集不一致</li>
+<li>测试集过小</li>
+<li>训练集测试集的特征质量低下，模型在训练集上的cv就不高</li>
+</ol>
+<p>此情况下大多数技巧都会失效，对此常用的做法是使用简单的模型。如上面不调参决策树强于调参后的决策树强于lightgbm。在一定范围内降低训练集cv，提升在测试集上的效果。</p>
+
+</div>
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="二分类和多分类问题.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="理解机器学习里数据不均衡.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": true,
+"facebook": false,
+"twitter": false,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"whatsapp": false,
+"all": {}
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": ["CBook.pdf"],
+"search": {
+"engine": "fuse",
+"options": null
+},
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

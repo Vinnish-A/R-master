@@ -177,7 +177,7 @@ integrate(\(x) x**3 + x, 0, 1)
 
 # data_exp = as_tibble(data_train_merged[1:100, ])
 # saveRDS(data_exp, "示例数据.Rds")
-data_task = readRDS("示例数据.Rds")
+data_task = readRDS("F:/0Local/project/R语言高手计划/示例及任务/data/示例数据.Rds")
 data_task
 
 generator_1 = function(sample_space, num) {
