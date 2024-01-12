@@ -79,6 +79,12 @@ model
 欠采样的模型
 添加权重的模型
 rough-edged
+初探r中的面向对象系统
+s3
+解惑
+实践
+r6
+s4
 rmarkdown中插入文献和修改引用样式
 rmarkdown的组成
 插入参考文献

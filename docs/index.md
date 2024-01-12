@@ -70,7 +70,7 @@ tidyverse是相对独立于base的R的一种方言，是一门专门操作文件
 
 
 ```r
-data_task = readRDS("./示例及任务/data/示例数据.Rds")
+data_task = readRDS("./data/示例数据.Rds")
 head(data_task)
 ```
 
@@ -162,8 +162,8 @@ R中的建模函数。包括：
 
 
 ```{=html}
-<div class="datatables html-widget html-fill-item" id="htmlwidget-5e4bb0f71f011f0db153" style="width:100%;height:auto;"></div>
-<script type="application/json" data-for="htmlwidget-5e4bb0f71f011f0db153">{"x":{"filter":"none","vertical":false,"data":[["1","2","3"],["chrM","chrM","chrM"],["ncbiRefSeq.2021-04-23","ncbiRefSeq.2021-04-23","ncbiRefSeq.2021-04-23"],["transcript","exon","transcript"],[15356,15356,15289],[15422,15422,15355],[".",".","."],["-","-","+"],[".",".","."],["gene_id \"TrnP\"; transcript_id \"rna-TrnP\";  gene_name \"TrnP\";","gene_id \"TrnP\"; transcript_id \"rna-TrnP\"; exon_number \"1\"; exon_id \"rna-TrnP.1\"; gene_name \"TrnP\";","gene_id \"TrnT\"; transcript_id \"rna-TrnT\";  gene_name \"TrnT\";"]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>X1<\/th>\n      <th>X2<\/th>\n      <th>X3<\/th>\n      <th>X4<\/th>\n      <th>X5<\/th>\n      <th>X6<\/th>\n      <th>X7<\/th>\n      <th>X8<\/th>\n      <th>X9<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"scrollX":true,"columnDefs":[{"className":"dt-right","targets":[4,5]},{"orderable":false,"targets":0}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
+<div class="datatables html-widget html-fill-item" id="htmlwidget-5fdeca1717d101b980fc" style="width:100%;height:auto;"></div>
+<script type="application/json" data-for="htmlwidget-5fdeca1717d101b980fc">{"x":{"filter":"none","vertical":false,"data":[["1","2","3"],["chrM","chrM","chrM"],["ncbiRefSeq.2021-04-23","ncbiRefSeq.2021-04-23","ncbiRefSeq.2021-04-23"],["transcript","exon","transcript"],[15356,15356,15289],[15422,15422,15355],[".",".","."],["-","-","+"],[".",".","."],["gene_id \"TrnP\"; transcript_id \"rna-TrnP\";  gene_name \"TrnP\";","gene_id \"TrnP\"; transcript_id \"rna-TrnP\"; exon_number \"1\"; exon_id \"rna-TrnP.1\"; gene_name \"TrnP\";","gene_id \"TrnT\"; transcript_id \"rna-TrnT\";  gene_name \"TrnT\";"]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>X1<\/th>\n      <th>X2<\/th>\n      <th>X3<\/th>\n      <th>X4<\/th>\n      <th>X5<\/th>\n      <th>X6<\/th>\n      <th>X7<\/th>\n      <th>X8<\/th>\n      <th>X9<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"scrollX":true,"columnDefs":[{"className":"dt-right","targets":[4,5]},{"orderable":false,"targets":0}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
 ```
 
 按要求要求整理成如下形式：
@@ -174,8 +174,8 @@ R中的建模函数。包括：
 
 
 ```{=html}
-<div class="datatables html-widget html-fill-item" id="htmlwidget-39bce52109f4f463032c" style="width:100%;height:auto;"></div>
-<script type="application/json" data-for="htmlwidget-39bce52109f4f463032c">{"x":{"filter":"none","vertical":false,"data":[["1","2","3","4","5","6"],["chrM","chrM","chrM","chrM","chrM","chrM"],["transcript","transcript","transcript","transcript","transcript","transcript"],[7927,7766,5328,7013,8607,14145],[8607,7969,6872,7696,9390,15288],["+","+","+","+","+","+"],["ATP6","ATP8","COX1","COX2","COX3","CYTB"],["NP_904333.1","NP_904332.1","NP_904330.1","NP_904331.1","NP_904334.1","NP_904340.1"],[680,203,1544,683,783,1143]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>chr<\/th>\n      <th>type<\/th>\n      <th>start<\/th>\n      <th>end<\/th>\n      <th>strand<\/th>\n      <th>gene_id<\/th>\n      <th>transcript_id<\/th>\n      <th>length<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"scrollX":true,"columnDefs":[{"className":"dt-right","targets":[3,4,8]},{"orderable":false,"targets":0}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
+<div class="datatables html-widget html-fill-item" id="htmlwidget-972c252c52210ace5d26" style="width:100%;height:auto;"></div>
+<script type="application/json" data-for="htmlwidget-972c252c52210ace5d26">{"x":{"filter":"none","vertical":false,"data":[["1","2","3","4","5","6"],["chrM","chrM","chrM","chrM","chrM","chrM"],["transcript","transcript","transcript","transcript","transcript","transcript"],[7927,7766,5328,7013,8607,14145],[8607,7969,6872,7696,9390,15288],["+","+","+","+","+","+"],["ATP6","ATP8","COX1","COX2","COX3","CYTB"],["NP_904333.1","NP_904332.1","NP_904330.1","NP_904331.1","NP_904334.1","NP_904340.1"],[680,203,1544,683,783,1143]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>chr<\/th>\n      <th>type<\/th>\n      <th>start<\/th>\n      <th>end<\/th>\n      <th>strand<\/th>\n      <th>gene_id<\/th>\n      <th>transcript_id<\/th>\n      <th>length<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"scrollX":true,"columnDefs":[{"className":"dt-right","targets":[3,4,8]},{"orderable":false,"targets":0}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
 ```
 
 本人给出的任务和示例是R语言基础的部分提纲。之后对于R语言除巩固基础外，更多的是在实战中熟悉R语言生态（评价一个人代码能力的不是一个人基础多好，而是这个人对这门语言的生态有多了解、会用多少的包、脑中有多少编程范式，从而高效的解决自己遇到的问题。但是对于基础的掌握会让你更快熟悉另一门语言，因为基础总是相通的。

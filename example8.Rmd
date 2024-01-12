@@ -1,0 +1,307 @@
+
+```{r setup, include=FALSE}
+set.seed(42)
+library(tidyverse)
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# 初探R中的面向对象系统
+
+面向对象是一种高级的编程思想，在构建大型项目时格外有用，面向对象的较为详细的阐述可见[python100天](https://www.bookstack.cn/read/Python-100-Days/Day01-15-08.%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E7%BC%96%E7%A8%8B%E5%9F%BA%E7%A1%80.md)。
+
+面向对象有三个特点：封装、继承和多态。我们可以这样简单理解：
+
+-   封装：把低级数据结构封装成我们自定义的高级数据结构，搭配我们设定的一系列方法，实现标准输入、标准输出
+-   继承：一个高级数据结构可以来自一个较为低级的数据结构，继承了低级结构的特点
+-   多态：高级数据结构之间彼此互不相同
+
+R中有三种主流面向对象系统（新出的S7系统尚未成熟，还有一些古怪的面向对象系统暂且不表），R6最新，最接近现代编程里的主流面向对象结构，S3成熟简单，但和主流思想偏差较大，S4是S3和R6之间的过渡，虽然很多优秀的包都基于S4构建，但是这个结构本身很不便于开发，存在很多不便，这里仅仅带过。
+
+## S3
+
+S3系统来自R语言的前身S语言，简洁强大，但是非常的不规范。
+
+### 解惑
+
+R中一个现象令纯学者困惑，为什么一个函数可以接收不同的数据结构？比如`print`既可以接收data.frame又可以接收tibble，打印出来的内容却不一样。
+
+```{r}
+example_tbl = as_tibble(iris)
+
+print(iris[1:10, ])
+print(example_tbl)
+```
+
+或者一个函数接收不同的数据结构，算出来的内容居然是相同的！~~如果你看过变量遮蔽的内容，一定知道这里的with是什么意思，后面的那个波浪号是R中的公式语法~~
+
+```{r}
+a = with(sleep, t.test(extra[group == 1], extra[group == 2]))
+b = t.test(extra ~ group, sleep)
+c = list(a, b); names(c) = c("numeric", "formula"); c
+```
+
+上两者的原因都在于R的S3结构。S3结构的特点是对每个类别可以使用属于各个类别自己方法，命名特点为`函数名 + .类别`，一个变量可以有多个类别，执行一个变量的S3方法时，会从左到右依次往下找有没有对此类别可以用的方法，如果实在找不到，就会使用default方法，这就是所谓的多重继承。
+
+我们可以使用`class`查看每个变量所属的类别
+
+```{r}
+list(class(iris), class(example_tbl))
+```
+
+通过`methods`查看一个函数对应的全部类别的所有方法。对于print，一定有对应的`print.data.frame`，`print.tbl`方法。
+
+```{r}
+methods("print")
+```
+
+果然有，我们还想继续查看每个方法的具体内容，我们试图通过直接打印`print.data.frame`，却找不到。我们需要使用`getAnywhere`函数来查找。
+
+```{r}
+list(getAnywhere("print.data.frame"), getAnywhere("print.tbl"))
+```
+
+可以看到这俩函数差的很多，所以执行的内容不一样。我们再看看`t.test`。
+
+```{r}
+methods("t.test")
+```
+
+default就是默认方法，因为没有对应numeric的方法，所以我们输入两个向量进去的时候执行的就是default方法。我们只关注formula好了。
+
+```{r}
+getAnywhere("t.test.formula")
+```
+
+可以看到他实际上就是先想办法把formula对应的内容变成一个df，然后执行`y = t.test(x = DATA[[1L]], y = DATA[[2L]], ...)`，然后再把向量输入进去，使用default方法。
+
+### 实践
+
+S3对象只关注方法，不关注数据，所以我们可以给随便一个数据随便定义一个类。也可以通过`structure`看起来更规范一点。
+
+```{r}
+x = list; class(x) = c("a", "b", "c")
+y = structure(list(), class = c("a", "b", "c"))
+list(class(x), class(y))
+```
+
+我们尝试构建一下S3方法，其实十分简单，如果一个函数的内容仅仅只是`UseMethod("函数名")`的话，就会被识别成一个S3方法，然后我们只需要为这个S3方法写各个对象实现的细节。
+
+```{r}
+f = function(x) UseMethod("f")
+
+f.a = function(x) return("Class a")
+
+f.default = function(x) return("Unknown class")
+
+x = structure(list(), class = "a")
+y = structure(list(), class = c("b", "a"))
+z = structure(list(), class = "c")
+
+list(f(x), f(y), f(z))
+```
+
+接下来我们看一个实例，`NextMethod`的作用是调用右边一个类的方法，假如每个类之间有明确的继承关系就可以用。但是并不是很好用，因为他会将参数原封不动的传给下一个方法，既然这样，那我们像上面t.test那样重新传参就好了。
+
+```{r}
+person   = structure(c(name = "A"), class = c("person"))
+employee = structure(c(name = "B", job = "worker"), class = c("employee", "person"))
+boss     = structure(c(name = "C", job = "manager", status = "rich"), class = c("boss", "employee", "person"))
+
+introduce_yourself = function(person) UseMethod("introduce_yourself")
+
+introduce_yourself.person = function(person_) {
+  cat("---\nHi\n")
+  cat("My name is", person_[["name"]], "\n")
+}
+
+introduce_yourself.employee = function(employee_) {
+  NextMethod()
+  cat("And I work as", employee_[["job"]], "\n")
+}
+
+introduce_yourself.boss = function(boss_) {
+  NextMethod()
+  cat("I am", boss_[["status"]], "\n")
+}
+
+introduce_yourself(person); introduce_yourself(employee); introduce_yourself(boss)
+```
+
+R的传参机制在以后可能有所介绍。
+
+## R6
+
+R6对象和其他语言的面向对象系统其实没啥区别了。在[R语言教程-基于tidyverse]()中有所提及，这里不再赘述。
+
+我们把上面那个例子在R6中再实现一遍。
+
+需要注意的是在S4和R6里我们先定义一个"类"，再把这个类实例化成一个"对象"。就类似于狗和熊熊的关系。在实例化的过程里，我们需要给这个实例提供一些信息，就是new或者initialize所需要的参数。
+
+```{r warning=FALSE}
+library(R6)
+
+person = R6Class( 
+  classname = "anyone", 
+  public = list( 
+    name = NULL, 
+    initialize = function(name, income) { 
+      self$name = name 
+      private$income = income 
+    }, 
+    printInfo = function() { 
+      cat("---\nHi\n")
+      cat("My name is", self$name, "\n")
+      cat("I get", private$income, "a month", "\n")
+      invisible(self) 
+    }
+  ), 
+  private = list(income = NULL) 
+)
+
+
+
+employee = R6Class( 
+  classname = "staff", 
+  inherit = person, 
+  public = list( 
+    initialize = function(name, income, job) {
+      super$initialize(name, income)
+      private$job = job
+    },
+    printInfo = function() { 
+      super$printInfo() 
+      cat("And I work as", private$job, "\n")
+    }
+  ), 
+  private = list(job = NULL)
+)
+
+
+
+boss = R6Class( 
+  classname = "staff", 
+  inherit = employee, 
+  public = list( 
+    initialize = function(name, income, job, status) {
+      super$initialize(name, income, job)
+      private$status = status
+    },
+    printInfo = function() { 
+      super$printInfo() 
+      cat("I am", private$status, "\n")
+    }
+  ), 
+  private = list(status = NULL)
+)
+
+Jack = person$new("Jack", 100)
+Mike = employee$new("Mike", 1000, "worker")
+Bob = boss$new("Bob", 10000, "manager", "rich")
+
+Mike$printInfo()
+Jack$printInfo()
+Bob$printInfo()
+```
+
+可以看到，同样的功能S3比R6实现简单很多，但是R6规范的多。R6十分重要，后面我们会再出一期R6专题欣赏优秀的面向对象工程。
+
+## S4
+
+S4对象只有历史意义了，功能比不上S3和R6。简单提及一下S4的特点就好了，S4的特点就是接近R的底层，因此十分不好用。S4中每个类会有一些默认的方法，比如show等，我们可以直接覆盖掉这些方法，如果方法不在默认方法里，则需要通过`setGeneric`注册一下，再添加方法。
+
+```{r eval=FALSE}
+library(methods)
+
+setClass(
+  Class     = "IcecreamMachine",
+  slots     = c(
+    strawberry = "numeric",
+    chocolate  = "numeric",
+    mango      = "numeric"
+  ),
+  prototype = list(
+    strawberry = 0,
+    chocolate  = 0,
+    mango      = 0
+  )
+)
+
+setMethod(
+  f           = "show",
+  signature   = "IcecreamMachine",
+  definition = function(object) {
+    cat("*** Wounderful Icecream Machine! ***\n")
+    cat("Taste:\n")
+    cat("\tStrawberry: ", object@strawberry, "\n") 
+    cat("\tChocolate: ", object@chocolate, "\n") 
+    cat("\tMango: ", object@mango, "\n") 
+  }
+)
+
+setGeneric(
+  name = "getIcecream",
+  def  = function(object,...) {
+    standardGeneric("getIcecream")
+  }
+)
+
+setMethod(
+  f          = "getIcecream",
+  signature  = "IcecreamMachine",
+  definition = function(object, type) {
+    slot(object, type) <- slot(object, type) - 1
+    return(object)
+  }
+)
+
+setGeneric(
+  name = "setIce<-",
+  def  = function(object, type, value) {
+    standardGeneric("setIce<-")
+  }
+)
+
+setReplaceMethod(
+  f          = "setIce",
+  signature  = "IcecreamMachine",
+  definition = function(object, type, value) {
+    slot(object, type) <- value        
+    return(object)
+  }
+)
+
+setMethod(
+  f          = "[",
+  signature  = "IcecreamMachine",
+  definition = function(x,i,j,drop) {
+    slot(x, i)
+  }
+)
+
+setReplaceMethod(
+  f          = "[",
+  signature  = "IcecreamMachine",
+  definition = function(x,i,j,value) {
+    slot(x, i) = value
+    validObject(x)
+    return(x)
+  }
+)
+
+setMethod(
+  f          = "initialize",
+  signature  = "IcecreamMachine",
+  definition = function(.Object, strawberry, chocolate, mango) {        
+    cat("Welcome to an icecream world!\n")        
+    .Object@strawberry <- strawberry        
+    .Object@chocolate  <- chocolate        
+    .Object@mango      <- mango        
+    return(.Object)
+  }
+) 
+
+showMethods(classes = "IcecreamMachine")
+getMethod("getIcecream", "IcecreamMachine")
+
+first_machine = new("IcecreamMachine", 5, 3, 7)
+```

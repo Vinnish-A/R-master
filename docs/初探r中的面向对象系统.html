@@ -1,0 +1,1204 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>9 初探R中的面向对象系统 | R语言高手计划</title>
+  <meta name="description" content="Med-X社员手册" />
+  <meta name="generator" content="bookdown 0.36 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="9 初探R中的面向对象系统 | R语言高手计划" />
+  <meta property="og:type" content="book" />
+  
+  <meta property="og:description" content="Med-X社员手册" />
+  <meta name="github-repo" content="Vinnish-A/R-master" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="9 初探R中的面向对象系统 | R语言高手计划" />
+  
+  <meta name="twitter:description" content="Med-X社员手册" />
+  
+
+<meta name="author" content="Vinnish 普尔弥什" />
+
+
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="理解机器学习里数据不均衡.html"/>
+<link rel="next" href="rmarkdown中插入文献和修改引用样式.html"/>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+<script src="libs/htmlwidgets-1.6.3/htmlwidgets.js"></script>
+<link href="libs/datatables-css-0.0.0/datatables-crosstalk.css" rel="stylesheet" />
+<script src="libs/datatables-binding-0.30/datatables.js"></script>
+<link href="libs/dt-core-1.13.4/css/jquery.dataTables.min.css" rel="stylesheet" />
+<link href="libs/dt-core-1.13.4/css/jquery.dataTables.extra.css" rel="stylesheet" />
+<script src="libs/dt-core-1.13.4/js/jquery.dataTables.min.js"></script>
+<link href="libs/crosstalk-1.2.1/css/crosstalk.min.css" rel="stylesheet" />
+<script src="libs/crosstalk-1.2.1/js/crosstalk.min.js"></script>
+<link rel="stylesheet" type="text/css" href="style.css">
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-EHGBT6KMPG"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-EHGBT6KMPG');
+</script>
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  jax: ["input/TeX","output/SVG"],
+  extensions: ["tex2jax.js","MathMenu.js","MathZoom.js"],
+  TeX: {
+    extensions: ["AMSmath.js","AMSsymbols.js","noErrors.js","noUndefined.js"]
+  }
+});
+</script>
+<script type="text/javascript"
+   src="../../../MathJax/MathJax.js">
+</script>
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<style type="text/css">
+  
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+</style>
+<style type="text/css">
+/* Used with Pandoc 2.11+ new --citeproc when CSL is used */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> 预备</a>
+<ul>
+<li class="chapter" data-level="1.1" data-path="index.html"><a href="index.html#工作环境"><i class="fa fa-check"></i><b>1.1</b> 工作环境</a></li>
+<li class="chapter" data-level="1.2" data-path="index.html"><a href="index.html#使用project管理项目"><i class="fa fa-check"></i><b>1.2</b> 使用project管理项目</a></li>
+<li class="chapter" data-level="1.3" data-path="index.html"><a href="index.html#第一周"><i class="fa fa-check"></i><b>1.3</b> 第一周</a>
+<ul>
+<li class="chapter" data-level="1.3.1" data-path="index.html"><a href="index.html#目标"><i class="fa fa-check"></i><b>1.3.1</b> 目标</a></li>
+<li class="chapter" data-level="1.3.2" data-path="index.html"><a href="index.html#示例及任务"><i class="fa fa-check"></i><b>1.3.2</b> 示例及任务</a></li>
+</ul></li>
+<li class="chapter" data-level="1.4" data-path="index.html"><a href="index.html#第二周"><i class="fa fa-check"></i><b>1.4</b> 第二周</a>
+<ul>
+<li class="chapter" data-level="1.4.1" data-path="index.html"><a href="index.html#目标-1"><i class="fa fa-check"></i><b>1.4.1</b> 目标</a></li>
+<li class="chapter" data-level="1.4.2" data-path="index.html"><a href="index.html#示例及任务-1"><i class="fa fa-check"></i><b>1.4.2</b> 示例及任务</a></li>
+</ul></li>
+<li class="chapter" data-level="1.5" data-path="index.html"><a href="index.html#第三周"><i class="fa fa-check"></i><b>1.5</b> 第三周</a>
+<ul>
+<li class="chapter" data-level="1.5.1" data-path="index.html"><a href="index.html#目标-2"><i class="fa fa-check"></i><b>1.5.1</b> 目标</a></li>
+<li class="chapter" data-level="1.5.2" data-path="index.html"><a href="index.html#示例及任务-2"><i class="fa fa-check"></i><b>1.5.2</b> 示例及任务</a></li>
+</ul></li>
+<li class="chapter" data-level="1.6" data-path="index.html"><a href="index.html#第四周"><i class="fa fa-check"></i><b>1.6</b> 第四周</a>
+<ul>
+<li class="chapter" data-level="1.6.1" data-path="index.html"><a href="index.html#目标-3"><i class="fa fa-check"></i><b>1.6.1</b> 目标</a></li>
+<li class="chapter" data-level="1.6.2" data-path="index.html"><a href="index.html#示例及任务-3"><i class="fa fa-check"></i><b>1.6.2</b> 示例及任务</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="用tidyr读写操作文件.html"><a href="用tidyr读写操作文件.html"><i class="fa fa-check"></i><b>2</b> 用tidyr读写、操作文件</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="用tidyr读写操作文件.html"><a href="用tidyr读写操作文件.html#使用内置数据集iris"><i class="fa fa-check"></i><b>2.1</b> 使用内置数据集iris</a></li>
+<li class="chapter" data-level="2.2" data-path="用tidyr读写操作文件.html"><a href="用tidyr读写操作文件.html#的使用"><i class="fa fa-check"></i><b>2.2</b> %&gt;% 的使用</a></li>
+<li class="chapter" data-level="2.3" data-path="用tidyr读写操作文件.html"><a href="用tidyr读写操作文件.html#select的使用"><i class="fa fa-check"></i><b>2.3</b> select的使用</a></li>
+<li class="chapter" data-level="2.4" data-path="用tidyr读写操作文件.html"><a href="用tidyr读写操作文件.html#mutate的使用"><i class="fa fa-check"></i><b>2.4</b> mutate的使用</a></li>
+<li class="chapter" data-level="2.5" data-path="用tidyr读写操作文件.html"><a href="用tidyr读写操作文件.html#group_by-summarise"><i class="fa fa-check"></i><b>2.5</b> group_by + summarise</a></li>
+<li class="chapter" data-level="2.6" data-path="用tidyr读写操作文件.html"><a href="用tidyr读写操作文件.html#检验环节"><i class="fa fa-check"></i><b>2.6</b> 检验环节</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="r的基础和特征.html"><a href="r的基础和特征.html"><i class="fa fa-check"></i><b>3</b> R的基础和特征</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="r的基础和特征.html"><a href="r的基础和特征.html#r中的数据结构"><i class="fa fa-check"></i><b>3.1</b> R中的数据结构</a></li>
+<li class="chapter" data-level="3.2" data-path="r的基础和特征.html"><a href="r的基础和特征.html#向量化"><i class="fa fa-check"></i><b>3.2</b> 向量化</a></li>
+<li class="chapter" data-level="3.3" data-path="r的基础和特征.html"><a href="r的基础和特征.html#for循环"><i class="fa fa-check"></i><b>3.3</b> for循环</a></li>
+<li class="chapter" data-level="3.4" data-path="r的基础和特征.html"><a href="r的基础和特征.html#for的向量化"><i class="fa fa-check"></i><b>3.4</b> for的向量化</a></li>
+<li class="chapter" data-level="3.5" data-path="r的基础和特征.html"><a href="r的基础和特征.html#标准化"><i class="fa fa-check"></i><b>3.5</b> 标准化</a></li>
+<li class="chapter" data-level="3.6" data-path="r的基础和特征.html"><a href="r的基础和特征.html#求单个变量和其它变量的相关性"><i class="fa fa-check"></i><b>3.6</b> 求单个变量和其它变量的相关性</a></li>
+<li class="chapter" data-level="3.7" data-path="r的基础和特征.html"><a href="r的基础和特征.html#函数式编程"><i class="fa fa-check"></i><b>3.7</b> 函数式编程</a></li>
+<li class="chapter" data-level="3.8" data-path="r的基础和特征.html"><a href="r的基础和特征.html#实例和小测验"><i class="fa fa-check"></i><b>3.8</b> 实例和小测验</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="字符串操作和r进阶.html"><a href="字符串操作和r进阶.html"><i class="fa fa-check"></i><b>4</b> 字符串操作和R进阶</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="字符串操作和r进阶.html"><a href="字符串操作和r进阶.html#提纲"><i class="fa fa-check"></i><b>4.1</b> 提纲</a>
+<ul>
+<li class="chapter" data-level="4.1.1" data-path="字符串操作和r进阶.html"><a href="字符串操作和r进阶.html#变量掩蔽"><i class="fa fa-check"></i><b>4.1.1</b> 变量掩蔽</a></li>
+<li class="chapter" data-level="4.1.2" data-path="字符串操作和r进阶.html"><a href="字符串操作和r进阶.html#字符串操作"><i class="fa fa-check"></i><b>4.1.2</b> 字符串操作</a></li>
+<li class="chapter" data-level="4.1.3" data-path="字符串操作和r进阶.html"><a href="字符串操作和r进阶.html#grep"><i class="fa fa-check"></i><b>4.1.3</b> grep</a></li>
+<li class="chapter" data-level="4.1.4" data-path="字符串操作和r进阶.html"><a href="字符串操作和r进阶.html#substr"><i class="fa fa-check"></i><b>4.1.4</b> substr</a></li>
+<li class="chapter" data-level="4.1.5" data-path="字符串操作和r进阶.html"><a href="字符串操作和r进阶.html#正则表达式与str_extract"><i class="fa fa-check"></i><b>4.1.5</b> 正则表达式与str_extract</a></li>
+<li class="chapter" data-level="4.1.6" data-path="字符串操作和r进阶.html"><a href="字符串操作和r进阶.html#str_subset"><i class="fa fa-check"></i><b>4.1.6</b> str_subset</a></li>
+<li class="chapter" data-level="4.1.7" data-path="字符串操作和r进阶.html"><a href="字符串操作和r进阶.html#str_split"><i class="fa fa-check"></i><b>4.1.7</b> str_split</a></li>
+</ul></li>
+<li class="chapter" data-level="4.2" data-path="字符串操作和r进阶.html"><a href="字符串操作和r进阶.html#实战"><i class="fa fa-check"></i><b>4.2</b> 实战</a>
+<ul>
+<li class="chapter" data-level="4.2.1" data-path="字符串操作和r进阶.html"><a href="字符串操作和r进阶.html#向量化-1"><i class="fa fa-check"></i><b>4.2.1</b> 1. 向量化</a></li>
+<li class="chapter" data-level="4.2.2" data-path="字符串操作和r进阶.html"><a href="字符串操作和r进阶.html#tibble的nested-tibble性质"><i class="fa fa-check"></i><b>4.2.2</b> 2. tibble的nested tibble性质</a></li>
+<li class="chapter" data-level="4.2.3" data-path="字符串操作和r进阶.html"><a href="字符串操作和r进阶.html#dataframe操作"><i class="fa fa-check"></i><b>4.2.3</b> 3. dataframe操作</a></li>
+<li class="chapter" data-level="4.2.4" data-path="字符串操作和r进阶.html"><a href="字符串操作和r进阶.html#循环"><i class="fa fa-check"></i><b>4.2.4</b> 4. 循环</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="初探mlr3.html"><a href="初探mlr3.html"><i class="fa fa-check"></i><b>5</b> 初探mlr3</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="初探mlr3.html"><a href="初探mlr3.html#mlr3中使用po进行特征工程"><i class="fa fa-check"></i><b>5.1</b> mlr3中使用po()进行特征工程</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="二分类和多分类问题.html"><a href="二分类和多分类问题.html"><i class="fa fa-check"></i><b>6</b> 二分类和多分类问题</a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="二分类和多分类问题.html"><a href="二分类和多分类问题.html#二分类"><i class="fa fa-check"></i><b>6.1</b> 二分类</a></li>
+<li class="chapter" data-level="6.2" data-path="二分类和多分类问题.html"><a href="二分类和多分类问题.html#hardmax"><i class="fa fa-check"></i><b>6.2</b> hardmax</a></li>
+<li class="chapter" data-level="6.3" data-path="二分类和多分类问题.html"><a href="二分类和多分类问题.html#softmax"><i class="fa fa-check"></i><b>6.3</b> softmax</a></li>
+<li class="chapter" data-level="6.4" data-path="二分类和多分类问题.html"><a href="二分类和多分类问题.html#多分类的损失函数"><i class="fa fa-check"></i><b>6.4</b> 多分类的损失函数</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="特征工程交叉验证和超参数调优.html"><a href="特征工程交叉验证和超参数调优.html"><i class="fa fa-check"></i><b>7</b> 特征工程、交叉验证和超参数调优</a>
+<ul>
+<li class="chapter" data-level="7.1" data-path="特征工程交叉验证和超参数调优.html"><a href="特征工程交叉验证和超参数调优.html#特征工程"><i class="fa fa-check"></i><b>7.1</b> 特征工程</a>
+<ul>
+<li class="chapter" data-level="7.1.1" data-path="特征工程交叉验证和超参数调优.html"><a href="特征工程交叉验证和超参数调优.html#读入数据"><i class="fa fa-check"></i><b>7.1.1</b> 读入数据</a></li>
+<li class="chapter" data-level="7.1.2" data-path="特征工程交叉验证和超参数调优.html"><a href="特征工程交叉验证和超参数调优.html#创建任务"><i class="fa fa-check"></i><b>7.1.2</b> 创建任务</a></li>
+</ul></li>
+<li class="chapter" data-level="7.2" data-path="特征工程交叉验证和超参数调优.html"><a href="特征工程交叉验证和超参数调优.html#超参数调优"><i class="fa fa-check"></i><b>7.2</b> 超参数调优</a>
+<ul>
+<li class="chapter" data-level="7.2.1" data-path="特征工程交叉验证和超参数调优.html"><a href="特征工程交叉验证和超参数调优.html#mlr3实现"><i class="fa fa-check"></i><b>7.2.1</b> mlr3实现</a></li>
+<li class="chapter" data-level="7.2.2" data-path="特征工程交叉验证和超参数调优.html"><a href="特征工程交叉验证和超参数调优.html#使用注意"><i class="fa fa-check"></i><b>7.2.2</b> 使用注意</a></li>
+</ul></li>
+<li class="chapter" data-level="7.3" data-path="特征工程交叉验证和超参数调优.html"><a href="特征工程交叉验证和超参数调优.html#交叉验证"><i class="fa fa-check"></i><b>7.3</b> 交叉验证</a>
+<ul>
+<li class="chapter" data-level="7.3.1" data-path="特征工程交叉验证和超参数调优.html"><a href="特征工程交叉验证和超参数调优.html#模型堆叠"><i class="fa fa-check"></i><b>7.3.1</b> 模型堆叠</a></li>
+<li class="chapter" data-level="7.3.2" data-path="特征工程交叉验证和超参数调优.html"><a href="特征工程交叉验证和超参数调优.html#交叉验证失效怎么办"><i class="fa fa-check"></i><b>7.3.2</b> 交叉验证失效怎么办？</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="理解机器学习里数据不均衡.html"><a href="理解机器学习里数据不均衡.html"><i class="fa fa-check"></i><b>8</b> 理解机器学习里数据不均衡</a>
+<ul>
+<li class="chapter" data-level="8.1" data-path="理解机器学习里数据不均衡.html"><a href="理解机器学习里数据不均衡.html#data_prepare"><i class="fa fa-check"></i><b>8.1</b> data_prepare</a></li>
+<li class="chapter" data-level="8.2" data-path="理解机器学习里数据不均衡.html"><a href="理解机器学习里数据不均衡.html#model"><i class="fa fa-check"></i><b>8.2</b> model</a>
+<ul>
+<li class="chapter" data-level="8.2.1" data-path="理解机器学习里数据不均衡.html"><a href="理解机器学习里数据不均衡.html#数据均衡的模型"><i class="fa fa-check"></i><b>8.2.1</b> 数据均衡的模型</a></li>
+<li class="chapter" data-level="8.2.2" data-path="理解机器学习里数据不均衡.html"><a href="理解机器学习里数据不均衡.html#数据不均衡的模型"><i class="fa fa-check"></i><b>8.2.2</b> 数据不均衡的模型</a></li>
+<li class="chapter" data-level="8.2.3" data-path="理解机器学习里数据不均衡.html"><a href="理解机器学习里数据不均衡.html#训练集上后处理准确率的模型"><i class="fa fa-check"></i><b>8.2.3</b> 训练集上后处理准确率的模型</a></li>
+<li class="chapter" data-level="8.2.4" data-path="理解机器学习里数据不均衡.html"><a href="理解机器学习里数据不均衡.html#测试集上后处理准确率"><i class="fa fa-check"></i><b>8.2.4</b> 测试集上后处理准确率</a></li>
+<li class="chapter" data-level="8.2.5" data-path="理解机器学习里数据不均衡.html"><a href="理解机器学习里数据不均衡.html#过采样的模型"><i class="fa fa-check"></i><b>8.2.5</b> 过采样的模型</a></li>
+<li class="chapter" data-level="8.2.6" data-path="理解机器学习里数据不均衡.html"><a href="理解机器学习里数据不均衡.html#欠采样的模型"><i class="fa fa-check"></i><b>8.2.6</b> 欠采样的模型</a></li>
+<li class="chapter" data-level="8.2.7" data-path="理解机器学习里数据不均衡.html"><a href="理解机器学习里数据不均衡.html#添加权重的模型"><i class="fa fa-check"></i><b>8.2.7</b> 添加权重的模型</a></li>
+</ul></li>
+<li class="chapter" data-level="8.3" data-path="理解机器学习里数据不均衡.html"><a href="理解机器学习里数据不均衡.html#rough-edged"><i class="fa fa-check"></i><b>8.3</b> rough edged</a></li>
+</ul></li>
+<li class="chapter" data-level="9" data-path="初探r中的面向对象系统.html"><a href="初探r中的面向对象系统.html"><i class="fa fa-check"></i><b>9</b> 初探R中的面向对象系统</a>
+<ul>
+<li class="chapter" data-level="9.1" data-path="初探r中的面向对象系统.html"><a href="初探r中的面向对象系统.html#s3"><i class="fa fa-check"></i><b>9.1</b> S3</a>
+<ul>
+<li class="chapter" data-level="9.1.1" data-path="初探r中的面向对象系统.html"><a href="初探r中的面向对象系统.html#解惑"><i class="fa fa-check"></i><b>9.1.1</b> 解惑</a></li>
+<li class="chapter" data-level="9.1.2" data-path="初探r中的面向对象系统.html"><a href="初探r中的面向对象系统.html#实践"><i class="fa fa-check"></i><b>9.1.2</b> 实践</a></li>
+</ul></li>
+<li class="chapter" data-level="9.2" data-path="初探r中的面向对象系统.html"><a href="初探r中的面向对象系统.html#r6"><i class="fa fa-check"></i><b>9.2</b> R6</a></li>
+<li class="chapter" data-level="9.3" data-path="初探r中的面向对象系统.html"><a href="初探r中的面向对象系统.html#s4"><i class="fa fa-check"></i><b>9.3</b> S4</a></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="rmarkdown中插入文献和修改引用样式.html"><a href="rmarkdown中插入文献和修改引用样式.html"><i class="fa fa-check"></i><b>10</b> （R）markdown中插入文献和修改引用样式</a>
+<ul>
+<li class="chapter" data-level="10.1" data-path="rmarkdown中插入文献和修改引用样式.html"><a href="rmarkdown中插入文献和修改引用样式.html#rmarkdown的组成"><i class="fa fa-check"></i><b>10.1</b> Rmarkdown的组成</a></li>
+<li class="chapter" data-level="10.2" data-path="rmarkdown中插入文献和修改引用样式.html"><a href="rmarkdown中插入文献和修改引用样式.html#插入参考文献"><i class="fa fa-check"></i><b>10.2</b> 插入参考文献</a></li>
+<li class="chapter" data-level="10.3" data-path="rmarkdown中插入文献和修改引用样式.html"><a href="rmarkdown中插入文献和修改引用样式.html#修改引用样式"><i class="fa fa-check"></i><b>10.3</b> 修改引用样式</a></li>
+<li class="chapter" data-level="10.4" data-path="rmarkdown中插入文献和修改引用样式.html"><a href="rmarkdown中插入文献和修改引用样式.html#其它技巧和问题"><i class="fa fa-check"></i><b>10.4</b> 其它技巧和问题</a>
+<ul>
+<li class="chapter" data-level="10.4.1" data-path="rmarkdown中插入文献和修改引用样式.html"><a href="rmarkdown中插入文献和修改引用样式.html#快捷键"><i class="fa fa-check"></i><b>10.4.1</b> 快捷键</a></li>
+<li class="chapter" data-level="10.4.2" data-path="rmarkdown中插入文献和修改引用样式.html"><a href="rmarkdown中插入文献和修改引用样式.html#引用多篇"><i class="fa fa-check"></i><b>10.4.2</b> 引用多篇</a></li>
+<li class="chapter" data-level="10.4.3" data-path="rmarkdown中插入文献和修改引用样式.html"><a href="rmarkdown中插入文献和修改引用样式.html#导出注意事项"><i class="fa fa-check"></i><b>10.4.3</b> 导出注意事项</a></li>
+</ul></li>
+<li class="chapter" data-level="10.5" data-path="rmarkdown中插入文献和修改引用样式.html"><a href="rmarkdown中插入文献和修改引用样式.html#参考文献"><i class="fa fa-check"></i><b>10.5</b> 参考文献</a></li>
+</ul></li>
+<li class="chapter" data-level="11" data-path="puzzle1展开折叠数据.html"><a href="puzzle1展开折叠数据.html"><i class="fa fa-check"></i><b>11</b> puzzle1：展开折叠数据</a>
+<ul>
+<li class="chapter" data-level="11.1" data-path="puzzle1展开折叠数据.html"><a href="puzzle1展开折叠数据.html#数据展开"><i class="fa fa-check"></i><b>11.1</b> 数据展开</a></li>
+<li class="chapter" data-level="11.2" data-path="puzzle1展开折叠数据.html"><a href="puzzle1展开折叠数据.html#模型建立"><i class="fa fa-check"></i><b>11.2</b> 模型建立</a></li>
+</ul></li>
+<li class="chapter" data-level="12" data-path="puzzle2初试假设检验.html"><a href="puzzle2初试假设检验.html"><i class="fa fa-check"></i><b>12</b> puzzle2：初试假设检验</a>
+<ul>
+<li class="chapter" data-level="12.1" data-path="puzzle2初试假设检验.html"><a href="puzzle2初试假设检验.html#示例"><i class="fa fa-check"></i><b>12.1</b> 示例</a>
+<ul>
+<li class="chapter" data-level="12.1.1" data-path="puzzle2初试假设检验.html"><a href="puzzle2初试假设检验.html#计算"><i class="fa fa-check"></i><b>12.1.1</b> 计算</a></li>
+</ul></li>
+<li class="chapter" data-level="12.2" data-path="puzzle2初试假设检验.html"><a href="puzzle2初试假设检验.html#题目"><i class="fa fa-check"></i><b>12.2</b> 题目</a></li>
+</ul></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">R语言高手计划</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="初探r中的面向对象系统" class="section level1 hasAnchor" number="9">
+<h1><span class="header-section-number">9</span> 初探R中的面向对象系统<a href="初探r中的面向对象系统.html#初探r中的面向对象系统" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<p>面向对象是一种高级的编程思想，在构建大型项目时格外有用，面向对象的较为详细的阐述可见<a href="https://www.bookstack.cn/read/Python-100-Days/Day01-15-08.%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E7%BC%96%E7%A8%8B%E5%9F%BA%E7%A1%80.md">python100天</a>。</p>
+<p>面向对象有三个特点：封装、继承和多态。我们可以这样简单理解：</p>
+<ul>
+<li>封装：把低级数据结构封装成我们自定义的高级数据结构，搭配我们设定的一系列方法，实现标准输入、标准输出</li>
+<li>继承：一个高级数据结构可以来自一个较为低级的数据结构，继承了低级结构的特点</li>
+<li>多态：高级数据结构之间彼此互不相同</li>
+</ul>
+<p>R中有三种主流面向对象系统（新出的S7系统尚未成熟，还有一些古怪的面向对象系统暂且不表），R6最新，最接近现代编程里的主流面向对象结构，S3成熟简单，但和主流思想偏差较大，S4是S3和R6之间的过渡，虽然很多优秀的包都基于S4构建，但是这个结构本身很不便于开发，存在很多不便，这里仅仅带过。</p>
+<div id="s3" class="section level2 hasAnchor" number="9.1">
+<h2><span class="header-section-number">9.1</span> S3<a href="初探r中的面向对象系统.html#s3" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>S3系统来自R语言的前身S语言，简洁强大，但是非常的不规范。</p>
+<div id="解惑" class="section level3 hasAnchor" number="9.1.1">
+<h3><span class="header-section-number">9.1.1</span> 解惑<a href="初探r中的面向对象系统.html#解惑" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>R中一个现象令纯学者困惑，为什么一个函数可以接收不同的数据结构？比如<code>print</code>既可以接收data.frame又可以接收tibble，打印出来的内容却不一样。</p>
+<div class="sourceCode" id="cb399"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb399-1"><a href="初探r中的面向对象系统.html#cb399-1" tabindex="-1"></a>example_tbl <span class="ot">=</span> <span class="fu">as_tibble</span>(iris)</span>
+<span id="cb399-2"><a href="初探r中的面向对象系统.html#cb399-2" tabindex="-1"></a></span>
+<span id="cb399-3"><a href="初探r中的面向对象系统.html#cb399-3" tabindex="-1"></a><span class="fu">print</span>(iris[<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>, ])</span></code></pre></div>
+<pre><code>##    Sepal.Length Sepal.Width Petal.Length Petal.Width Species
+## 1           5.1         3.5          1.4         0.2  setosa
+## 2           4.9         3.0          1.4         0.2  setosa
+## 3           4.7         3.2          1.3         0.2  setosa
+## 4           4.6         3.1          1.5         0.2  setosa
+## 5           5.0         3.6          1.4         0.2  setosa
+## 6           5.4         3.9          1.7         0.4  setosa
+## 7           4.6         3.4          1.4         0.3  setosa
+## 8           5.0         3.4          1.5         0.2  setosa
+## 9           4.4         2.9          1.4         0.2  setosa
+## 10          4.9         3.1          1.5         0.1  setosa</code></pre>
+<div class="sourceCode" id="cb401"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb401-1"><a href="初探r中的面向对象系统.html#cb401-1" tabindex="-1"></a><span class="fu">print</span>(example_tbl)</span></code></pre></div>
+<pre><code>## # A tibble: 150 × 5
+##    Sepal.Length Sepal.Width Petal.Length Petal.Width Species
+##           &lt;dbl&gt;       &lt;dbl&gt;        &lt;dbl&gt;       &lt;dbl&gt; &lt;fct&gt;  
+##  1          5.1         3.5          1.4         0.2 setosa 
+##  2          4.9         3            1.4         0.2 setosa 
+##  3          4.7         3.2          1.3         0.2 setosa 
+##  4          4.6         3.1          1.5         0.2 setosa 
+##  5          5           3.6          1.4         0.2 setosa 
+##  6          5.4         3.9          1.7         0.4 setosa 
+##  7          4.6         3.4          1.4         0.3 setosa 
+##  8          5           3.4          1.5         0.2 setosa 
+##  9          4.4         2.9          1.4         0.2 setosa 
+## 10          4.9         3.1          1.5         0.1 setosa 
+## # ℹ 140 more rows</code></pre>
+<p>或者一个函数接收不同的数据结构，算出来的内容居然是相同的！<del>如果你看过变量遮蔽的内容，一定知道这里的with是什么意思，后面的那个波浪号是R中的公式语法</del></p>
+<div class="sourceCode" id="cb403"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb403-1"><a href="初探r中的面向对象系统.html#cb403-1" tabindex="-1"></a>a <span class="ot">=</span> <span class="fu">with</span>(sleep, <span class="fu">t.test</span>(extra[group <span class="sc">==</span> <span class="dv">1</span>], extra[group <span class="sc">==</span> <span class="dv">2</span>]))</span>
+<span id="cb403-2"><a href="初探r中的面向对象系统.html#cb403-2" tabindex="-1"></a>b <span class="ot">=</span> <span class="fu">t.test</span>(extra <span class="sc">~</span> group, sleep)</span>
+<span id="cb403-3"><a href="初探r中的面向对象系统.html#cb403-3" tabindex="-1"></a>c <span class="ot">=</span> <span class="fu">list</span>(a, b); <span class="fu">names</span>(c) <span class="ot">=</span> <span class="fu">c</span>(<span class="st">&quot;numeric&quot;</span>, <span class="st">&quot;formula&quot;</span>); c</span></code></pre></div>
+<pre><code>## $numeric
+## 
+##  Welch Two Sample t-test
+## 
+## data:  extra[group == 1] and extra[group == 2]
+## t = -1.8608, df = 17.776, p-value = 0.07939
+## alternative hypothesis: true difference in means is not equal to 0
+## 95 percent confidence interval:
+##  -3.3654832  0.2054832
+## sample estimates:
+## mean of x mean of y 
+##      0.75      2.33 
+## 
+## 
+## $formula
+## 
+##  Welch Two Sample t-test
+## 
+## data:  extra by group
+## t = -1.8608, df = 17.776, p-value = 0.07939
+## alternative hypothesis: true difference in means between group 1 and group 2 is not equal to 0
+## 95 percent confidence interval:
+##  -3.3654832  0.2054832
+## sample estimates:
+## mean in group 1 mean in group 2 
+##            0.75            2.33</code></pre>
+<p>上两者的原因都在于R的S3结构。S3结构的特点是对每个类别可以使用属于各个类别自己方法，命名特点为<code>函数名 + .类别</code>，一个变量可以有多个类别，执行一个变量的S3方法时，会从左到右依次往下找有没有对此类别可以用的方法，如果实在找不到，就会使用default方法，这就是所谓的多重继承。</p>
+<p>我们可以使用<code>class</code>查看每个变量所属的类别</p>
+<div class="sourceCode" id="cb405"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb405-1"><a href="初探r中的面向对象系统.html#cb405-1" tabindex="-1"></a><span class="fu">list</span>(<span class="fu">class</span>(iris), <span class="fu">class</span>(example_tbl))</span></code></pre></div>
+<pre><code>## [[1]]
+## [1] &quot;data.frame&quot;
+## 
+## [[2]]
+## [1] &quot;tbl_df&quot;     &quot;tbl&quot;        &quot;data.frame&quot;</code></pre>
+<p>通过<code>methods</code>查看一个函数对应的全部类别的所有方法。对于print，一定有对应的<code>print.data.frame</code>，<code>print.tbl</code>方法。</p>
+<div class="sourceCode" id="cb407"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb407-1"><a href="初探r中的面向对象系统.html#cb407-1" tabindex="-1"></a><span class="fu">methods</span>(<span class="st">&quot;print&quot;</span>)</span></code></pre></div>
+<pre><code>##   [1] print.acf*                                          
+##   [2] print.activeConcordance*                            
+##   [3] print.AES*                                          
+##   [4] print.all_vars*                                     
+##   [5] print.anova*                                        
+##   [6] print.any_vars*                                     
+##   [7] print.aov*                                          
+##   [8] print.aovlist*                                      
+##   [9] print.ar*                                           
+##  [10] print.Arima*                                        
+##  [11] print.arima0*                                       
+##  [12] print.AsIs                                          
+##  [13] print.aspell*                                       
+##  [14] print.aspell_inspect_context*                       
+##  [15] print.bibentry*                                     
+##  [16] print.Bibtex*                                       
+##  [17] print.browseVignettes*                              
+##  [18] print.bslib_breakpoints*                            
+##  [19] print.bslib_fragment*                               
+##  [20] print.bslib_page*                                   
+##  [21] print.bslib_showcase_layout*                        
+##  [22] print.bslib_value_box_theme*                        
+##  [23] print.by                                            
+##  [24] print.cachem*                                       
+##  [25] print.changedFiles*                                 
+##  [26] print.check_bogus_return*                           
+##  [27] print.check_code_usage_in_package*                  
+##  [28] print.check_compiled_code*                          
+##  [29] print.check_demo_index*                             
+##  [30] print.check_depdef*                                 
+##  [31] print.check_details*                                
+##  [32] print.check_details_changes*                        
+##  [33] print.check_doi_db*                                 
+##  [34] print.check_dotInternal*                            
+##  [35] print.check_make_vars*                              
+##  [36] print.check_nonAPI_calls*                           
+##  [37] print.check_package_code_assign_to_globalenv*       
+##  [38] print.check_package_code_attach*                    
+##  [39] print.check_package_code_data_into_globalenv*       
+##  [40] print.check_package_code_startup_functions*         
+##  [41] print.check_package_code_syntax*                    
+##  [42] print.check_package_code_unload_functions*          
+##  [43] print.check_package_compact_datasets*               
+##  [44] print.check_package_CRAN_incoming*                  
+##  [45] print.check_package_datalist*                       
+##  [46] print.check_package_datasets*                       
+##  [47] print.check_package_depends*                        
+##  [48] print.check_package_description*                    
+##  [49] print.check_package_description_encoding*           
+##  [50] print.check_package_license*                        
+##  [51] print.check_packages_in_dir*                        
+##  [52] print.check_packages_used*                          
+##  [53] print.check_po_files*                               
+##  [54] print.check_pragmas*                                
+##  [55] print.check_Rd_line_widths*                         
+##  [56] print.check_Rd_metadata*                            
+##  [57] print.check_Rd_xrefs*                               
+##  [58] print.check_RegSym_calls*                           
+##  [59] print.check_S3_methods_needing_delayed_registration*
+##  [60] print.check_so_symbols*                             
+##  [61] print.check_T_and_F*                                
+##  [62] print.check_url_db*                                 
+##  [63] print.check_vignette_index*                         
+##  [64] print.checkDocFiles*                                
+##  [65] print.checkDocStyle*                                
+##  [66] print.checkFF*                                      
+##  [67] print.checkRd*                                      
+##  [68] print.checkRdContents*                              
+##  [69] print.checkReplaceFuns*                             
+##  [70] print.checkS3methods*                               
+##  [71] print.checkTnF*                                     
+##  [72] print.checkVignettes*                               
+##  [73] print.citation*                                     
+##  [74] print.cli_ansi_html_style*                          
+##  [75] print.cli_ansi_string*                              
+##  [76] print.cli_ansi_style*                               
+##  [77] print.cli_boxx*                                     
+##  [78] print.cli_diff_chr*                                 
+##  [79] print.cli_doc*                                      
+##  [80] print.cli_progress_demo*                            
+##  [81] print.cli_rule*                                     
+##  [82] print.cli_sitrep*                                   
+##  [83] print.cli_spark*                                    
+##  [84] print.cli_spinner*                                  
+##  [85] print.cli_tree*                                     
+##  [86] print.codoc*                                        
+##  [87] print.codocClasses*                                 
+##  [88] print.codocData*                                    
+##  [89] print.col_spec*                                     
+##  [90] print.collector*                                    
+##  [91] print.colorConverter*                               
+##  [92] print.compactPDF*                                   
+##  [93] print.condition                                     
+##  [94] print.connection                                    
+##  [95] print.CRAN_package_reverse_dependencies_and_views*  
+##  [96] print.css*                                          
+##  [97] print.data.frame                                    
+##  [98] print.Date                                          
+##  [99] print.date_names*                                   
+## [100] print.default                                       
+## [101] print.dendrogram*                                   
+## [102] print.density*                                      
+## [103] print.difftime                                      
+## [104] print.dist*                                         
+## [105] print.Dlist                                         
+## [106] print.DLLInfo                                       
+## [107] print.DLLInfoList                                   
+## [108] print.DLLRegisteredRoutines                         
+## [109] print.document_context*                             
+## [110] print.document_position*                            
+## [111] print.document_range*                               
+## [112] print.document_selection*                           
+## [113] print.dplyr_join_by*                                
+## [114] print.dplyr_sel_vars*                               
+## [115] print.dummy_coef*                                   
+## [116] print.dummy_coef_list*                              
+## [117] print.ecdf*                                         
+## [118] print.eigen                                         
+## [119] print.element*                                      
+## [120] print.factanal*                                     
+## [121] print.factor                                        
+## [122] print.family*                                       
+## [123] print.fileSnapshot*                                 
+## [124] print.findLineNumResult*                            
+## [125] print.flatGridListing*                              
+## [126] print.formula*                                      
+## [127] print.fseq*                                         
+## [128] print.ftable*                                       
+## [129] print.fun_list*                                     
+## [130] print.function                                      
+## [131] print.getAnywhere*                                  
+## [132] print.ggplot*                                       
+## [133] print.ggplot2_bins*                                 
+## [134] print.ggproto*                                      
+## [135] print.ggproto_method*                               
+## [136] print.gList*                                        
+## [137] print.glm*                                          
+## [138] print.glue*                                         
+## [139] print.gpar*                                         
+## [140] print.GridCoords*                                   
+## [141] print.GridGrobCoords*                               
+## [142] print.GridGTreeCoords*                              
+## [143] print.grob*                                         
+## [144] print.gtable*                                       
+## [145] print.hashtab*                                      
+## [146] print.hcl_palettes*                                 
+## [147] print.hclust*                                       
+## [148] print.help_files_with_topic*                        
+## [149] print.hexmode                                       
+## [150] print.hms*                                          
+## [151] print.HoltWinters*                                  
+## [152] print.hsearch*                                      
+## [153] print.hsearch_db*                                   
+## [154] print.htest*                                        
+## [155] print.html*                                         
+## [156] print.html_dependency*                              
+## [157] print.htmltools.selector*                           
+## [158] print.htmltools.selector.list*                      
+## [159] print.infl*                                         
+## [160] print.integrate*                                    
+## [161] print.isoreg*                                       
+## [162] print.json*                                         
+## [163] print.key_missing*                                  
+## [164] print.kmeans*                                       
+## [165] print.knitr_kable*                                  
+## [166] print.last_dplyr_warnings*                          
+## [167] print.Latex*                                        
+## [168] print.LaTeX*                                        
+## [169] print.libraryIQR                                    
+## [170] print.lifecycle_warnings*                           
+## [171] print.listof                                        
+## [172] print.lm*                                           
+## [173] print.loadings*                                     
+## [174] print.locale*                                       
+## [175] print.loess*                                        
+## [176] print.logLik*                                       
+## [177] print.ls_str*                                       
+## [178] print.medpolish*                                    
+## [179] print.MethodsFunction*                              
+## [180] print.mtable*                                       
+## [181] print.NativeRoutineList                             
+## [182] print.news_db*                                      
+## [183] print.nls*                                          
+## [184] print.noquote                                       
+## [185] print.numeric_version                               
+## [186] print.object_size*                                  
+## [187] print.octmode                                       
+## [188] print.packageDescription*                           
+## [189] print.packageInfo                                   
+## [190] print.packageIQR*                                   
+## [191] print.packageStatus*                                
+## [192] print.pairwise.htest*                               
+## [193] print.path*                                         
+## [194] print.person*                                       
+## [195] print.pillar*                                       
+## [196] print.pillar_1e*                                    
+## [197] print.pillar_colonnade*                             
+## [198] print.pillar_ornament*                              
+## [199] print.pillar_shaft*                                 
+## [200] print.pillar_squeezed_colonnade*                    
+## [201] print.pillar_tbl_format_setup*                      
+## [202] print.pillar_vctr*                                  
+## [203] print.pillar_vctr_attr*                             
+## [204] print.POSIXct                                       
+## [205] print.POSIXlt                                       
+## [206] print.power.htest*                                  
+## [207] print.ppr*                                          
+## [208] print.prcomp*                                       
+## [209] print.princomp*                                     
+## [210] print.proc_time                                     
+## [211] print.purrr_function_compose*                       
+## [212] print.purrr_function_partial*                       
+## [213] print.purrr_rate_backoff*                           
+## [214] print.purrr_rate_delay*                             
+## [215] print.quosure*                                      
+## [216] print.quosures*                                     
+## [217] print.R6*                                           
+## [218] print.R6ClassGenerator*                             
+## [219] print.raster*                                       
+## [220] print.Rconcordance*                                 
+## [221] print.Rd*                                           
+## [222] print.recordedplot*                                 
+## [223] print.rel*                                          
+## [224] print.restart                                       
+## [225] print.RGBcolorConverter*                            
+## [226] print.RGlyphFont*                                   
+## [227] print.rlang:::list_of_conditions*                   
+## [228] print.rlang_box_done*                               
+## [229] print.rlang_box_splice*                             
+## [230] print.rlang_data_pronoun*                           
+## [231] print.rlang_dict*                                   
+## [232] print.rlang_dyn_array*                              
+## [233] print.rlang_envs*                                   
+## [234] print.rlang_error*                                  
+## [235] print.rlang_fake_data_pronoun*                      
+## [236] print.rlang_lambda_function*                        
+## [237] print.rlang_message*                                
+## [238] print.rlang_trace*                                  
+## [239] print.rlang_warning*                                
+## [240] print.rlang_zap*                                    
+## [241] print.rle                                           
+## [242] print.rlib_bytes*                                   
+## [243] print.rlib_error_3_0*                               
+## [244] print.rlib_trace_3_0*                               
+## [245] print.roman*                                        
+## [246] print.sass*                                         
+## [247] print.sass_bundle*                                  
+## [248] print.sass_layer*                                   
+## [249] print.SavedPlots*                                   
+## [250] print.scalar*                                       
+## [251] print.sessionInfo*                                  
+## [252] print.shiny.tag*                                    
+## [253] print.shiny.tag.env*                                
+## [254] print.shiny.tag.list*                               
+## [255] print.shiny.tag.query*                              
+## [256] print.simple.list                                   
+## [257] print.smooth.spline*                                
+## [258] print.socket*                                       
+## [259] print.src*                                          
+## [260] print.srcfile                                       
+## [261] print.srcref                                        
+## [262] print.stepfun*                                      
+## [263] print.stl*                                          
+## [264] print.stringr_view*                                 
+## [265] print.StructTS*                                     
+## [266] print.subdir_tests*                                 
+## [267] print.summarize_CRAN_check_status*                  
+## [268] print.summary.aov*                                  
+## [269] print.summary.aovlist*                              
+## [270] print.summary.ecdf*                                 
+## [271] print.summary.glm*                                  
+## [272] print.summary.lm*                                   
+## [273] print.summary.loess*                                
+## [274] print.summary.manova*                               
+## [275] print.summary.nls*                                  
+## [276] print.summary.packageStatus*                        
+## [277] print.summary.ppr*                                  
+## [278] print.summary.prcomp*                               
+## [279] print.summary.princomp*                             
+## [280] print.summary.table                                 
+## [281] print.summary.warnings                              
+## [282] print.summaryDefault                                
+## [283] print.table                                         
+## [284] print.tables_aov*                                   
+## [285] print.tbl*                                          
+## [286] print.terms*                                        
+## [287] print.theme*                                        
+## [288] print.tidyverse_conflicts*                          
+## [289] print.tidyverse_logo*                               
+## [290] print.trans*                                        
+## [291] print.trunc_mat*                                    
+## [292] print.ts*                                           
+## [293] print.tskernel*                                     
+## [294] print.TukeyHSD*                                     
+## [295] print.tukeyline*                                    
+## [296] print.tukeysmooth*                                  
+## [297] print.undoc*                                        
+## [298] print.uneval*                                       
+## [299] print.unit*                                         
+## [300] print.vctrs_bytes*                                  
+## [301] print.vctrs_sclr*                                   
+## [302] print.vctrs_unspecified*                            
+## [303] print.vctrs_vctr*                                   
+## [304] print.viewport*                                     
+## [305] print.vignette*                                     
+## [306] print.warnings                                      
+## [307] print.xfun_raw_string*                              
+## [308] print.xfun_rename_seq*                              
+## [309] print.xfun_strict_list*                             
+## [310] print.xgettext*                                     
+## [311] print.xngettext*                                    
+## [312] print.xtabs*                                        
+## see &#39;?methods&#39; for accessing help and source code</code></pre>
+<p>果然有，我们还想继续查看每个方法的具体内容，我们试图通过直接打印<code>print.data.frame</code>，却找不到。我们需要使用<code>getAnywhere</code>函数来查找。</p>
+<div class="sourceCode" id="cb409"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb409-1"><a href="初探r中的面向对象系统.html#cb409-1" tabindex="-1"></a><span class="fu">list</span>(<span class="fu">getAnywhere</span>(<span class="st">&quot;print.data.frame&quot;</span>), <span class="fu">getAnywhere</span>(<span class="st">&quot;print.tbl&quot;</span>))</span></code></pre></div>
+<pre><code>## [[1]]
+## A single object matching &#39;print.data.frame&#39; was found
+## It was found in the following places
+##   package:base
+##   registered S3 method for print from namespace base
+##   namespace:base
+## with value
+## 
+## function (x, ..., digits = NULL, quote = FALSE, right = TRUE, 
+##     row.names = TRUE, max = NULL) 
+## {
+##     n &lt;- length(row.names(x))
+##     if (length(x) == 0L) {
+##         cat(sprintf(ngettext(n, &quot;data frame with 0 columns and %d row&quot;, 
+##             &quot;data frame with 0 columns and %d rows&quot;), n), &quot;\n&quot;, 
+##             sep = &quot;&quot;)
+##     }
+##     else if (n == 0L) {
+##         print.default(names(x), quote = FALSE)
+##         cat(gettext(&quot;&lt;0 rows&gt; (or 0-length row.names)\n&quot;))
+##     }
+##     else {
+##         if (is.null(max)) 
+##             max &lt;- getOption(&quot;max.print&quot;, 99999L)
+##         if (!is.finite(max)) 
+##             stop(&quot;invalid &#39;max&#39; / getOption(\&quot;max.print\&quot;): &quot;, 
+##                 max)
+##         omit &lt;- (n0 &lt;- max%/%length(x)) &lt; n
+##         m &lt;- as.matrix(format.data.frame(if (omit) 
+##             x[seq_len(n0), , drop = FALSE]
+##         else x, digits = digits, na.encode = FALSE))
+##         if (!isTRUE(row.names)) 
+##             dimnames(m)[[1L]] &lt;- if (isFALSE(row.names)) 
+##                 rep.int(&quot;&quot;, if (omit) 
+##                   n0
+##                 else n)
+##             else row.names
+##         print(m, ..., quote = quote, right = right, max = max)
+##         if (omit) 
+##             cat(&quot; [ reached &#39;max&#39; / getOption(\&quot;max.print\&quot;) -- omitted&quot;, 
+##                 n - n0, &quot;rows ]\n&quot;)
+##     }
+##     invisible(x)
+## }
+## &lt;bytecode: 0x0000022d7d813be8&gt;
+## &lt;environment: namespace:base&gt;
+## 
+## [[2]]
+## A single object matching &#39;print.tbl&#39; was found
+## It was found in the following places
+##   registered S3 method for print from namespace pillar
+##   namespace:pillar
+## with value
+## 
+## function (x, width = NULL, ..., n = NULL, max_extra_cols = NULL, 
+##     max_footer_lines = NULL) 
+## {
+##     print_tbl(x, width, ..., n = n, max_extra_cols = max_extra_cols, 
+##         max_footer_lines = max_footer_lines)
+## }
+## &lt;bytecode: 0x0000022d7cf180d8&gt;
+## &lt;environment: namespace:pillar&gt;</code></pre>
+<p>可以看到这俩函数差的很多，所以执行的内容不一样。我们再看看<code>t.test</code>。</p>
+<div class="sourceCode" id="cb411"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb411-1"><a href="初探r中的面向对象系统.html#cb411-1" tabindex="-1"></a><span class="fu">methods</span>(<span class="st">&quot;t.test&quot;</span>)</span></code></pre></div>
+<pre><code>## [1] t.test.default* t.test.formula*
+## see &#39;?methods&#39; for accessing help and source code</code></pre>
+<p>default就是默认方法，因为没有对应numeric的方法，所以我们输入两个向量进去的时候执行的就是default方法。我们只关注formula好了。</p>
+<div class="sourceCode" id="cb413"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb413-1"><a href="初探r中的面向对象系统.html#cb413-1" tabindex="-1"></a><span class="fu">getAnywhere</span>(<span class="st">&quot;t.test.formula&quot;</span>)</span></code></pre></div>
+<pre><code>## A single object matching &#39;t.test.formula&#39; was found
+## It was found in the following places
+##   registered S3 method for t.test from namespace stats
+##   namespace:stats
+## with value
+## 
+## function (formula, data, subset, na.action, ...) 
+## {
+##     if (missing(formula) || (length(formula) != 3L)) 
+##         stop(&quot;&#39;formula&#39; missing or incorrect&quot;)
+##     oneSampleOrPaired &lt;- FALSE
+##     if (length(attr(terms(formula[-2L]), &quot;term.labels&quot;)) != 1L) 
+##         if (formula[[3L]] == 1L) 
+##             oneSampleOrPaired &lt;- TRUE
+##         else stop(&quot;&#39;formula&#39; missing or incorrect&quot;)
+##     m &lt;- match.call(expand.dots = FALSE)
+##     if (is.matrix(eval(m$data, parent.frame()))) 
+##         m$data &lt;- as.data.frame(data)
+##     m[[1L]] &lt;- quote(stats::model.frame)
+##     m$... &lt;- NULL
+##     mf &lt;- eval(m, parent.frame())
+##     DNAME &lt;- paste(names(mf), collapse = &quot; by &quot;)
+##     names(mf) &lt;- NULL
+##     response &lt;- attr(attr(mf, &quot;terms&quot;), &quot;response&quot;)
+##     if (!oneSampleOrPaired) {
+##         g &lt;- factor(mf[[-response]])
+##         if (nlevels(g) != 2L) 
+##             stop(&quot;grouping factor must have exactly 2 levels&quot;)
+##         DATA &lt;- split(mf[[response]], g)
+##         y &lt;- t.test(x = DATA[[1L]], y = DATA[[2L]], ...)
+##         if (length(y$estimate) == 2L) {
+##             names(y$estimate) &lt;- paste(&quot;mean in group&quot;, levels(g))
+##             names(y$null.value) &lt;- paste(&quot;difference in means between&quot;, 
+##                 paste(&quot;group&quot;, levels(g), collapse = &quot; and &quot;))
+##         }
+##     }
+##     else {
+##         respVar &lt;- mf[[response]]
+##         if (inherits(respVar, &quot;Pair&quot;)) {
+##             y &lt;- t.test(x = respVar[, 1L], y = respVar[, 2L], 
+##                 paired = TRUE, ...)
+##         }
+##         else {
+##             y &lt;- t.test(x = respVar, ...)
+##         }
+##     }
+##     y$data.name &lt;- DNAME
+##     y
+## }
+## &lt;bytecode: 0x0000022d5846f8f8&gt;
+## &lt;environment: namespace:stats&gt;</code></pre>
+<p>可以看到他实际上就是先想办法把formula对应的内容变成一个df，然后执行<code>y = t.test(x = DATA[[1L]], y = DATA[[2L]], ...)</code>，然后再把向量输入进去，使用default方法。</p>
+</div>
+<div id="实践" class="section level3 hasAnchor" number="9.1.2">
+<h3><span class="header-section-number">9.1.2</span> 实践<a href="初探r中的面向对象系统.html#实践" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>S3对象只关注方法，不关注数据，所以我们可以给随便一个数据随便定义一个类。也可以通过<code>structure</code>看起来更规范一点。</p>
+<div class="sourceCode" id="cb415"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb415-1"><a href="初探r中的面向对象系统.html#cb415-1" tabindex="-1"></a>x <span class="ot">=</span> list; <span class="fu">class</span>(x) <span class="ot">=</span> <span class="fu">c</span>(<span class="st">&quot;a&quot;</span>, <span class="st">&quot;b&quot;</span>, <span class="st">&quot;c&quot;</span>)</span>
+<span id="cb415-2"><a href="初探r中的面向对象系统.html#cb415-2" tabindex="-1"></a>y <span class="ot">=</span> <span class="fu">structure</span>(<span class="fu">list</span>(), <span class="at">class =</span> <span class="fu">c</span>(<span class="st">&quot;a&quot;</span>, <span class="st">&quot;b&quot;</span>, <span class="st">&quot;c&quot;</span>))</span>
+<span id="cb415-3"><a href="初探r中的面向对象系统.html#cb415-3" tabindex="-1"></a><span class="fu">list</span>(<span class="fu">class</span>(x), <span class="fu">class</span>(y))</span></code></pre></div>
+<pre><code>## [[1]]
+## [1] &quot;a&quot; &quot;b&quot; &quot;c&quot;
+## 
+## [[2]]
+## [1] &quot;a&quot; &quot;b&quot; &quot;c&quot;</code></pre>
+<p>我们尝试构建一下S3方法，其实十分简单，如果一个函数的内容仅仅只是<code>UseMethod("函数名")</code>的话，就会被识别成一个S3方法，然后我们只需要为这个S3方法写各个对象实现的细节。</p>
+<div class="sourceCode" id="cb417"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb417-1"><a href="初探r中的面向对象系统.html#cb417-1" tabindex="-1"></a>f <span class="ot">=</span> <span class="cf">function</span>(x) <span class="fu">UseMethod</span>(<span class="st">&quot;f&quot;</span>)</span>
+<span id="cb417-2"><a href="初探r中的面向对象系统.html#cb417-2" tabindex="-1"></a></span>
+<span id="cb417-3"><a href="初探r中的面向对象系统.html#cb417-3" tabindex="-1"></a>f.a <span class="ot">=</span> <span class="cf">function</span>(x) <span class="fu">return</span>(<span class="st">&quot;Class a&quot;</span>)</span>
+<span id="cb417-4"><a href="初探r中的面向对象系统.html#cb417-4" tabindex="-1"></a></span>
+<span id="cb417-5"><a href="初探r中的面向对象系统.html#cb417-5" tabindex="-1"></a>f.default <span class="ot">=</span> <span class="cf">function</span>(x) <span class="fu">return</span>(<span class="st">&quot;Unknown class&quot;</span>)</span>
+<span id="cb417-6"><a href="初探r中的面向对象系统.html#cb417-6" tabindex="-1"></a></span>
+<span id="cb417-7"><a href="初探r中的面向对象系统.html#cb417-7" tabindex="-1"></a>x <span class="ot">=</span> <span class="fu">structure</span>(<span class="fu">list</span>(), <span class="at">class =</span> <span class="st">&quot;a&quot;</span>)</span>
+<span id="cb417-8"><a href="初探r中的面向对象系统.html#cb417-8" tabindex="-1"></a>y <span class="ot">=</span> <span class="fu">structure</span>(<span class="fu">list</span>(), <span class="at">class =</span> <span class="fu">c</span>(<span class="st">&quot;b&quot;</span>, <span class="st">&quot;a&quot;</span>))</span>
+<span id="cb417-9"><a href="初探r中的面向对象系统.html#cb417-9" tabindex="-1"></a>z <span class="ot">=</span> <span class="fu">structure</span>(<span class="fu">list</span>(), <span class="at">class =</span> <span class="st">&quot;c&quot;</span>)</span>
+<span id="cb417-10"><a href="初探r中的面向对象系统.html#cb417-10" tabindex="-1"></a></span>
+<span id="cb417-11"><a href="初探r中的面向对象系统.html#cb417-11" tabindex="-1"></a><span class="fu">list</span>(<span class="fu">f</span>(x), <span class="fu">f</span>(y), <span class="fu">f</span>(z))</span></code></pre></div>
+<pre><code>## [[1]]
+## [1] &quot;Class a&quot;
+## 
+## [[2]]
+## [1] &quot;Class a&quot;
+## 
+## [[3]]
+## [1] &quot;Unknown class&quot;</code></pre>
+<p>接下来我们看一个实例，<code>NextMethod</code>的作用是调用右边一个类的方法，假如每个类之间有明确的继承关系就可以用。但是并不是很好用，因为他会将参数原封不动的传给下一个方法，既然这样，那我们像上面t.test那样重新传参就好了。</p>
+<div class="sourceCode" id="cb419"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb419-1"><a href="初探r中的面向对象系统.html#cb419-1" tabindex="-1"></a>person   <span class="ot">=</span> <span class="fu">structure</span>(<span class="fu">c</span>(<span class="at">name =</span> <span class="st">&quot;A&quot;</span>), <span class="at">class =</span> <span class="fu">c</span>(<span class="st">&quot;person&quot;</span>))</span>
+<span id="cb419-2"><a href="初探r中的面向对象系统.html#cb419-2" tabindex="-1"></a>employee <span class="ot">=</span> <span class="fu">structure</span>(<span class="fu">c</span>(<span class="at">name =</span> <span class="st">&quot;B&quot;</span>, <span class="at">job =</span> <span class="st">&quot;worker&quot;</span>), <span class="at">class =</span> <span class="fu">c</span>(<span class="st">&quot;employee&quot;</span>, <span class="st">&quot;person&quot;</span>))</span>
+<span id="cb419-3"><a href="初探r中的面向对象系统.html#cb419-3" tabindex="-1"></a>boss     <span class="ot">=</span> <span class="fu">structure</span>(<span class="fu">c</span>(<span class="at">name =</span> <span class="st">&quot;C&quot;</span>, <span class="at">job =</span> <span class="st">&quot;manager&quot;</span>, <span class="at">status =</span> <span class="st">&quot;rich&quot;</span>), <span class="at">class =</span> <span class="fu">c</span>(<span class="st">&quot;boss&quot;</span>, <span class="st">&quot;employee&quot;</span>, <span class="st">&quot;person&quot;</span>))</span>
+<span id="cb419-4"><a href="初探r中的面向对象系统.html#cb419-4" tabindex="-1"></a></span>
+<span id="cb419-5"><a href="初探r中的面向对象系统.html#cb419-5" tabindex="-1"></a>introduce_yourself <span class="ot">=</span> <span class="cf">function</span>(person) <span class="fu">UseMethod</span>(<span class="st">&quot;introduce_yourself&quot;</span>)</span>
+<span id="cb419-6"><a href="初探r中的面向对象系统.html#cb419-6" tabindex="-1"></a></span>
+<span id="cb419-7"><a href="初探r中的面向对象系统.html#cb419-7" tabindex="-1"></a>introduce_yourself.person <span class="ot">=</span> <span class="cf">function</span>(person_) {</span>
+<span id="cb419-8"><a href="初探r中的面向对象系统.html#cb419-8" tabindex="-1"></a>  <span class="fu">cat</span>(<span class="st">&quot;---</span><span class="sc">\n</span><span class="st">Hi</span><span class="sc">\n</span><span class="st">&quot;</span>)</span>
+<span id="cb419-9"><a href="初探r中的面向对象系统.html#cb419-9" tabindex="-1"></a>  <span class="fu">cat</span>(<span class="st">&quot;My name is&quot;</span>, person_[[<span class="st">&quot;name&quot;</span>]], <span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span>)</span>
+<span id="cb419-10"><a href="初探r中的面向对象系统.html#cb419-10" tabindex="-1"></a>}</span>
+<span id="cb419-11"><a href="初探r中的面向对象系统.html#cb419-11" tabindex="-1"></a></span>
+<span id="cb419-12"><a href="初探r中的面向对象系统.html#cb419-12" tabindex="-1"></a>introduce_yourself.employee <span class="ot">=</span> <span class="cf">function</span>(employee_) {</span>
+<span id="cb419-13"><a href="初探r中的面向对象系统.html#cb419-13" tabindex="-1"></a>  <span class="fu">NextMethod</span>()</span>
+<span id="cb419-14"><a href="初探r中的面向对象系统.html#cb419-14" tabindex="-1"></a>  <span class="fu">cat</span>(<span class="st">&quot;And I work as&quot;</span>, employee_[[<span class="st">&quot;job&quot;</span>]], <span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span>)</span>
+<span id="cb419-15"><a href="初探r中的面向对象系统.html#cb419-15" tabindex="-1"></a>}</span>
+<span id="cb419-16"><a href="初探r中的面向对象系统.html#cb419-16" tabindex="-1"></a></span>
+<span id="cb419-17"><a href="初探r中的面向对象系统.html#cb419-17" tabindex="-1"></a>introduce_yourself.boss <span class="ot">=</span> <span class="cf">function</span>(boss_) {</span>
+<span id="cb419-18"><a href="初探r中的面向对象系统.html#cb419-18" tabindex="-1"></a>  <span class="fu">NextMethod</span>()</span>
+<span id="cb419-19"><a href="初探r中的面向对象系统.html#cb419-19" tabindex="-1"></a>  <span class="fu">cat</span>(<span class="st">&quot;I am&quot;</span>, boss_[[<span class="st">&quot;status&quot;</span>]], <span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span>)</span>
+<span id="cb419-20"><a href="初探r中的面向对象系统.html#cb419-20" tabindex="-1"></a>}</span>
+<span id="cb419-21"><a href="初探r中的面向对象系统.html#cb419-21" tabindex="-1"></a></span>
+<span id="cb419-22"><a href="初探r中的面向对象系统.html#cb419-22" tabindex="-1"></a><span class="fu">introduce_yourself</span>(person); <span class="fu">introduce_yourself</span>(employee); <span class="fu">introduce_yourself</span>(boss)</span></code></pre></div>
+<pre><code>## ---
+## Hi
+## My name is A</code></pre>
+<pre><code>## ---
+## Hi
+## My name is B 
+## And I work as worker</code></pre>
+<pre><code>## ---
+## Hi
+## My name is C 
+## And I work as manager 
+## I am rich</code></pre>
+<p>R的传参机制在以后可能有所介绍。</p>
+</div>
+</div>
+<div id="r6" class="section level2 hasAnchor" number="9.2">
+<h2><span class="header-section-number">9.2</span> R6<a href="初探r中的面向对象系统.html#r6" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>R6对象和其他语言的面向对象系统其实没啥区别了。在<a href="">R语言教程-基于tidyverse</a>中有所提及，这里不再赘述。</p>
+<p>我们把上面那个例子在R6中再实现一遍。</p>
+<p>需要注意的是在S4和R6里我们先定义一个”类”，再把这个类实例化成一个”对象”。就类似于狗和熊熊的关系。在实例化的过程里，我们需要给这个实例提供一些信息，就是new或者initialize所需要的参数。</p>
+<div class="sourceCode" id="cb423"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb423-1"><a href="初探r中的面向对象系统.html#cb423-1" tabindex="-1"></a><span class="fu">library</span>(R6)</span>
+<span id="cb423-2"><a href="初探r中的面向对象系统.html#cb423-2" tabindex="-1"></a></span>
+<span id="cb423-3"><a href="初探r中的面向对象系统.html#cb423-3" tabindex="-1"></a>person <span class="ot">=</span> <span class="fu">R6Class</span>( </span>
+<span id="cb423-4"><a href="初探r中的面向对象系统.html#cb423-4" tabindex="-1"></a>  <span class="at">classname =</span> <span class="st">&quot;anyone&quot;</span>, </span>
+<span id="cb423-5"><a href="初探r中的面向对象系统.html#cb423-5" tabindex="-1"></a>  <span class="at">public =</span> <span class="fu">list</span>( </span>
+<span id="cb423-6"><a href="初探r中的面向对象系统.html#cb423-6" tabindex="-1"></a>    <span class="at">name =</span> <span class="cn">NULL</span>, </span>
+<span id="cb423-7"><a href="初探r中的面向对象系统.html#cb423-7" tabindex="-1"></a>    <span class="at">initialize =</span> <span class="cf">function</span>(name, income) { </span>
+<span id="cb423-8"><a href="初探r中的面向对象系统.html#cb423-8" tabindex="-1"></a>      self<span class="sc">$</span>name <span class="ot">=</span> name </span>
+<span id="cb423-9"><a href="初探r中的面向对象系统.html#cb423-9" tabindex="-1"></a>      private<span class="sc">$</span>income <span class="ot">=</span> income </span>
+<span id="cb423-10"><a href="初探r中的面向对象系统.html#cb423-10" tabindex="-1"></a>    }, </span>
+<span id="cb423-11"><a href="初探r中的面向对象系统.html#cb423-11" tabindex="-1"></a>    <span class="at">printInfo =</span> <span class="cf">function</span>() { </span>
+<span id="cb423-12"><a href="初探r中的面向对象系统.html#cb423-12" tabindex="-1"></a>      <span class="fu">cat</span>(<span class="st">&quot;---</span><span class="sc">\n</span><span class="st">Hi</span><span class="sc">\n</span><span class="st">&quot;</span>)</span>
+<span id="cb423-13"><a href="初探r中的面向对象系统.html#cb423-13" tabindex="-1"></a>      <span class="fu">cat</span>(<span class="st">&quot;My name is&quot;</span>, self<span class="sc">$</span>name, <span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span>)</span>
+<span id="cb423-14"><a href="初探r中的面向对象系统.html#cb423-14" tabindex="-1"></a>      <span class="fu">cat</span>(<span class="st">&quot;I get&quot;</span>, private<span class="sc">$</span>income, <span class="st">&quot;a month&quot;</span>, <span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span>)</span>
+<span id="cb423-15"><a href="初探r中的面向对象系统.html#cb423-15" tabindex="-1"></a>      <span class="fu">invisible</span>(self) </span>
+<span id="cb423-16"><a href="初探r中的面向对象系统.html#cb423-16" tabindex="-1"></a>    }</span>
+<span id="cb423-17"><a href="初探r中的面向对象系统.html#cb423-17" tabindex="-1"></a>  ), </span>
+<span id="cb423-18"><a href="初探r中的面向对象系统.html#cb423-18" tabindex="-1"></a>  <span class="at">private =</span> <span class="fu">list</span>(<span class="at">income =</span> <span class="cn">NULL</span>) </span>
+<span id="cb423-19"><a href="初探r中的面向对象系统.html#cb423-19" tabindex="-1"></a>)</span>
+<span id="cb423-20"><a href="初探r中的面向对象系统.html#cb423-20" tabindex="-1"></a></span>
+<span id="cb423-21"><a href="初探r中的面向对象系统.html#cb423-21" tabindex="-1"></a></span>
+<span id="cb423-22"><a href="初探r中的面向对象系统.html#cb423-22" tabindex="-1"></a></span>
+<span id="cb423-23"><a href="初探r中的面向对象系统.html#cb423-23" tabindex="-1"></a>employee <span class="ot">=</span> <span class="fu">R6Class</span>( </span>
+<span id="cb423-24"><a href="初探r中的面向对象系统.html#cb423-24" tabindex="-1"></a>  <span class="at">classname =</span> <span class="st">&quot;staff&quot;</span>, </span>
+<span id="cb423-25"><a href="初探r中的面向对象系统.html#cb423-25" tabindex="-1"></a>  <span class="at">inherit =</span> person, </span>
+<span id="cb423-26"><a href="初探r中的面向对象系统.html#cb423-26" tabindex="-1"></a>  <span class="at">public =</span> <span class="fu">list</span>( </span>
+<span id="cb423-27"><a href="初探r中的面向对象系统.html#cb423-27" tabindex="-1"></a>    <span class="at">initialize =</span> <span class="cf">function</span>(name, income, job) {</span>
+<span id="cb423-28"><a href="初探r中的面向对象系统.html#cb423-28" tabindex="-1"></a>      super<span class="sc">$</span><span class="fu">initialize</span>(name, income)</span>
+<span id="cb423-29"><a href="初探r中的面向对象系统.html#cb423-29" tabindex="-1"></a>      private<span class="sc">$</span>job <span class="ot">=</span> job</span>
+<span id="cb423-30"><a href="初探r中的面向对象系统.html#cb423-30" tabindex="-1"></a>    },</span>
+<span id="cb423-31"><a href="初探r中的面向对象系统.html#cb423-31" tabindex="-1"></a>    <span class="at">printInfo =</span> <span class="cf">function</span>() { </span>
+<span id="cb423-32"><a href="初探r中的面向对象系统.html#cb423-32" tabindex="-1"></a>      super<span class="sc">$</span><span class="fu">printInfo</span>() </span>
+<span id="cb423-33"><a href="初探r中的面向对象系统.html#cb423-33" tabindex="-1"></a>      <span class="fu">cat</span>(<span class="st">&quot;And I work as&quot;</span>, private<span class="sc">$</span>job, <span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span>)</span>
+<span id="cb423-34"><a href="初探r中的面向对象系统.html#cb423-34" tabindex="-1"></a>    }</span>
+<span id="cb423-35"><a href="初探r中的面向对象系统.html#cb423-35" tabindex="-1"></a>  ), </span>
+<span id="cb423-36"><a href="初探r中的面向对象系统.html#cb423-36" tabindex="-1"></a>  <span class="at">private =</span> <span class="fu">list</span>(<span class="at">job =</span> <span class="cn">NULL</span>)</span>
+<span id="cb423-37"><a href="初探r中的面向对象系统.html#cb423-37" tabindex="-1"></a>)</span>
+<span id="cb423-38"><a href="初探r中的面向对象系统.html#cb423-38" tabindex="-1"></a></span>
+<span id="cb423-39"><a href="初探r中的面向对象系统.html#cb423-39" tabindex="-1"></a></span>
+<span id="cb423-40"><a href="初探r中的面向对象系统.html#cb423-40" tabindex="-1"></a></span>
+<span id="cb423-41"><a href="初探r中的面向对象系统.html#cb423-41" tabindex="-1"></a>boss <span class="ot">=</span> <span class="fu">R6Class</span>( </span>
+<span id="cb423-42"><a href="初探r中的面向对象系统.html#cb423-42" tabindex="-1"></a>  <span class="at">classname =</span> <span class="st">&quot;staff&quot;</span>, </span>
+<span id="cb423-43"><a href="初探r中的面向对象系统.html#cb423-43" tabindex="-1"></a>  <span class="at">inherit =</span> employee, </span>
+<span id="cb423-44"><a href="初探r中的面向对象系统.html#cb423-44" tabindex="-1"></a>  <span class="at">public =</span> <span class="fu">list</span>( </span>
+<span id="cb423-45"><a href="初探r中的面向对象系统.html#cb423-45" tabindex="-1"></a>    <span class="at">initialize =</span> <span class="cf">function</span>(name, income, job, status) {</span>
+<span id="cb423-46"><a href="初探r中的面向对象系统.html#cb423-46" tabindex="-1"></a>      super<span class="sc">$</span><span class="fu">initialize</span>(name, income, job)</span>
+<span id="cb423-47"><a href="初探r中的面向对象系统.html#cb423-47" tabindex="-1"></a>      private<span class="sc">$</span>status <span class="ot">=</span> status</span>
+<span id="cb423-48"><a href="初探r中的面向对象系统.html#cb423-48" tabindex="-1"></a>    },</span>
+<span id="cb423-49"><a href="初探r中的面向对象系统.html#cb423-49" tabindex="-1"></a>    <span class="at">printInfo =</span> <span class="cf">function</span>() { </span>
+<span id="cb423-50"><a href="初探r中的面向对象系统.html#cb423-50" tabindex="-1"></a>      super<span class="sc">$</span><span class="fu">printInfo</span>() </span>
+<span id="cb423-51"><a href="初探r中的面向对象系统.html#cb423-51" tabindex="-1"></a>      <span class="fu">cat</span>(<span class="st">&quot;I am&quot;</span>, private<span class="sc">$</span>status, <span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span>)</span>
+<span id="cb423-52"><a href="初探r中的面向对象系统.html#cb423-52" tabindex="-1"></a>    }</span>
+<span id="cb423-53"><a href="初探r中的面向对象系统.html#cb423-53" tabindex="-1"></a>  ), </span>
+<span id="cb423-54"><a href="初探r中的面向对象系统.html#cb423-54" tabindex="-1"></a>  <span class="at">private =</span> <span class="fu">list</span>(<span class="at">status =</span> <span class="cn">NULL</span>)</span>
+<span id="cb423-55"><a href="初探r中的面向对象系统.html#cb423-55" tabindex="-1"></a>)</span>
+<span id="cb423-56"><a href="初探r中的面向对象系统.html#cb423-56" tabindex="-1"></a></span>
+<span id="cb423-57"><a href="初探r中的面向对象系统.html#cb423-57" tabindex="-1"></a>Jack <span class="ot">=</span> person<span class="sc">$</span><span class="fu">new</span>(<span class="st">&quot;Jack&quot;</span>, <span class="dv">100</span>)</span>
+<span id="cb423-58"><a href="初探r中的面向对象系统.html#cb423-58" tabindex="-1"></a>Mike <span class="ot">=</span> employee<span class="sc">$</span><span class="fu">new</span>(<span class="st">&quot;Mike&quot;</span>, <span class="dv">1000</span>, <span class="st">&quot;worker&quot;</span>)</span>
+<span id="cb423-59"><a href="初探r中的面向对象系统.html#cb423-59" tabindex="-1"></a>Bob <span class="ot">=</span> boss<span class="sc">$</span><span class="fu">new</span>(<span class="st">&quot;Bob&quot;</span>, <span class="dv">10000</span>, <span class="st">&quot;manager&quot;</span>, <span class="st">&quot;rich&quot;</span>)</span>
+<span id="cb423-60"><a href="初探r中的面向对象系统.html#cb423-60" tabindex="-1"></a></span>
+<span id="cb423-61"><a href="初探r中的面向对象系统.html#cb423-61" tabindex="-1"></a>Mike<span class="sc">$</span><span class="fu">printInfo</span>()</span></code></pre></div>
+<pre><code>## ---
+## Hi
+## My name is Mike 
+## I get 1000 a month 
+## And I work as worker</code></pre>
+<div class="sourceCode" id="cb425"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb425-1"><a href="初探r中的面向对象系统.html#cb425-1" tabindex="-1"></a>Jack<span class="sc">$</span><span class="fu">printInfo</span>()</span></code></pre></div>
+<pre><code>## ---
+## Hi
+## My name is Jack 
+## I get 100 a month</code></pre>
+<div class="sourceCode" id="cb427"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb427-1"><a href="初探r中的面向对象系统.html#cb427-1" tabindex="-1"></a>Bob<span class="sc">$</span><span class="fu">printInfo</span>()</span></code></pre></div>
+<pre><code>## ---
+## Hi
+## My name is Bob 
+## I get 10000 a month 
+## And I work as manager 
+## I am rich</code></pre>
+<p>可以看到，同样的功能S3比R6实现简单很多，但是R6规范的多。R6十分重要，后面我们会再出一期R6专题欣赏优秀的面向对象工程。</p>
+</div>
+<div id="s4" class="section level2 hasAnchor" number="9.3">
+<h2><span class="header-section-number">9.3</span> S4<a href="初探r中的面向对象系统.html#s4" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>S4对象只有历史意义了，功能比不上S3和R6。简单提及一下S4的特点就好了，S4的特点就是接近R的底层，因此十分不好用。S4中每个类会有一些默认的方法，比如show等，我们可以直接覆盖掉这些方法，如果方法不在默认方法里，则需要通过<code>setGeneric</code>注册一下，再添加方法。</p>
+<div class="sourceCode" id="cb429"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb429-1"><a href="初探r中的面向对象系统.html#cb429-1" tabindex="-1"></a><span class="fu">library</span>(methods)</span>
+<span id="cb429-2"><a href="初探r中的面向对象系统.html#cb429-2" tabindex="-1"></a></span>
+<span id="cb429-3"><a href="初探r中的面向对象系统.html#cb429-3" tabindex="-1"></a><span class="fu">setClass</span>(</span>
+<span id="cb429-4"><a href="初探r中的面向对象系统.html#cb429-4" tabindex="-1"></a>  <span class="at">Class     =</span> <span class="st">&quot;IcecreamMachine&quot;</span>,</span>
+<span id="cb429-5"><a href="初探r中的面向对象系统.html#cb429-5" tabindex="-1"></a>  <span class="at">slots     =</span> <span class="fu">c</span>(</span>
+<span id="cb429-6"><a href="初探r中的面向对象系统.html#cb429-6" tabindex="-1"></a>    <span class="at">strawberry =</span> <span class="st">&quot;numeric&quot;</span>,</span>
+<span id="cb429-7"><a href="初探r中的面向对象系统.html#cb429-7" tabindex="-1"></a>    <span class="at">chocolate  =</span> <span class="st">&quot;numeric&quot;</span>,</span>
+<span id="cb429-8"><a href="初探r中的面向对象系统.html#cb429-8" tabindex="-1"></a>    <span class="at">mango      =</span> <span class="st">&quot;numeric&quot;</span></span>
+<span id="cb429-9"><a href="初探r中的面向对象系统.html#cb429-9" tabindex="-1"></a>  ),</span>
+<span id="cb429-10"><a href="初探r中的面向对象系统.html#cb429-10" tabindex="-1"></a>  <span class="at">prototype =</span> <span class="fu">list</span>(</span>
+<span id="cb429-11"><a href="初探r中的面向对象系统.html#cb429-11" tabindex="-1"></a>    <span class="at">strawberry =</span> <span class="dv">0</span>,</span>
+<span id="cb429-12"><a href="初探r中的面向对象系统.html#cb429-12" tabindex="-1"></a>    <span class="at">chocolate  =</span> <span class="dv">0</span>,</span>
+<span id="cb429-13"><a href="初探r中的面向对象系统.html#cb429-13" tabindex="-1"></a>    <span class="at">mango      =</span> <span class="dv">0</span></span>
+<span id="cb429-14"><a href="初探r中的面向对象系统.html#cb429-14" tabindex="-1"></a>  )</span>
+<span id="cb429-15"><a href="初探r中的面向对象系统.html#cb429-15" tabindex="-1"></a>)</span>
+<span id="cb429-16"><a href="初探r中的面向对象系统.html#cb429-16" tabindex="-1"></a></span>
+<span id="cb429-17"><a href="初探r中的面向对象系统.html#cb429-17" tabindex="-1"></a><span class="fu">setMethod</span>(</span>
+<span id="cb429-18"><a href="初探r中的面向对象系统.html#cb429-18" tabindex="-1"></a>  <span class="at">f           =</span> <span class="st">&quot;show&quot;</span>,</span>
+<span id="cb429-19"><a href="初探r中的面向对象系统.html#cb429-19" tabindex="-1"></a>  <span class="at">signature   =</span> <span class="st">&quot;IcecreamMachine&quot;</span>,</span>
+<span id="cb429-20"><a href="初探r中的面向对象系统.html#cb429-20" tabindex="-1"></a>  <span class="at">definition =</span> <span class="cf">function</span>(object) {</span>
+<span id="cb429-21"><a href="初探r中的面向对象系统.html#cb429-21" tabindex="-1"></a>    <span class="fu">cat</span>(<span class="st">&quot;*** Wounderful Icecream Machine! ***</span><span class="sc">\n</span><span class="st">&quot;</span>)</span>
+<span id="cb429-22"><a href="初探r中的面向对象系统.html#cb429-22" tabindex="-1"></a>    <span class="fu">cat</span>(<span class="st">&quot;Taste:</span><span class="sc">\n</span><span class="st">&quot;</span>)</span>
+<span id="cb429-23"><a href="初探r中的面向对象系统.html#cb429-23" tabindex="-1"></a>    <span class="fu">cat</span>(<span class="st">&quot;</span><span class="sc">\t</span><span class="st">Strawberry: &quot;</span>, object<span class="sc">@</span>strawberry, <span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span>) </span>
+<span id="cb429-24"><a href="初探r中的面向对象系统.html#cb429-24" tabindex="-1"></a>    <span class="fu">cat</span>(<span class="st">&quot;</span><span class="sc">\t</span><span class="st">Chocolate: &quot;</span>, object<span class="sc">@</span>chocolate, <span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span>) </span>
+<span id="cb429-25"><a href="初探r中的面向对象系统.html#cb429-25" tabindex="-1"></a>    <span class="fu">cat</span>(<span class="st">&quot;</span><span class="sc">\t</span><span class="st">Mango: &quot;</span>, object<span class="sc">@</span>mango, <span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span>) </span>
+<span id="cb429-26"><a href="初探r中的面向对象系统.html#cb429-26" tabindex="-1"></a>  }</span>
+<span id="cb429-27"><a href="初探r中的面向对象系统.html#cb429-27" tabindex="-1"></a>)</span>
+<span id="cb429-28"><a href="初探r中的面向对象系统.html#cb429-28" tabindex="-1"></a></span>
+<span id="cb429-29"><a href="初探r中的面向对象系统.html#cb429-29" tabindex="-1"></a><span class="fu">setGeneric</span>(</span>
+<span id="cb429-30"><a href="初探r中的面向对象系统.html#cb429-30" tabindex="-1"></a>  <span class="at">name =</span> <span class="st">&quot;getIcecream&quot;</span>,</span>
+<span id="cb429-31"><a href="初探r中的面向对象系统.html#cb429-31" tabindex="-1"></a>  <span class="at">def  =</span> <span class="cf">function</span>(object,...) {</span>
+<span id="cb429-32"><a href="初探r中的面向对象系统.html#cb429-32" tabindex="-1"></a>    <span class="fu">standardGeneric</span>(<span class="st">&quot;getIcecream&quot;</span>)</span>
+<span id="cb429-33"><a href="初探r中的面向对象系统.html#cb429-33" tabindex="-1"></a>  }</span>
+<span id="cb429-34"><a href="初探r中的面向对象系统.html#cb429-34" tabindex="-1"></a>)</span>
+<span id="cb429-35"><a href="初探r中的面向对象系统.html#cb429-35" tabindex="-1"></a></span>
+<span id="cb429-36"><a href="初探r中的面向对象系统.html#cb429-36" tabindex="-1"></a><span class="fu">setMethod</span>(</span>
+<span id="cb429-37"><a href="初探r中的面向对象系统.html#cb429-37" tabindex="-1"></a>  <span class="at">f          =</span> <span class="st">&quot;getIcecream&quot;</span>,</span>
+<span id="cb429-38"><a href="初探r中的面向对象系统.html#cb429-38" tabindex="-1"></a>  <span class="at">signature  =</span> <span class="st">&quot;IcecreamMachine&quot;</span>,</span>
+<span id="cb429-39"><a href="初探r中的面向对象系统.html#cb429-39" tabindex="-1"></a>  <span class="at">definition =</span> <span class="cf">function</span>(object, type) {</span>
+<span id="cb429-40"><a href="初探r中的面向对象系统.html#cb429-40" tabindex="-1"></a>    <span class="fu">slot</span>(object, type) <span class="ot">&lt;-</span> <span class="fu">slot</span>(object, type) <span class="sc">-</span> <span class="dv">1</span></span>
+<span id="cb429-41"><a href="初探r中的面向对象系统.html#cb429-41" tabindex="-1"></a>    <span class="fu">return</span>(object)</span>
+<span id="cb429-42"><a href="初探r中的面向对象系统.html#cb429-42" tabindex="-1"></a>  }</span>
+<span id="cb429-43"><a href="初探r中的面向对象系统.html#cb429-43" tabindex="-1"></a>)</span>
+<span id="cb429-44"><a href="初探r中的面向对象系统.html#cb429-44" tabindex="-1"></a></span>
+<span id="cb429-45"><a href="初探r中的面向对象系统.html#cb429-45" tabindex="-1"></a><span class="fu">setGeneric</span>(</span>
+<span id="cb429-46"><a href="初探r中的面向对象系统.html#cb429-46" tabindex="-1"></a>  <span class="at">name =</span> <span class="st">&quot;setIce&lt;-&quot;</span>,</span>
+<span id="cb429-47"><a href="初探r中的面向对象系统.html#cb429-47" tabindex="-1"></a>  <span class="at">def  =</span> <span class="cf">function</span>(object, type, value) {</span>
+<span id="cb429-48"><a href="初探r中的面向对象系统.html#cb429-48" tabindex="-1"></a>    <span class="fu">standardGeneric</span>(<span class="st">&quot;setIce&lt;-&quot;</span>)</span>
+<span id="cb429-49"><a href="初探r中的面向对象系统.html#cb429-49" tabindex="-1"></a>  }</span>
+<span id="cb429-50"><a href="初探r中的面向对象系统.html#cb429-50" tabindex="-1"></a>)</span>
+<span id="cb429-51"><a href="初探r中的面向对象系统.html#cb429-51" tabindex="-1"></a></span>
+<span id="cb429-52"><a href="初探r中的面向对象系统.html#cb429-52" tabindex="-1"></a><span class="fu">setReplaceMethod</span>(</span>
+<span id="cb429-53"><a href="初探r中的面向对象系统.html#cb429-53" tabindex="-1"></a>  <span class="at">f          =</span> <span class="st">&quot;setIce&quot;</span>,</span>
+<span id="cb429-54"><a href="初探r中的面向对象系统.html#cb429-54" tabindex="-1"></a>  <span class="at">signature  =</span> <span class="st">&quot;IcecreamMachine&quot;</span>,</span>
+<span id="cb429-55"><a href="初探r中的面向对象系统.html#cb429-55" tabindex="-1"></a>  <span class="at">definition =</span> <span class="cf">function</span>(object, type, value) {</span>
+<span id="cb429-56"><a href="初探r中的面向对象系统.html#cb429-56" tabindex="-1"></a>    <span class="fu">slot</span>(object, type) <span class="ot">&lt;-</span> value        </span>
+<span id="cb429-57"><a href="初探r中的面向对象系统.html#cb429-57" tabindex="-1"></a>    <span class="fu">return</span>(object)</span>
+<span id="cb429-58"><a href="初探r中的面向对象系统.html#cb429-58" tabindex="-1"></a>  }</span>
+<span id="cb429-59"><a href="初探r中的面向对象系统.html#cb429-59" tabindex="-1"></a>)</span>
+<span id="cb429-60"><a href="初探r中的面向对象系统.html#cb429-60" tabindex="-1"></a></span>
+<span id="cb429-61"><a href="初探r中的面向对象系统.html#cb429-61" tabindex="-1"></a><span class="fu">setMethod</span>(</span>
+<span id="cb429-62"><a href="初探r中的面向对象系统.html#cb429-62" tabindex="-1"></a>  <span class="at">f          =</span> <span class="st">&quot;[&quot;</span>,</span>
+<span id="cb429-63"><a href="初探r中的面向对象系统.html#cb429-63" tabindex="-1"></a>  <span class="at">signature  =</span> <span class="st">&quot;IcecreamMachine&quot;</span>,</span>
+<span id="cb429-64"><a href="初探r中的面向对象系统.html#cb429-64" tabindex="-1"></a>  <span class="at">definition =</span> <span class="cf">function</span>(x,i,j,drop) {</span>
+<span id="cb429-65"><a href="初探r中的面向对象系统.html#cb429-65" tabindex="-1"></a>    <span class="fu">slot</span>(x, i)</span>
+<span id="cb429-66"><a href="初探r中的面向对象系统.html#cb429-66" tabindex="-1"></a>  }</span>
+<span id="cb429-67"><a href="初探r中的面向对象系统.html#cb429-67" tabindex="-1"></a>)</span>
+<span id="cb429-68"><a href="初探r中的面向对象系统.html#cb429-68" tabindex="-1"></a></span>
+<span id="cb429-69"><a href="初探r中的面向对象系统.html#cb429-69" tabindex="-1"></a><span class="fu">setReplaceMethod</span>(</span>
+<span id="cb429-70"><a href="初探r中的面向对象系统.html#cb429-70" tabindex="-1"></a>  <span class="at">f          =</span> <span class="st">&quot;[&quot;</span>,</span>
+<span id="cb429-71"><a href="初探r中的面向对象系统.html#cb429-71" tabindex="-1"></a>  <span class="at">signature  =</span> <span class="st">&quot;IcecreamMachine&quot;</span>,</span>
+<span id="cb429-72"><a href="初探r中的面向对象系统.html#cb429-72" tabindex="-1"></a>  <span class="at">definition =</span> <span class="cf">function</span>(x,i,j,value) {</span>
+<span id="cb429-73"><a href="初探r中的面向对象系统.html#cb429-73" tabindex="-1"></a>    <span class="fu">slot</span>(x, i) <span class="ot">=</span> value</span>
+<span id="cb429-74"><a href="初探r中的面向对象系统.html#cb429-74" tabindex="-1"></a>    <span class="fu">validObject</span>(x)</span>
+<span id="cb429-75"><a href="初探r中的面向对象系统.html#cb429-75" tabindex="-1"></a>    <span class="fu">return</span>(x)</span>
+<span id="cb429-76"><a href="初探r中的面向对象系统.html#cb429-76" tabindex="-1"></a>  }</span>
+<span id="cb429-77"><a href="初探r中的面向对象系统.html#cb429-77" tabindex="-1"></a>)</span>
+<span id="cb429-78"><a href="初探r中的面向对象系统.html#cb429-78" tabindex="-1"></a></span>
+<span id="cb429-79"><a href="初探r中的面向对象系统.html#cb429-79" tabindex="-1"></a><span class="fu">setMethod</span>(</span>
+<span id="cb429-80"><a href="初探r中的面向对象系统.html#cb429-80" tabindex="-1"></a>  <span class="at">f          =</span> <span class="st">&quot;initialize&quot;</span>,</span>
+<span id="cb429-81"><a href="初探r中的面向对象系统.html#cb429-81" tabindex="-1"></a>  <span class="at">signature  =</span> <span class="st">&quot;IcecreamMachine&quot;</span>,</span>
+<span id="cb429-82"><a href="初探r中的面向对象系统.html#cb429-82" tabindex="-1"></a>  <span class="at">definition =</span> <span class="cf">function</span>(.Object, strawberry, chocolate, mango) {        </span>
+<span id="cb429-83"><a href="初探r中的面向对象系统.html#cb429-83" tabindex="-1"></a>    <span class="fu">cat</span>(<span class="st">&quot;Welcome to an icecream world!</span><span class="sc">\n</span><span class="st">&quot;</span>)        </span>
+<span id="cb429-84"><a href="初探r中的面向对象系统.html#cb429-84" tabindex="-1"></a>    .Object<span class="sc">@</span>strawberry <span class="ot">&lt;-</span> strawberry        </span>
+<span id="cb429-85"><a href="初探r中的面向对象系统.html#cb429-85" tabindex="-1"></a>    .Object<span class="sc">@</span>chocolate  <span class="ot">&lt;-</span> chocolate        </span>
+<span id="cb429-86"><a href="初探r中的面向对象系统.html#cb429-86" tabindex="-1"></a>    .Object<span class="sc">@</span>mango      <span class="ot">&lt;-</span> mango        </span>
+<span id="cb429-87"><a href="初探r中的面向对象系统.html#cb429-87" tabindex="-1"></a>    <span class="fu">return</span>(.Object)</span>
+<span id="cb429-88"><a href="初探r中的面向对象系统.html#cb429-88" tabindex="-1"></a>  }</span>
+<span id="cb429-89"><a href="初探r中的面向对象系统.html#cb429-89" tabindex="-1"></a>) </span>
+<span id="cb429-90"><a href="初探r中的面向对象系统.html#cb429-90" tabindex="-1"></a></span>
+<span id="cb429-91"><a href="初探r中的面向对象系统.html#cb429-91" tabindex="-1"></a><span class="fu">showMethods</span>(<span class="at">classes =</span> <span class="st">&quot;IcecreamMachine&quot;</span>)</span>
+<span id="cb429-92"><a href="初探r中的面向对象系统.html#cb429-92" tabindex="-1"></a><span class="fu">getMethod</span>(<span class="st">&quot;getIcecream&quot;</span>, <span class="st">&quot;IcecreamMachine&quot;</span>)</span>
+<span id="cb429-93"><a href="初探r中的面向对象系统.html#cb429-93" tabindex="-1"></a></span>
+<span id="cb429-94"><a href="初探r中的面向对象系统.html#cb429-94" tabindex="-1"></a>first_machine <span class="ot">=</span> <span class="fu">new</span>(<span class="st">&quot;IcecreamMachine&quot;</span>, <span class="dv">5</span>, <span class="dv">3</span>, <span class="dv">7</span>)</span></code></pre></div>
+
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="理解机器学习里数据不均衡.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="rmarkdown中插入文献和修改引用样式.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": true,
+"facebook": false,
+"twitter": false,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"whatsapp": false,
+"all": {}
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": ["CBook.pdf"],
+"search": {
+"engine": "fuse",
+"options": null
+},
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

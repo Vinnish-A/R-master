@@ -16,7 +16,7 @@ library(tidyverse)
 library(DT)
 knitr::opts_chunk$set(echo = TRUE)
 
-mm10 = read_tsv("./示例及任务/data/mm10.ncbiRefSeq.gtf", col_names = F)
+mm10 = read_tsv("./data/mm10.ncbiRefSeq.gtf", col_names = F)
 ```
 
 # 预备
@@ -75,7 +75,7 @@ tidyverse是相对独立于base的R的一种方言，是一门专门操作文件
 我设计了一个函数，目的是将每个位次上字符的频率视作概率，重新生成一定数量的序列，求问为什么函数一可以运行而函数二会报错？
 
 ```{r}
-data_task = readRDS("./示例及任务/data/示例数据.Rds")
+data_task = readRDS("./data/示例数据.Rds")
 head(data_task)
 
 generator_1 = function(sample_space, num) {
