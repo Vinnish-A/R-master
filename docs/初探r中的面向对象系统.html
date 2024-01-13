@@ -795,7 +795,7 @@ div.csl-indent {
 ##     }
 ##     invisible(x)
 ## }
-## &lt;bytecode: 0x000001dbfca7f878&gt;
+## &lt;bytecode: 0x000001ebf0744a28&gt;
 ## &lt;environment: namespace:base&gt;
 ## 
 ## [[2]]
@@ -811,7 +811,7 @@ div.csl-indent {
 ##     print_tbl(x, width, ..., n = n, max_extra_cols = max_extra_cols, 
 ##         max_footer_lines = max_footer_lines)
 ## }
-## &lt;bytecode: 0x000001dbfc181cf8&gt;
+## &lt;bytecode: 0x000001ebefe3efb8&gt;
 ## &lt;environment: namespace:pillar&gt;</code></pre>
 <p>可以看到这俩函数差的很多，所以执行的内容不一样。我们再看看<code>t.test</code>。</p>
 <div class="sourceCode" id="cb411"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb411-1"><a href="初探r中的面向对象系统.html#cb411-1" tabindex="-1"></a><span class="fu">methods</span>(<span class="st">&quot;t.test&quot;</span>)</span></code></pre></div>
@@ -868,7 +868,7 @@ div.csl-indent {
 ##     y$data.name &lt;- DNAME
 ##     y
 ## }
-## &lt;bytecode: 0x000001dbfebeb968&gt;
+## &lt;bytecode: 0x000001ebf28ec918&gt;
 ## &lt;environment: namespace:stats&gt;</code></pre>
 <p>可以看到他实际上就是先想办法把formula对应的内容变成一个df，然后执行<code>y = t.test(x = DATA[[1L]], y = DATA[[2L]], ...)</code>，然后再把向量输入进去，使用default方法。</p>
 </div>
