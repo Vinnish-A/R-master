@@ -4,18 +4,18 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>R语言高手计划</title>
+  <title>2 预备 | R语言高手计划</title>
   <meta name="description" content="Med-X社员手册" />
   <meta name="generator" content="bookdown 0.36 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="R语言高手计划" />
+  <meta property="og:title" content="2 预备 | R语言高手计划" />
   <meta property="og:type" content="book" />
   
   <meta property="og:description" content="Med-X社员手册" />
   <meta name="github-repo" content="Vinnish-A/R-master" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="R语言高手计划" />
+  <meta name="twitter:title" content="2 预备 | R语言高手计划" />
   
   <meta name="twitter:description" content="Med-X社员手册" />
   
@@ -29,8 +29,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-
-<link rel="next" href="预备.html"/>
+<link rel="prev" href="index.html"/>
+<link rel="next" href="用tidyr读写操作文件.html"/>
 <script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -351,29 +351,180 @@ div.csl-indent {
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="header">
-<h1 class="title">R语言高手计划</h1>
-<p class="author"><em>Vinnish 普尔弥什</em></p>
-</div>
-<div id="前言" class="section level1 hasAnchor" number="1">
-<h1><span class="header-section-number">1</span> 前言<a href="index.html#前言" class="anchor-section" aria-label="Anchor link to header"></a></h1>
-<p>本册是安徽医科大学MITUS团队供MITUS团队预备成员学习统计操作基础的R语言部分，不是出版图书，仅供内部使用。</p>
-<p>本册主要涉及R软件的操作和简单的R开发、概率统计以及机器学习等内容。考虑到本册是大部分同学学习的第一本参考资料，MITUS团队赠与各位同学以下忠告：</p>
+<div id="预备" class="section level1 hasAnchor" number="2">
+<h1><span class="header-section-number">2</span> 预备<a href="预备.html#预备" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<div id="工作环境" class="section level2 hasAnchor" number="2.1">
+<h2><span class="header-section-number">2.1</span> 工作环境<a href="预备.html#工作环境" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <ol style="list-style-type: decimal">
-<li>正确评价自身优势劣势，但不要给自己设限</li>
-<li>平静做事，平和待人</li>
-<li>明确认定学习任务，合理安排学习时间，准确评估学习效果</li>
-<li>自尊自强</li>
+<li>卸载掉不需要的软件后，确认工作环境清洁（最好将电脑的用户路径改为英文），安装编程语言：R软件、R的集成开发环境：Rstudio</li>
+<li>学习如何使用R安装R的软件包。首先是学会配置Cran和Bioconductor的镜像。然后是尝试从cran、github、bioconductor三种途径，安装上tidyverse、mlr3verse、mlr3proba、annoprobe等包（bioconductor并不常用，只需要会用devtools的install_github和base的install.packages函数安装包即可）。</li>
 </ol>
+<p>参考书目：</p>
+<ul>
+<li><a href="">R语言教程——基于tidyverse</a></li>
+<li><a href="">R语言教程——北大数院</a></li>
+<li><a href="">mlr3教学ppt</a></li>
+</ul>
+</div>
+<div id="使用project管理项目" class="section level2 hasAnchor" number="2.2">
+<h2><span class="header-section-number">2.2</span> 使用project管理项目<a href="预备.html#使用project管理项目" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>再左上角的File里创建New Project，学习怎么使用Rproject<a href="https://zhuanlan.zhihu.com/p/630825871">链接</a>。</p>
+</div>
+<div id="第一周" class="section level2 hasAnchor" number="2.3">
+<h2><span class="header-section-number">2.3</span> 第一周<a href="预备.html#第一周" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="目标" class="section level3 hasAnchor" number="2.3.1">
+<h3><span class="header-section-number">2.3.1</span> 目标<a href="预备.html#目标" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>第一周是学习常见文件拓展名比如txt、csv、tsv的意义。使用tidyverse的read_csv或原生的read.csv等函数读入文件为数据框，然后跟着参考书籍学习使用tidyverse的select、filter、mutate、across、group_by、summarise等函数，并且用r原生的方法实现以上这些函数的功能，主要是数据选择、筛选、修改、汇总四个部分。</p>
+</div>
+<div id="示例及任务" class="section level3 hasAnchor" number="2.3.2">
+<h3><span class="header-section-number">2.3.2</span> 示例及任务<a href="预备.html#示例及任务" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>示例见example1.R</p>
+<p>在内置数据集airquality中，进行</p>
+<ol style="list-style-type: decimal">
+<li>查看每列的缺失值个数</li>
+<li>使用每列的平均值对缺失值进行填补（注意mean函数和na）</li>
+<li>汇总显示Ozone到Temp列每月的平均值</li>
+</ol>
+<p>tidyverse是相对独立于base的R的一种方言，是一门专门操作文件（在R中表现为数据框）的语言，本章的目的在于希望来者能认识数据，认知掌握如何操作数据框，培养数据意识。</p>
+</div>
+</div>
+<div id="第二周" class="section level2 hasAnchor" number="2.4">
+<h2><span class="header-section-number">2.4</span> 第二周<a href="预备.html#第二周" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="目标-1" class="section level3 hasAnchor" number="2.4.1">
+<h3><span class="header-section-number">2.4.1</span> 目标<a href="预备.html#目标-1" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>第二周是对R的基础与特征的学习：</p>
+<ol style="list-style-type: decimal">
+<li>r中的数值运算符号，如 + - * ** / //等</li>
+<li>r中的逻辑运算符号，如 ! &amp; |等</li>
+<li>r的控制结构，如if for循环（在数据科学中数量掌握这两个可以应对90%的情况）</li>
+<li>r的索引方法，如 $ [] [[]]等</li>
+<li>r的特点，向量化（需要一定的线性代数知识，对矩阵乘法有个印象就够了），重点学习apply函数簇中的apply和lapply函数</li>
+</ol>
+<p>内容较杂，希望一定要借助chatgpt来学习。</p>
+</div>
+<div id="示例及任务-1" class="section level3 hasAnchor" number="2.4.2">
+<h3><span class="header-section-number">2.4.2</span> 示例及任务<a href="预备.html#示例及任务-1" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>示例见example2.R</p>
+<p>我设计了一个函数，目的是将每个位次上字符的频率视作概率，重新生成一定数量的序列，求问为什么函数一可以运行而函数二会报错？</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="预备.html#cb1-1" tabindex="-1"></a>data_task <span class="ot">=</span> <span class="fu">readRDS</span>(<span class="st">&quot;./data/示例数据.Rds&quot;</span>)</span>
+<span id="cb1-2"><a href="预备.html#cb1-2" tabindex="-1"></a><span class="fu">head</span>(data_task)</span></code></pre></div>
+<pre><code>## # A tibble: 6 × 14
+##   A6    A5    A4    A3    A2    A1    G6    G5    G4    G3    G2    G1   
+##   &lt;fct&gt; &lt;fct&gt; &lt;fct&gt; &lt;fct&gt; &lt;fct&gt; &lt;fct&gt; &lt;fct&gt; &lt;fct&gt; &lt;fct&gt; &lt;fct&gt; &lt;fct&gt; &lt;fct&gt;
+## 1 R     A     Q     L     S     Q     X     A     X     L     S     X    
+## 2 A     A     Q     L     S     Q     A     A     X     L     S     X    
+## 3 C     A     Q     L     S     Q     S     A     X     L     S     X    
+## 4 D     A     Q     L     S     Q     N     A     X     L     S     X    
+## 5 E     A     Q     L     S     Q     X     A     X     L     S     X    
+## 6 F     A     Q     L     S     Q     F     A     X     L     S     X    
+## # ℹ 2 more variables: Activity &lt;dbl&gt;, Selectivity &lt;dbl&gt;</code></pre>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="预备.html#cb3-1" tabindex="-1"></a>generator_1 <span class="ot">=</span> <span class="cf">function</span>(sample_space, num) {</span>
+<span id="cb3-2"><a href="预备.html#cb3-2" tabindex="-1"></a>  </span>
+<span id="cb3-3"><a href="预备.html#cb3-3" tabindex="-1"></a>  <span class="co"># 计算类别A中每个种类的构成</span></span>
+<span id="cb3-4"><a href="预备.html#cb3-4" tabindex="-1"></a>  sample_list_1 <span class="ot">=</span> sample_space <span class="sc">%&gt;%</span> </span>
+<span id="cb3-5"><a href="预备.html#cb3-5" tabindex="-1"></a>    <span class="fu">select</span>(<span class="fu">matches</span>(<span class="st">&quot;A&quot;</span>), <span class="sc">-</span>Activity) <span class="sc">%&gt;%</span> </span>
+<span id="cb3-6"><a href="预备.html#cb3-6" tabindex="-1"></a>    <span class="fu">lapply</span>(\(vec) <span class="fu">table</span>(vec)<span class="sc">/</span><span class="fu">length</span>(vec))</span>
+<span id="cb3-7"><a href="预备.html#cb3-7" tabindex="-1"></a>  </span>
+<span id="cb3-8"><a href="预备.html#cb3-8" tabindex="-1"></a>  <span class="co"># 计算类别G中每个种类的构成</span></span>
+<span id="cb3-9"><a href="预备.html#cb3-9" tabindex="-1"></a>  sample_list_2 <span class="ot">=</span> sample_space <span class="sc">%&gt;%</span> </span>
+<span id="cb3-10"><a href="预备.html#cb3-10" tabindex="-1"></a>    <span class="fu">select</span>(<span class="fu">matches</span>(<span class="st">&quot;G&quot;</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb3-11"><a href="预备.html#cb3-11" tabindex="-1"></a>    <span class="fu">lapply</span>(\(vec) <span class="fu">table</span>(vec)<span class="sc">/</span><span class="fu">length</span>(vec)) </span>
+<span id="cb3-12"><a href="预备.html#cb3-12" tabindex="-1"></a>  </span>
+<span id="cb3-13"><a href="预备.html#cb3-13" tabindex="-1"></a>  <span class="co"># 采用递归方法连接字符串</span></span>
+<span id="cb3-14"><a href="预备.html#cb3-14" tabindex="-1"></a>  seq1 <span class="ot">=</span> <span class="fu">Reduce</span>(paste0, <span class="fu">lapply</span>(sample_list_1, \(.x) <span class="fu">sample</span>(<span class="fu">names</span>(.x), num, T, .x)))</span>
+<span id="cb3-15"><a href="预备.html#cb3-15" tabindex="-1"></a>  seq2 <span class="ot">=</span> <span class="fu">Reduce</span>(paste0, <span class="fu">lapply</span>(sample_list_2, \(.x) <span class="fu">sample</span>(<span class="fu">names</span>(.x), num, T, .x)))</span>
+<span id="cb3-16"><a href="预备.html#cb3-16" tabindex="-1"></a>  </span>
+<span id="cb3-17"><a href="预备.html#cb3-17" tabindex="-1"></a>  <span class="fu">list</span>(<span class="at">Sequence1 =</span> seq1, <span class="at">Sequnce2 =</span> seq2)</span>
+<span id="cb3-18"><a href="预备.html#cb3-18" tabindex="-1"></a>  </span>
+<span id="cb3-19"><a href="预备.html#cb3-19" tabindex="-1"></a>}</span>
+<span id="cb3-20"><a href="预备.html#cb3-20" tabindex="-1"></a></span>
+<span id="cb3-21"><a href="预备.html#cb3-21" tabindex="-1"></a><span class="co"># 为什么1能运行2运行不了呢？</span></span>
+<span id="cb3-22"><a href="预备.html#cb3-22" tabindex="-1"></a>generator_2 <span class="ot">=</span> <span class="cf">function</span>(sample_space, num) {</span>
+<span id="cb3-23"><a href="预备.html#cb3-23" tabindex="-1"></a>  </span>
+<span id="cb3-24"><a href="预备.html#cb3-24" tabindex="-1"></a>  <span class="co"># 计算类别A中每个种类的构成</span></span>
+<span id="cb3-25"><a href="预备.html#cb3-25" tabindex="-1"></a>  sample_list_1 <span class="ot">=</span> sample_space <span class="sc">%&gt;%</span> </span>
+<span id="cb3-26"><a href="预备.html#cb3-26" tabindex="-1"></a>    <span class="fu">select</span>(<span class="fu">matches</span>(<span class="st">&quot;A&quot;</span>), <span class="sc">-</span>Activity) <span class="sc">%&gt;%</span> </span>
+<span id="cb3-27"><a href="预备.html#cb3-27" tabindex="-1"></a>    <span class="fu">apply</span>(<span class="dv">2</span>, \(vec) <span class="fu">table</span>(vec)<span class="sc">/</span><span class="fu">length</span>(vec))</span>
+<span id="cb3-28"><a href="预备.html#cb3-28" tabindex="-1"></a>  </span>
+<span id="cb3-29"><a href="预备.html#cb3-29" tabindex="-1"></a>  <span class="co"># 计算类别G中每个种类的构成</span></span>
+<span id="cb3-30"><a href="预备.html#cb3-30" tabindex="-1"></a>  sample_list_2 <span class="ot">=</span> sample_space <span class="sc">%&gt;%</span> </span>
+<span id="cb3-31"><a href="预备.html#cb3-31" tabindex="-1"></a>    <span class="fu">select</span>(<span class="fu">matches</span>(<span class="st">&quot;G&quot;</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb3-32"><a href="预备.html#cb3-32" tabindex="-1"></a>    <span class="fu">apply</span>(<span class="dv">2</span>, \(vec) <span class="fu">table</span>(vec)<span class="sc">/</span><span class="fu">length</span>(vec)) </span>
+<span id="cb3-33"><a href="预备.html#cb3-33" tabindex="-1"></a>  </span>
+<span id="cb3-34"><a href="预备.html#cb3-34" tabindex="-1"></a>  <span class="co"># 采用递归方法连接字符串</span></span>
+<span id="cb3-35"><a href="预备.html#cb3-35" tabindex="-1"></a>  seq1 <span class="ot">=</span> <span class="fu">Reduce</span>(paste0, <span class="fu">lapply</span>(sample_list_1, \(.x) <span class="fu">sample</span>(<span class="fu">names</span>(.x), num, T, .x)))</span>
+<span id="cb3-36"><a href="预备.html#cb3-36" tabindex="-1"></a>  seq2 <span class="ot">=</span> <span class="fu">Reduce</span>(paste0, <span class="fu">lapply</span>(sample_list_2, \(.x) <span class="fu">sample</span>(<span class="fu">names</span>(.x), num, T, .x)))</span>
+<span id="cb3-37"><a href="预备.html#cb3-37" tabindex="-1"></a>  </span>
+<span id="cb3-38"><a href="预备.html#cb3-38" tabindex="-1"></a>  <span class="fu">list</span>(<span class="at">Sequence1 =</span> seq1, <span class="at">Sequnce2 =</span> seq2)</span>
+<span id="cb3-39"><a href="预备.html#cb3-39" tabindex="-1"></a>  </span>
+<span id="cb3-40"><a href="预备.html#cb3-40" tabindex="-1"></a>}</span></code></pre></div>
+<p>本章的目的是令来者学习R的基本数据结构和控制结构，属于Rbase的部分，非常基础。</p>
+</div>
+</div>
+<div id="第三周" class="section level2 hasAnchor" number="2.5">
+<h2><span class="header-section-number">2.5</span> 第三周<a href="预备.html#第三周" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="目标-2" class="section level3 hasAnchor" number="2.5.1">
+<h3><span class="header-section-number">2.5.1</span> 目标<a href="预备.html#目标-2" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>第三周主要是浅尝R中的各类函数与实战</p>
+<p>R中的字符串操作。包括：</p>
+<ol style="list-style-type: decimal">
+<li>base中的paste, paste0, grep与grepl函数、stringr中的str_c, str_dectet, str_sub, str_extract等函数。</li>
+<li>熟悉正则表达式（不需要了解，只需要对相关概念有印象）。（3）熟悉with函数的变量掩蔽概念（不需要了解，只需要知道为什么有的地方可以不用字符串）。</li>
+</ol>
+<p>R中的建模函数。包括：</p>
+<ol style="list-style-type: decimal">
+<li>学习base中的公式语法</li>
+<li>学习lm与glm函数，尝试使用lm进行简单线性回归，使用glm进行逻辑回归。</li>
+</ol>
+<p>另外，这周还需要学习部分理论知识，包括：</p>
+<p>回归与分类的概念。熟悉简单线性回归，多元线性回归，逻辑回归和k近邻分类（不需要了解和推导，只需要建立起概念）。参考书目为<a href="https://youtube.com/playlist?list=PLTp0eSi9MdkNZB4kyLSzIXIUy9JQOJ5AM&amp;si=6jb8kKh_LoXWflrh">台大生物统计课程</a>和课本<a href="">回归分析</a>（当然也可以自己搜集资料）。</p>
+<p>另外，线性代数的学习也需要加紧。</p>
+</div>
+<div id="示例及任务-2" class="section level3 hasAnchor" number="2.5.2">
+<h3><span class="header-section-number">2.5.2</span> 示例及任务<a href="预备.html#示例及任务-2" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>示例见example3.R</p>
+<p>有数据形如下</p>
+<div class="datatables html-widget html-fill-item" id="htmlwidget-b34e1c60bd314a9dec92" style="width:100%;height:auto;"></div>
+<script type="application/json" data-for="htmlwidget-b34e1c60bd314a9dec92">{"x":{"filter":"none","vertical":false,"data":[["1","2","3"],["chrM","chrM","chrM"],["ncbiRefSeq.2021-04-23","ncbiRefSeq.2021-04-23","ncbiRefSeq.2021-04-23"],["transcript","exon","transcript"],[15356,15356,15289],[15422,15422,15355],[".",".","."],["-","-","+"],[".",".","."],["gene_id \"TrnP\"; transcript_id \"rna-TrnP\";  gene_name \"TrnP\";","gene_id \"TrnP\"; transcript_id \"rna-TrnP\"; exon_number \"1\"; exon_id \"rna-TrnP.1\"; gene_name \"TrnP\";","gene_id \"TrnT\"; transcript_id \"rna-TrnT\";  gene_name \"TrnT\";"]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>X1<\/th>\n      <th>X2<\/th>\n      <th>X3<\/th>\n      <th>X4<\/th>\n      <th>X5<\/th>\n      <th>X6<\/th>\n      <th>X7<\/th>\n      <th>X8<\/th>\n      <th>X9<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"scrollX":true,"columnDefs":[{"className":"dt-right","targets":[4,5]},{"orderable":false,"targets":0}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
+<p>按要求要求整理成如下形式：</p>
+<ol style="list-style-type: decimal">
+<li>只保留编码区域（CDS）内的基因，或者一段基因的转录本（== “transcript”或== “CDS”）</li>
+<li>提取基因id、基因name、转录本id</li>
+<li>只保留每个基因中长度最长的片段，无论是CDS还是transcript</li>
+</ol>
+<div class="datatables html-widget html-fill-item" id="htmlwidget-9f91ca7bb739bc431ec3" style="width:100%;height:auto;"></div>
+<script type="application/json" data-for="htmlwidget-9f91ca7bb739bc431ec3">{"x":{"filter":"none","vertical":false,"data":[["1","2","3","4","5","6"],["chrM","chrM","chrM","chrM","chrM","chrM"],["transcript","transcript","transcript","transcript","transcript","transcript"],[7927,7766,5328,7013,8607,14145],[8607,7969,6872,7696,9390,15288],["+","+","+","+","+","+"],["ATP6","ATP8","COX1","COX2","COX3","CYTB"],["NP_904333.1","NP_904332.1","NP_904330.1","NP_904331.1","NP_904334.1","NP_904340.1"],[680,203,1544,683,783,1143]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>chr<\/th>\n      <th>type<\/th>\n      <th>start<\/th>\n      <th>end<\/th>\n      <th>strand<\/th>\n      <th>gene_id<\/th>\n      <th>transcript_id<\/th>\n      <th>length<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"scrollX":true,"columnDefs":[{"className":"dt-right","targets":[3,4,8]},{"orderable":false,"targets":0}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
+<p>本人给出的任务和示例是R语言基础的部分提纲。之后对于R语言除巩固基础外，更多的是在实战中熟悉R语言生态（评价一个人代码能力的不是一个人基础多好，而是这个人对这门语言的生态有多了解、会用多少的包、脑中有多少编程范式，从而高效的解决自己遇到的问题。但是对于基础的掌握会让你更快熟悉另一门语言，因为基础总是相通的。</p>
+</div>
+</div>
+<div id="第四周" class="section level2 hasAnchor" number="2.6">
+<h2><span class="header-section-number">2.6</span> 第四周<a href="预备.html#第四周" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="目标-3" class="section level3 hasAnchor" number="2.6.1">
+<h3><span class="header-section-number">2.6.1</span> 目标<a href="预备.html#目标-3" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>第四周的学习任务主要是：</p>
+<ol style="list-style-type: decimal">
+<li>熟悉决策树这类树模型，熟悉基于树的统计学习方法，包括随机森林和GBDT模型。</li>
+<li>熟悉主要的预测结果的评价指标，包括回归的指标mse、rmse，分类的指标信息熵、交叉熵等。着重学习二分类的分类指标ROC曲线。</li>
+<li>熟悉mlr3机器学习框架。学会创建task、学习器，简单的训练学习器并预测。</li>
+</ol>
+</div>
+<div id="示例及任务-3" class="section level3 hasAnchor" number="2.6.2">
+<h3><span class="header-section-number">2.6.2</span> 示例及任务<a href="预备.html#示例及任务-3" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>示例见example4.R，example5.R</p>
+<p>example4.R是我总结的学习mlr3基础期间的常见误区，值得学习！</p>
+<p>限时挑战（本周）：设计r程序，计算roc曲线的auc（参考r语言教程基于tidyverse中序章部分和task3）。</p>
+<p>如果学会了简单（多元）线性回归和逻辑回归（最简单的回归和分类任务），知道从表格型数据得到回归或分类预测结果的数据形式，那么就使用更复杂的模型而言，就不存在问题了。</p>
 
+</div>
+</div>
 </div>
             </section>
 
           </div>
         </div>
       </div>
-
-<a href="预备.html" class="navigation navigation-next navigation-unique" aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="index.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="用tidyr读写操作文件.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
