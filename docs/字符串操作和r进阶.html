@@ -720,55 +720,45 @@ div.csl-indent {
 <span id="cb236-2"><a href="字符串操作和r进阶.html#cb236-2" tabindex="-1"></a>  <span class="fu">unique</span>() <span class="sc">%&gt;%</span> </span>
 <span id="cb236-3"><a href="字符串操作和r进阶.html#cb236-3" tabindex="-1"></a>  <span class="fu">str_split</span>(<span class="st">&quot;, &quot;</span>) <span class="sc">%&gt;%</span> </span>
 <span id="cb236-4"><a href="字符串操作和r进阶.html#cb236-4" tabindex="-1"></a>  <span class="fu">unlist</span>() <span class="sc">%&gt;%</span> </span>
-<span id="cb236-5"><a href="字符串操作和r进阶.html#cb236-5" tabindex="-1"></a>  <span class="fu">unique</span>()</span>
-<span id="cb236-6"><a href="字符串操作和r进阶.html#cb236-6" tabindex="-1"></a></span>
-<span id="cb236-7"><a href="字符串操作和r进阶.html#cb236-7" tabindex="-1"></a><span class="co"># 下面这种写法利用了R的参数传递机制</span></span>
-<span id="cb236-8"><a href="字符串操作和r进阶.html#cb236-8" tabindex="-1"></a><span class="co"># 灵活、强大，但是不美观，表现为把传参过程写在函数的外面</span></span>
-<span id="cb236-9"><a href="字符串操作和r进阶.html#cb236-9" tabindex="-1"></a><span class="co"># 但是有一些特定用途，比如说多个函数依赖于同一个参数</span></span>
-<span id="cb236-10"><a href="字符串操作和r进阶.html#cb236-10" tabindex="-1"></a><span class="fu">sapply</span>(type, \(x, invec) <span class="fu">as.numeric</span>(<span class="fu">grepl</span>(x, invec)), <span class="at">invec =</span> data<span class="sc">$</span>type)</span></code></pre></div>
+<span id="cb236-5"><a href="字符串操作和r进阶.html#cb236-5" tabindex="-1"></a>  <span class="fu">unique</span>()</span></code></pre></div>
+<p>下面这种写法利用了R的参数传递机制。灵活、强大，表现为把传参过程写在函数的外面。但是有一些特定用途，比如说多个函数依赖于同一个参数，在后面的进阶章节学习到R的参数传递机制时会重点讲述。</p>
+<div class="sourceCode" id="cb237"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb237-1"><a href="字符串操作和r进阶.html#cb237-1" tabindex="-1"></a><span class="fu">sapply</span>(type, \(x, invec) <span class="fu">as.numeric</span>(<span class="fu">grepl</span>(x, invec)), <span class="at">invec =</span> data<span class="sc">$</span>type)</span></code></pre></div>
 <pre><code>##      a b -
 ## [1,] 1 1 0
 ## [2,] 0 0 1
 ## [3,] 1 0 0</code></pre>
-<div class="sourceCode" id="cb238"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb238-1"><a href="字符串操作和r进阶.html#cb238-1" tabindex="-1"></a><span class="co"># 在没有上述特定情况下，个人更喜欢以下写法</span></span>
-<span id="cb238-2"><a href="字符串操作和r进阶.html#cb238-2" tabindex="-1"></a><span class="fu">sapply</span>(type, \(x, <span class="at">invec =</span> data<span class="sc">$</span>type) <span class="fu">as.numeric</span>(<span class="fu">grepl</span>(x, invec)))</span></code></pre></div>
+<p>在没有上述特定情况下，个人更喜欢以下写法</p>
+<div class="sourceCode" id="cb239"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb239-1"><a href="字符串操作和r进阶.html#cb239-1" tabindex="-1"></a><span class="fu">sapply</span>(type, \(x, <span class="at">invec =</span> data<span class="sc">$</span>type) <span class="fu">as.numeric</span>(<span class="fu">grepl</span>(x, invec)))</span></code></pre></div>
 <pre><code>##      a b -
 ## [1,] 1 1 0
 ## [2,] 0 0 1
 ## [3,] 1 0 0</code></pre>
-<div class="sourceCode" id="cb240"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb240-1"><a href="字符串操作和r进阶.html#cb240-1" tabindex="-1"></a><span class="co"># 像下面这样写也是可以的，但是总让人觉得这段程序要崩溃</span></span>
-<span id="cb240-2"><a href="字符串操作和r进阶.html#cb240-2" tabindex="-1"></a><span class="co"># 在环境管理不严格的动态语言中（如python和R）经常看到这种写法，让人觉得很不安全</span></span>
-<span id="cb240-3"><a href="字符串操作和r进阶.html#cb240-3" tabindex="-1"></a><span class="co"># 就是说内部的环境可以使用全局环境的变量，但是全局的不能使用局部的</span></span>
-<span id="cb240-4"><a href="字符串操作和r进阶.html#cb240-4" tabindex="-1"></a><span class="co"># 就是说儿子能花爹的钱，爹不能找儿子借钱</span></span>
-<span id="cb240-5"><a href="字符串操作和r进阶.html#cb240-5" tabindex="-1"></a><span class="co"># 但是只是看着不安全，如果你理解了上述的参数传递机制和R的命名空间知识后，就会觉得没什么大不了的</span></span>
-<span id="cb240-6"><a href="字符串操作和r进阶.html#cb240-6" tabindex="-1"></a><span class="co"># 但是在极端情况下还是会崩溃，比如在r的shiny软件中惰性求值</span></span>
-<span id="cb240-7"><a href="字符串操作和r进阶.html#cb240-7" tabindex="-1"></a><span class="fu">sapply</span>(type, \(x) <span class="fu">as.numeric</span>(<span class="fu">grepl</span>(x, data<span class="sc">$</span>type)))</span></code></pre></div>
+<p>像下面这样写也是可以的，但是我不喜欢，我觉得怪怪的,就是说内部的环境可以使用全局环境的变量，但是全局的不能使用内部的。就是说儿子能找爸借钱，爸不能找儿子借钱，后面的进阶章节学习到R的环境会重点讲述。</p>
+<div class="sourceCode" id="cb241"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb241-1"><a href="字符串操作和r进阶.html#cb241-1" tabindex="-1"></a><span class="fu">sapply</span>(type, \(x) <span class="fu">as.numeric</span>(<span class="fu">grepl</span>(x, data<span class="sc">$</span>type)))</span></code></pre></div>
 <pre><code>##      a b -
 ## [1,] 1 1 0
 ## [2,] 0 0 1
 ## [3,] 1 0 0</code></pre>
-<div class="sourceCode" id="cb242"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb242-1"><a href="字符串操作和r进阶.html#cb242-1" tabindex="-1"></a><span class="co"># map函数同样可以，不过需要提前命名</span></span>
-<span id="cb242-2"><a href="字符串操作和r进阶.html#cb242-2" tabindex="-1"></a><span class="co"># map函数是purrr中的函数，相当于apply函数簇的拓展，用法相似</span></span>
-<span id="cb242-3"><a href="字符串操作和r进阶.html#cb242-3" tabindex="-1"></a><span class="fu">names</span>(type) <span class="ot">=</span> type</span>
-<span id="cb242-4"><a href="字符串操作和r进阶.html#cb242-4" tabindex="-1"></a><span class="fu">map</span>(type, \(x, <span class="at">invec =</span> data<span class="sc">$</span>type) <span class="fu">as.numeric</span>(<span class="fu">grepl</span>(x, invec))) <span class="sc">%&gt;%</span> </span>
-<span id="cb242-5"><a href="字符串操作和r进阶.html#cb242-5" tabindex="-1"></a>  <span class="fu">as_tibble</span>()</span></code></pre></div>
+<p>map函数同样可以，不过需要提前命名map函数是purrr中的函数，相当于apply函数簇的拓展，用法相似.</p>
+<div class="sourceCode" id="cb243"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb243-1"><a href="字符串操作和r进阶.html#cb243-1" tabindex="-1"></a><span class="fu">names</span>(type) <span class="ot">=</span> type</span>
+<span id="cb243-2"><a href="字符串操作和r进阶.html#cb243-2" tabindex="-1"></a><span class="fu">map</span>(type, \(x, <span class="at">invec =</span> data<span class="sc">$</span>type) <span class="fu">as.numeric</span>(<span class="fu">grepl</span>(x, invec))) <span class="sc">%&gt;%</span> </span>
+<span id="cb243-3"><a href="字符串操作和r进阶.html#cb243-3" tabindex="-1"></a>  <span class="fu">as_tibble</span>()</span></code></pre></div>
 <pre><code>## # A tibble: 3 × 3
 ##       a     b   `-`
 ##   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
 ## 1     1     1     0
 ## 2     0     0     1
 ## 3     1     0     0</code></pre>
-<div class="sourceCode" id="cb244"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb244-1"><a href="字符串操作和r进阶.html#cb244-1" tabindex="-1"></a><span class="fu">map_dfc</span>(type, \(x, <span class="at">invec =</span> data<span class="sc">$</span>type) <span class="fu">as.numeric</span>(<span class="fu">grepl</span>(x, invec)))</span></code></pre></div>
+<p>map + 后缀意味着指定输出的格式。</p>
+<div class="sourceCode" id="cb245"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb245-1"><a href="字符串操作和r进阶.html#cb245-1" tabindex="-1"></a><span class="fu">map_dfc</span>(type, \(x, <span class="at">invec =</span> data<span class="sc">$</span>type) <span class="fu">as.numeric</span>(<span class="fu">grepl</span>(x, invec)))</span></code></pre></div>
 <pre><code>## # A tibble: 3 × 3
 ##       a     b   `-`
 ##   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
 ## 1     1     1     0
 ## 2     0     0     1
 ## 3     1     0     0</code></pre>
-<div class="sourceCode" id="cb246"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb246-1"><a href="字符串操作和r进阶.html#cb246-1" tabindex="-1"></a><span class="co"># purrr的匿名函数设计中因为没有显式的传参</span></span>
-<span id="cb246-2"><a href="字符串操作和r进阶.html#cb246-2" tabindex="-1"></a><span class="co"># 所以只能用于单个参数，剩下一个参数只能从全局调用</span></span>
-<span id="cb246-3"><a href="字符串操作和r进阶.html#cb246-3" tabindex="-1"></a><span class="co"># 等同于上述的那种写法</span></span>
-<span id="cb246-4"><a href="字符串操作和r进阶.html#cb246-4" tabindex="-1"></a><span class="fu">map_dfc</span>(type, <span class="sc">~</span> <span class="fu">as.numeric</span>(<span class="fu">grepl</span>(.x, data<span class="sc">$</span>type)))</span></code></pre></div>
+<p>purrr的匿名函数设计中因为没有显式的传参，所以只能用于单个参数，剩下一个参数只能从全局调用，等同于上述的那种写法。</p>
+<div class="sourceCode" id="cb247"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb247-1"><a href="字符串操作和r进阶.html#cb247-1" tabindex="-1"></a><span class="fu">map_dfc</span>(type, <span class="sc">~</span> <span class="fu">as.numeric</span>(<span class="fu">grepl</span>(.x, data<span class="sc">$</span>type)))</span></code></pre></div>
 <pre><code>## # A tibble: 3 × 3
 ##       a     b   `-`
 ##   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
@@ -779,13 +769,13 @@ div.csl-indent {
 <div id="tibble的nested-tibble性质" class="section level3 hasAnchor" number="5.2.2">
 <h3><span class="header-section-number">5.2.2</span> 2. tibble的nested tibble性质<a href="字符串操作和r进阶.html#tibble的nested-tibble性质" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>tibble拓展了dataframe的范围，支持储存列表，甚至套娃另一个df。</p>
-<div class="sourceCode" id="cb248"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb248-1"><a href="字符串操作和r进阶.html#cb248-1" tabindex="-1"></a>data <span class="sc">%&gt;%</span></span>
-<span id="cb248-2"><a href="字符串操作和r进阶.html#cb248-2" tabindex="-1"></a>  <span class="fu">as_tibble</span>() <span class="sc">%&gt;%</span> </span>
-<span id="cb248-3"><a href="字符串操作和r进阶.html#cb248-3" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
-<span id="cb248-4"><a href="字符串操作和r进阶.html#cb248-4" tabindex="-1"></a>    <span class="at">y =</span> <span class="fu">str_split</span>(type, <span class="st">&quot;, &quot;</span>), </span>
-<span id="cb248-5"><a href="字符串操作和r进阶.html#cb248-5" tabindex="-1"></a>    <span class="at">y =</span> <span class="fu">map</span>(y, <span class="sc">~</span> <span class="fu">set_names</span>(.x, .x))) <span class="sc">%&gt;%</span> </span>
-<span id="cb248-6"><a href="字符串操作和r进阶.html#cb248-6" tabindex="-1"></a>  <span class="fu">unnest_wider</span>(y) <span class="sc">%&gt;%</span> </span>
-<span id="cb248-7"><a href="字符串操作和r进阶.html#cb248-7" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="sc">-</span>type, <span class="sc">~</span> <span class="fu">ifelse</span>(<span class="fu">is.na</span>(.x), <span class="dv">0</span>, <span class="dv">1</span>)))</span></code></pre></div>
+<div class="sourceCode" id="cb249"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb249-1"><a href="字符串操作和r进阶.html#cb249-1" tabindex="-1"></a>data <span class="sc">%&gt;%</span></span>
+<span id="cb249-2"><a href="字符串操作和r进阶.html#cb249-2" tabindex="-1"></a>  <span class="fu">as_tibble</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb249-3"><a href="字符串操作和r进阶.html#cb249-3" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb249-4"><a href="字符串操作和r进阶.html#cb249-4" tabindex="-1"></a>    <span class="at">y =</span> <span class="fu">str_split</span>(type, <span class="st">&quot;, &quot;</span>), </span>
+<span id="cb249-5"><a href="字符串操作和r进阶.html#cb249-5" tabindex="-1"></a>    <span class="at">y =</span> <span class="fu">map</span>(y, <span class="sc">~</span> <span class="fu">set_names</span>(.x, .x))) <span class="sc">%&gt;%</span> </span>
+<span id="cb249-6"><a href="字符串操作和r进阶.html#cb249-6" tabindex="-1"></a>  <span class="fu">unnest_wider</span>(y) <span class="sc">%&gt;%</span> </span>
+<span id="cb249-7"><a href="字符串操作和r进阶.html#cb249-7" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="sc">-</span>type, <span class="sc">~</span> <span class="fu">ifelse</span>(<span class="fu">is.na</span>(.x), <span class="dv">0</span>, <span class="dv">1</span>)))</span></code></pre></div>
 <pre><code>## # A tibble: 3 × 4
 ##   type      a     b   `-`
 ##   &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
@@ -796,10 +786,10 @@ div.csl-indent {
 <div id="dataframe操作" class="section level3 hasAnchor" number="5.2.3">
 <h3><span class="header-section-number">5.2.3</span> 3. dataframe操作<a href="字符串操作和r进阶.html#dataframe操作" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>利用tibble的性质确实有些超模了，只利用tidyr的数据框操作也可以。如果想单纯的使用mutate解决，无疑就陷入了误区，但是思路比较刁钻。</p>
-<div class="sourceCode" id="cb250"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb250-1"><a href="字符串操作和r进阶.html#cb250-1" tabindex="-1"></a>data <span class="sc">%&gt;%</span> </span>
-<span id="cb250-2"><a href="字符串操作和r进阶.html#cb250-2" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">id =</span> type, <span class="at">value =</span> <span class="dv">1</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb250-3"><a href="字符串操作和r进阶.html#cb250-3" tabindex="-1"></a>  <span class="fu">separate_rows</span>(type, <span class="at">sep =</span> <span class="st">&quot;, &quot;</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb250-4"><a href="字符串操作和r进阶.html#cb250-4" tabindex="-1"></a>  <span class="fu">pivot_wider</span>(<span class="at">names_from =</span> type, <span class="at">values_from =</span> value, <span class="at">values_fill =</span> <span class="dv">0</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb251"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb251-1"><a href="字符串操作和r进阶.html#cb251-1" tabindex="-1"></a>data <span class="sc">%&gt;%</span> </span>
+<span id="cb251-2"><a href="字符串操作和r进阶.html#cb251-2" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">id =</span> type, <span class="at">value =</span> <span class="dv">1</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb251-3"><a href="字符串操作和r进阶.html#cb251-3" tabindex="-1"></a>  <span class="fu">separate_rows</span>(type, <span class="at">sep =</span> <span class="st">&quot;, &quot;</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb251-4"><a href="字符串操作和r进阶.html#cb251-4" tabindex="-1"></a>  <span class="fu">pivot_wider</span>(<span class="at">names_from =</span> type, <span class="at">values_from =</span> value, <span class="at">values_fill =</span> <span class="dv">0</span>)</span></code></pre></div>
 <pre><code>## # A tibble: 3 × 4
 ##   id        a     b   `-`
 ##   &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
@@ -809,17 +799,17 @@ div.csl-indent {
 </div>
 <div id="循环" class="section level3 hasAnchor" number="5.2.4">
 <h3><span class="header-section-number">5.2.4</span> 4. 循环<a href="字符串操作和r进阶.html#循环" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<div class="sourceCode" id="cb252"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb252-1"><a href="字符串操作和r进阶.html#cb252-1" tabindex="-1"></a>type <span class="ot">=</span> data<span class="sc">$</span>type <span class="sc">%&gt;%</span> </span>
-<span id="cb252-2"><a href="字符串操作和r进阶.html#cb252-2" tabindex="-1"></a>  <span class="fu">unique</span>() <span class="sc">%&gt;%</span> </span>
-<span id="cb252-3"><a href="字符串操作和r进阶.html#cb252-3" tabindex="-1"></a>  <span class="fu">str_split</span>(<span class="st">&quot;, &quot;</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb252-4"><a href="字符串操作和r进阶.html#cb252-4" tabindex="-1"></a>  <span class="fu">unlist</span>() <span class="sc">%&gt;%</span> </span>
-<span id="cb252-5"><a href="字符串操作和r进阶.html#cb252-5" tabindex="-1"></a>  <span class="fu">unique</span>()</span>
-<span id="cb252-6"><a href="字符串操作和r进阶.html#cb252-6" tabindex="-1"></a></span>
-<span id="cb252-7"><a href="字符串操作和r进阶.html#cb252-7" tabindex="-1"></a>result <span class="ot">=</span> <span class="fu">list</span>()</span>
-<span id="cb252-8"><a href="字符串操作和r进阶.html#cb252-8" tabindex="-1"></a><span class="cf">for</span> (element <span class="cf">in</span> type) {</span>
-<span id="cb252-9"><a href="字符串操作和r进阶.html#cb252-9" tabindex="-1"></a>  result[[element]] <span class="ot">=</span> <span class="fu">as.numeric</span>(<span class="fu">grepl</span>(element, data<span class="sc">$</span>type))</span>
-<span id="cb252-10"><a href="字符串操作和r进阶.html#cb252-10" tabindex="-1"></a>}</span>
-<span id="cb252-11"><a href="字符串操作和r进阶.html#cb252-11" tabindex="-1"></a><span class="fu">as.data.frame</span>(result)</span></code></pre></div>
+<div class="sourceCode" id="cb253"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb253-1"><a href="字符串操作和r进阶.html#cb253-1" tabindex="-1"></a>type <span class="ot">=</span> data<span class="sc">$</span>type <span class="sc">%&gt;%</span> </span>
+<span id="cb253-2"><a href="字符串操作和r进阶.html#cb253-2" tabindex="-1"></a>  <span class="fu">unique</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb253-3"><a href="字符串操作和r进阶.html#cb253-3" tabindex="-1"></a>  <span class="fu">str_split</span>(<span class="st">&quot;, &quot;</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb253-4"><a href="字符串操作和r进阶.html#cb253-4" tabindex="-1"></a>  <span class="fu">unlist</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb253-5"><a href="字符串操作和r进阶.html#cb253-5" tabindex="-1"></a>  <span class="fu">unique</span>()</span>
+<span id="cb253-6"><a href="字符串操作和r进阶.html#cb253-6" tabindex="-1"></a></span>
+<span id="cb253-7"><a href="字符串操作和r进阶.html#cb253-7" tabindex="-1"></a>result <span class="ot">=</span> <span class="fu">list</span>()</span>
+<span id="cb253-8"><a href="字符串操作和r进阶.html#cb253-8" tabindex="-1"></a><span class="cf">for</span> (element <span class="cf">in</span> type) {</span>
+<span id="cb253-9"><a href="字符串操作和r进阶.html#cb253-9" tabindex="-1"></a>  result[[element]] <span class="ot">=</span> <span class="fu">as.numeric</span>(<span class="fu">grepl</span>(element, data<span class="sc">$</span>type))</span>
+<span id="cb253-10"><a href="字符串操作和r进阶.html#cb253-10" tabindex="-1"></a>}</span>
+<span id="cb253-11"><a href="字符串操作和r进阶.html#cb253-11" tabindex="-1"></a><span class="fu">as.data.frame</span>(result)</span></code></pre></div>
 <pre><code>##   a b X.
 ## 1 1 1  0
 ## 2 0 0  1

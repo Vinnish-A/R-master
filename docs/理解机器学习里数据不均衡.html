@@ -355,116 +355,116 @@ div.csl-indent {
 <h1><span class="header-section-number">9</span> 理解机器学习里数据不均衡<a href="理解机器学习里数据不均衡.html#理解机器学习里数据不均衡" class="anchor-section" aria-label="Anchor link to header"></a></h1>
 <div id="data_prepare" class="section level2 hasAnchor" number="9.1">
 <h2><span class="header-section-number">9.1</span> data_prepare<a href="理解机器学习里数据不均衡.html#data_prepare" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<div class="sourceCode" id="cb358"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb358-1"><a href="理解机器学习里数据不均衡.html#cb358-1" tabindex="-1"></a>mu <span class="ot">=</span> <span class="fu">rep</span>(<span class="dv">0</span>, <span class="dv">2</span>) </span>
-<span id="cb358-2"><a href="理解机器学习里数据不均衡.html#cb358-2" tabindex="-1"></a>Sigma1 <span class="ot">=</span> <span class="fu">matrix</span>(<span class="fl">0.7</span>, <span class="at">nrow=</span><span class="dv">2</span>, <span class="at">ncol=</span><span class="dv">2</span>) <span class="sc">+</span> <span class="fu">diag</span>(<span class="dv">2</span>) <span class="sc">*</span> <span class="fl">0.3</span></span>
-<span id="cb358-3"><a href="理解机器学习里数据不均衡.html#cb358-3" tabindex="-1"></a>Sigma2 <span class="ot">=</span> <span class="fu">matrix</span>(<span class="fl">0.5</span>, <span class="at">nrow=</span><span class="dv">2</span>, <span class="at">ncol=</span><span class="dv">2</span>) <span class="sc">+</span> <span class="fu">diag</span>(<span class="dv">2</span>) <span class="sc">*</span> <span class="fl">0.5</span> </span>
-<span id="cb358-4"><a href="理解机器学习里数据不均衡.html#cb358-4" tabindex="-1"></a>mat1 <span class="ot">=</span> <span class="fu">mvrnorm</span>(<span class="at">n =</span> <span class="dv">1000</span>, <span class="at">mu =</span> mu, <span class="at">Sigma =</span> Sigma1) <span class="sc">+</span> <span class="fu">matrix</span>(<span class="fu">rep</span>(<span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>),   <span class="at">each =</span> <span class="dv">1000</span>), <span class="at">ncol=</span><span class="dv">2</span>)</span>
-<span id="cb358-5"><a href="理解机器学习里数据不均衡.html#cb358-5" tabindex="-1"></a>mat2 <span class="ot">=</span> <span class="fu">mvrnorm</span>(<span class="at">n =</span> <span class="dv">1000</span>, <span class="at">mu =</span> mu, <span class="at">Sigma =</span> Sigma2) <span class="sc">+</span> <span class="fu">matrix</span>(<span class="fu">rep</span>(<span class="fu">c</span>(<span class="fl">1.5</span>, <span class="dv">0</span>), <span class="at">each =</span> <span class="dv">1000</span>), <span class="at">ncol=</span><span class="dv">2</span>)</span>
-<span id="cb358-6"><a href="理解机器学习里数据不均衡.html#cb358-6" tabindex="-1"></a></span>
-<span id="cb358-7"><a href="理解机器学习里数据不均衡.html#cb358-7" tabindex="-1"></a>data_train <span class="ot">=</span> <span class="fu">rbind</span>(mat1, mat2) <span class="sc">%&gt;%</span> </span>
-<span id="cb358-8"><a href="理解机器学习里数据不均衡.html#cb358-8" tabindex="-1"></a>  <span class="fu">as_tibble</span>() <span class="sc">%&gt;%</span> </span>
-<span id="cb358-9"><a href="理解机器学习里数据不均衡.html#cb358-9" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">group =</span> <span class="fu">factor</span>(<span class="fu">rep</span>(<span class="fu">c</span>(<span class="st">&quot;G1&quot;</span>, <span class="st">&quot;G2&quot;</span>), <span class="at">each =</span> <span class="dv">1000</span>)))</span></code></pre></div>
+<div class="sourceCode" id="cb359"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb359-1"><a href="理解机器学习里数据不均衡.html#cb359-1" tabindex="-1"></a>mu <span class="ot">=</span> <span class="fu">rep</span>(<span class="dv">0</span>, <span class="dv">2</span>) </span>
+<span id="cb359-2"><a href="理解机器学习里数据不均衡.html#cb359-2" tabindex="-1"></a>Sigma1 <span class="ot">=</span> <span class="fu">matrix</span>(<span class="fl">0.7</span>, <span class="at">nrow=</span><span class="dv">2</span>, <span class="at">ncol=</span><span class="dv">2</span>) <span class="sc">+</span> <span class="fu">diag</span>(<span class="dv">2</span>) <span class="sc">*</span> <span class="fl">0.3</span></span>
+<span id="cb359-3"><a href="理解机器学习里数据不均衡.html#cb359-3" tabindex="-1"></a>Sigma2 <span class="ot">=</span> <span class="fu">matrix</span>(<span class="fl">0.5</span>, <span class="at">nrow=</span><span class="dv">2</span>, <span class="at">ncol=</span><span class="dv">2</span>) <span class="sc">+</span> <span class="fu">diag</span>(<span class="dv">2</span>) <span class="sc">*</span> <span class="fl">0.5</span> </span>
+<span id="cb359-4"><a href="理解机器学习里数据不均衡.html#cb359-4" tabindex="-1"></a>mat1 <span class="ot">=</span> <span class="fu">mvrnorm</span>(<span class="at">n =</span> <span class="dv">1000</span>, <span class="at">mu =</span> mu, <span class="at">Sigma =</span> Sigma1) <span class="sc">+</span> <span class="fu">matrix</span>(<span class="fu">rep</span>(<span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>),   <span class="at">each =</span> <span class="dv">1000</span>), <span class="at">ncol=</span><span class="dv">2</span>)</span>
+<span id="cb359-5"><a href="理解机器学习里数据不均衡.html#cb359-5" tabindex="-1"></a>mat2 <span class="ot">=</span> <span class="fu">mvrnorm</span>(<span class="at">n =</span> <span class="dv">1000</span>, <span class="at">mu =</span> mu, <span class="at">Sigma =</span> Sigma2) <span class="sc">+</span> <span class="fu">matrix</span>(<span class="fu">rep</span>(<span class="fu">c</span>(<span class="fl">1.5</span>, <span class="dv">0</span>), <span class="at">each =</span> <span class="dv">1000</span>), <span class="at">ncol=</span><span class="dv">2</span>)</span>
+<span id="cb359-6"><a href="理解机器学习里数据不均衡.html#cb359-6" tabindex="-1"></a></span>
+<span id="cb359-7"><a href="理解机器学习里数据不均衡.html#cb359-7" tabindex="-1"></a>data_train <span class="ot">=</span> <span class="fu">rbind</span>(mat1, mat2) <span class="sc">%&gt;%</span> </span>
+<span id="cb359-8"><a href="理解机器学习里数据不均衡.html#cb359-8" tabindex="-1"></a>  <span class="fu">as_tibble</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb359-9"><a href="理解机器学习里数据不均衡.html#cb359-9" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">group =</span> <span class="fu">factor</span>(<span class="fu">rep</span>(<span class="fu">c</span>(<span class="st">&quot;G1&quot;</span>, <span class="st">&quot;G2&quot;</span>), <span class="at">each =</span> <span class="dv">1000</span>)))</span></code></pre></div>
 <pre><code>## Warning: The `x` argument of `as_tibble.matrix()` must have unique column names if
 ## `.name_repair` is omitted as of tibble 2.0.0.
 ## ℹ Using compatibility `.name_repair`.
 ## This warning is displayed once every 8 hours.
 ## Call `lifecycle::last_lifecycle_warnings()` to see where this warning was
 ## generated.</code></pre>
-<div class="sourceCode" id="cb360"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb360-1"><a href="理解机器学习里数据不均衡.html#cb360-1" tabindex="-1"></a>num <span class="ot">=</span> <span class="dv">200</span></span>
-<span id="cb360-2"><a href="理解机器学习里数据不均衡.html#cb360-2" tabindex="-1"></a>data_train_un <span class="ot">=</span> <span class="fu">rbind</span>(mat1, mat2[<span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">1000</span>, num), ]) <span class="sc">%&gt;%</span> </span>
-<span id="cb360-3"><a href="理解机器学习里数据不均衡.html#cb360-3" tabindex="-1"></a>  <span class="fu">as_tibble</span>() <span class="sc">%&gt;%</span> </span>
-<span id="cb360-4"><a href="理解机器学习里数据不均衡.html#cb360-4" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">group =</span> <span class="fu">factor</span>(<span class="fu">rep</span>(<span class="fu">c</span>(<span class="st">&quot;G1&quot;</span>, <span class="st">&quot;G2&quot;</span>), <span class="fu">c</span>(<span class="dv">1000</span>, num))))</span>
-<span id="cb360-5"><a href="理解机器学习里数据不均衡.html#cb360-5" tabindex="-1"></a></span>
-<span id="cb360-6"><a href="理解机器学习里数据不均衡.html#cb360-6" tabindex="-1"></a>data_test <span class="ot">=</span> <span class="fu">rbind</span>(</span>
-<span id="cb360-7"><a href="理解机器学习里数据不均衡.html#cb360-7" tabindex="-1"></a>  <span class="fu">mvrnorm</span>(<span class="at">n =</span> <span class="dv">500</span>, <span class="at">mu =</span> mu, <span class="at">Sigma =</span> Sigma1) <span class="sc">+</span> <span class="fu">matrix</span>(<span class="fu">rep</span>(<span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>),   <span class="at">each =</span> <span class="dv">500</span>), <span class="at">ncol=</span><span class="dv">2</span>), </span>
-<span id="cb360-8"><a href="理解机器学习里数据不均衡.html#cb360-8" tabindex="-1"></a>  <span class="fu">mvrnorm</span>(<span class="at">n =</span> <span class="dv">500</span>, <span class="at">mu =</span> mu, <span class="at">Sigma =</span> Sigma2) <span class="sc">+</span> <span class="fu">matrix</span>(<span class="fu">rep</span>(<span class="fu">c</span>(<span class="fl">1.5</span>, <span class="dv">0</span>), <span class="at">each =</span> <span class="dv">500</span>), <span class="at">ncol=</span><span class="dv">2</span>)</span>
-<span id="cb360-9"><a href="理解机器学习里数据不均衡.html#cb360-9" tabindex="-1"></a>) <span class="sc">%&gt;%</span> <span class="fu">as_tibble</span>() <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">group =</span> <span class="fu">factor</span>(<span class="fu">rep</span>(<span class="fu">c</span>(<span class="st">&quot;G1&quot;</span>, <span class="st">&quot;G2&quot;</span>), <span class="at">each =</span> <span class="dv">500</span>)))</span>
-<span id="cb360-10"><a href="理解机器学习里数据不均衡.html#cb360-10" tabindex="-1"></a></span>
-<span id="cb360-11"><a href="理解机器学习里数据不均衡.html#cb360-11" tabindex="-1"></a>data_train <span class="sc">%&gt;%</span> </span>
-<span id="cb360-12"><a href="理解机器学习里数据不均衡.html#cb360-12" tabindex="-1"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span> </span>
-<span id="cb360-13"><a href="理解机器学习里数据不均衡.html#cb360-13" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(V1, V2, <span class="at">color =</span> group, <span class="at">alpha =</span> <span class="fl">0.5</span>)) <span class="sc">+</span> </span>
-<span id="cb360-14"><a href="理解机器学习里数据不均衡.html#cb360-14" tabindex="-1"></a>  <span class="fu">scale_color_aaas</span>() <span class="sc">+</span> </span>
-<span id="cb360-15"><a href="理解机器学习里数据不均衡.html#cb360-15" tabindex="-1"></a>  <span class="fu">xlim</span>(<span class="sc">-</span><span class="dv">4</span>, <span class="dv">5</span>) <span class="sc">+</span></span>
-<span id="cb360-16"><a href="理解机器学习里数据不均衡.html#cb360-16" tabindex="-1"></a>  <span class="fu">ylim</span>(<span class="sc">-</span><span class="dv">4</span>, <span class="dv">5</span>) <span class="sc">+</span></span>
-<span id="cb360-17"><a href="理解机器学习里数据不均衡.html#cb360-17" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">&quot;数据分布&quot;</span>) <span class="sc">+</span> </span>
-<span id="cb360-18"><a href="理解机器学习里数据不均衡.html#cb360-18" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span> </span>
-<span id="cb360-19"><a href="理解机器学习里数据不均衡.html#cb360-19" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
-<span id="cb360-20"><a href="理解机器学习里数据不均衡.html#cb360-20" tabindex="-1"></a>    <span class="at">legend.position =</span> <span class="st">&quot;top&quot;</span>, </span>
-<span id="cb360-21"><a href="理解机器学习里数据不均衡.html#cb360-21" tabindex="-1"></a>    <span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="fl">0.5</span>)</span>
-<span id="cb360-22"><a href="理解机器学习里数据不均衡.html#cb360-22" tabindex="-1"></a>  )</span></code></pre></div>
+<div class="sourceCode" id="cb361"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb361-1"><a href="理解机器学习里数据不均衡.html#cb361-1" tabindex="-1"></a>num <span class="ot">=</span> <span class="dv">200</span></span>
+<span id="cb361-2"><a href="理解机器学习里数据不均衡.html#cb361-2" tabindex="-1"></a>data_train_un <span class="ot">=</span> <span class="fu">rbind</span>(mat1, mat2[<span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">1000</span>, num), ]) <span class="sc">%&gt;%</span> </span>
+<span id="cb361-3"><a href="理解机器学习里数据不均衡.html#cb361-3" tabindex="-1"></a>  <span class="fu">as_tibble</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb361-4"><a href="理解机器学习里数据不均衡.html#cb361-4" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">group =</span> <span class="fu">factor</span>(<span class="fu">rep</span>(<span class="fu">c</span>(<span class="st">&quot;G1&quot;</span>, <span class="st">&quot;G2&quot;</span>), <span class="fu">c</span>(<span class="dv">1000</span>, num))))</span>
+<span id="cb361-5"><a href="理解机器学习里数据不均衡.html#cb361-5" tabindex="-1"></a></span>
+<span id="cb361-6"><a href="理解机器学习里数据不均衡.html#cb361-6" tabindex="-1"></a>data_test <span class="ot">=</span> <span class="fu">rbind</span>(</span>
+<span id="cb361-7"><a href="理解机器学习里数据不均衡.html#cb361-7" tabindex="-1"></a>  <span class="fu">mvrnorm</span>(<span class="at">n =</span> <span class="dv">500</span>, <span class="at">mu =</span> mu, <span class="at">Sigma =</span> Sigma1) <span class="sc">+</span> <span class="fu">matrix</span>(<span class="fu">rep</span>(<span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>),   <span class="at">each =</span> <span class="dv">500</span>), <span class="at">ncol=</span><span class="dv">2</span>), </span>
+<span id="cb361-8"><a href="理解机器学习里数据不均衡.html#cb361-8" tabindex="-1"></a>  <span class="fu">mvrnorm</span>(<span class="at">n =</span> <span class="dv">500</span>, <span class="at">mu =</span> mu, <span class="at">Sigma =</span> Sigma2) <span class="sc">+</span> <span class="fu">matrix</span>(<span class="fu">rep</span>(<span class="fu">c</span>(<span class="fl">1.5</span>, <span class="dv">0</span>), <span class="at">each =</span> <span class="dv">500</span>), <span class="at">ncol=</span><span class="dv">2</span>)</span>
+<span id="cb361-9"><a href="理解机器学习里数据不均衡.html#cb361-9" tabindex="-1"></a>) <span class="sc">%&gt;%</span> <span class="fu">as_tibble</span>() <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">group =</span> <span class="fu">factor</span>(<span class="fu">rep</span>(<span class="fu">c</span>(<span class="st">&quot;G1&quot;</span>, <span class="st">&quot;G2&quot;</span>), <span class="at">each =</span> <span class="dv">500</span>)))</span>
+<span id="cb361-10"><a href="理解机器学习里数据不均衡.html#cb361-10" tabindex="-1"></a></span>
+<span id="cb361-11"><a href="理解机器学习里数据不均衡.html#cb361-11" tabindex="-1"></a>data_train <span class="sc">%&gt;%</span> </span>
+<span id="cb361-12"><a href="理解机器学习里数据不均衡.html#cb361-12" tabindex="-1"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span> </span>
+<span id="cb361-13"><a href="理解机器学习里数据不均衡.html#cb361-13" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(V1, V2, <span class="at">color =</span> group, <span class="at">alpha =</span> <span class="fl">0.5</span>)) <span class="sc">+</span> </span>
+<span id="cb361-14"><a href="理解机器学习里数据不均衡.html#cb361-14" tabindex="-1"></a>  <span class="fu">scale_color_aaas</span>() <span class="sc">+</span> </span>
+<span id="cb361-15"><a href="理解机器学习里数据不均衡.html#cb361-15" tabindex="-1"></a>  <span class="fu">xlim</span>(<span class="sc">-</span><span class="dv">4</span>, <span class="dv">5</span>) <span class="sc">+</span></span>
+<span id="cb361-16"><a href="理解机器学习里数据不均衡.html#cb361-16" tabindex="-1"></a>  <span class="fu">ylim</span>(<span class="sc">-</span><span class="dv">4</span>, <span class="dv">5</span>) <span class="sc">+</span></span>
+<span id="cb361-17"><a href="理解机器学习里数据不均衡.html#cb361-17" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">&quot;数据分布&quot;</span>) <span class="sc">+</span> </span>
+<span id="cb361-18"><a href="理解机器学习里数据不均衡.html#cb361-18" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span> </span>
+<span id="cb361-19"><a href="理解机器学习里数据不均衡.html#cb361-19" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
+<span id="cb361-20"><a href="理解机器学习里数据不均衡.html#cb361-20" tabindex="-1"></a>    <span class="at">legend.position =</span> <span class="st">&quot;top&quot;</span>, </span>
+<span id="cb361-21"><a href="理解机器学习里数据不均衡.html#cb361-21" tabindex="-1"></a>    <span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="fl">0.5</span>)</span>
+<span id="cb361-22"><a href="理解机器学习里数据不均衡.html#cb361-22" tabindex="-1"></a>  )</span></code></pre></div>
 <p><img src="example7_files/figure-html/unnamed-chunk-1-1.png" width="672" /></p>
-<div class="sourceCode" id="cb361"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb361-1"><a href="理解机器学习里数据不均衡.html#cb361-1" tabindex="-1"></a>data_train_un <span class="sc">%&gt;%</span> </span>
-<span id="cb361-2"><a href="理解机器学习里数据不均衡.html#cb361-2" tabindex="-1"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span> </span>
-<span id="cb361-3"><a href="理解机器学习里数据不均衡.html#cb361-3" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(V1, V2, <span class="at">color =</span> group, <span class="at">alpha =</span> <span class="fl">0.5</span>)) <span class="sc">+</span> </span>
-<span id="cb361-4"><a href="理解机器学习里数据不均衡.html#cb361-4" tabindex="-1"></a>  <span class="fu">scale_color_aaas</span>() <span class="sc">+</span> </span>
-<span id="cb361-5"><a href="理解机器学习里数据不均衡.html#cb361-5" tabindex="-1"></a>  <span class="fu">xlim</span>(<span class="sc">-</span><span class="dv">4</span>, <span class="dv">5</span>) <span class="sc">+</span></span>
-<span id="cb361-6"><a href="理解机器学习里数据不均衡.html#cb361-6" tabindex="-1"></a>  <span class="fu">ylim</span>(<span class="sc">-</span><span class="dv">4</span>, <span class="dv">5</span>) <span class="sc">+</span></span>
-<span id="cb361-7"><a href="理解机器学习里数据不均衡.html#cb361-7" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">&quot;数据分布&quot;</span>) <span class="sc">+</span> </span>
-<span id="cb361-8"><a href="理解机器学习里数据不均衡.html#cb361-8" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span> </span>
-<span id="cb361-9"><a href="理解机器学习里数据不均衡.html#cb361-9" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
-<span id="cb361-10"><a href="理解机器学习里数据不均衡.html#cb361-10" tabindex="-1"></a>    <span class="at">legend.position =</span> <span class="st">&quot;top&quot;</span>, </span>
-<span id="cb361-11"><a href="理解机器学习里数据不均衡.html#cb361-11" tabindex="-1"></a>    <span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="fl">0.5</span>)</span>
-<span id="cb361-12"><a href="理解机器学习里数据不均衡.html#cb361-12" tabindex="-1"></a>  )</span></code></pre></div>
+<div class="sourceCode" id="cb362"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb362-1"><a href="理解机器学习里数据不均衡.html#cb362-1" tabindex="-1"></a>data_train_un <span class="sc">%&gt;%</span> </span>
+<span id="cb362-2"><a href="理解机器学习里数据不均衡.html#cb362-2" tabindex="-1"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span> </span>
+<span id="cb362-3"><a href="理解机器学习里数据不均衡.html#cb362-3" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(V1, V2, <span class="at">color =</span> group, <span class="at">alpha =</span> <span class="fl">0.5</span>)) <span class="sc">+</span> </span>
+<span id="cb362-4"><a href="理解机器学习里数据不均衡.html#cb362-4" tabindex="-1"></a>  <span class="fu">scale_color_aaas</span>() <span class="sc">+</span> </span>
+<span id="cb362-5"><a href="理解机器学习里数据不均衡.html#cb362-5" tabindex="-1"></a>  <span class="fu">xlim</span>(<span class="sc">-</span><span class="dv">4</span>, <span class="dv">5</span>) <span class="sc">+</span></span>
+<span id="cb362-6"><a href="理解机器学习里数据不均衡.html#cb362-6" tabindex="-1"></a>  <span class="fu">ylim</span>(<span class="sc">-</span><span class="dv">4</span>, <span class="dv">5</span>) <span class="sc">+</span></span>
+<span id="cb362-7"><a href="理解机器学习里数据不均衡.html#cb362-7" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">&quot;数据分布&quot;</span>) <span class="sc">+</span> </span>
+<span id="cb362-8"><a href="理解机器学习里数据不均衡.html#cb362-8" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span> </span>
+<span id="cb362-9"><a href="理解机器学习里数据不均衡.html#cb362-9" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
+<span id="cb362-10"><a href="理解机器学习里数据不均衡.html#cb362-10" tabindex="-1"></a>    <span class="at">legend.position =</span> <span class="st">&quot;top&quot;</span>, </span>
+<span id="cb362-11"><a href="理解机器学习里数据不均衡.html#cb362-11" tabindex="-1"></a>    <span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="fl">0.5</span>)</span>
+<span id="cb362-12"><a href="理解机器学习里数据不均衡.html#cb362-12" tabindex="-1"></a>  )</span></code></pre></div>
 <p><img src="example7_files/figure-html/unnamed-chunk-1-2.png" width="672" /></p>
 </div>
 <div id="model" class="section level2 hasAnchor" number="9.2">
 <h2><span class="header-section-number">9.2</span> model<a href="理解机器学习里数据不均衡.html#model" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <div id="数据均衡的模型" class="section level3 hasAnchor" number="9.2.1">
 <h3><span class="header-section-number">9.2.1</span> 数据均衡的模型<a href="理解机器学习里数据不均衡.html#数据均衡的模型" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<div class="sourceCode" id="cb362"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb362-1"><a href="理解机器学习里数据不均衡.html#cb362-1" tabindex="-1"></a>model1 <span class="ot">=</span> <span class="fu">glm</span>(group <span class="sc">~</span> ., <span class="at">data =</span> data_train, <span class="at">family =</span> <span class="fu">binomial</span>())</span>
-<span id="cb362-2"><a href="理解机器学习里数据不均衡.html#cb362-2" tabindex="-1"></a><span class="co"># as.matrix(data.frame(V0 = 1, V1 = data_train$V1, V2 = data_train$V2)) %*% coef(model1)</span></span>
-<span id="cb362-3"><a href="理解机器学习里数据不均衡.html#cb362-3" tabindex="-1"></a>coef1 <span class="ot">=</span> <span class="fu">coef</span>(model1)</span>
-<span id="cb362-4"><a href="理解机器学习里数据不均衡.html#cb362-4" tabindex="-1"></a>coef1</span></code></pre></div>
+<div class="sourceCode" id="cb363"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb363-1"><a href="理解机器学习里数据不均衡.html#cb363-1" tabindex="-1"></a>model1 <span class="ot">=</span> <span class="fu">glm</span>(group <span class="sc">~</span> ., <span class="at">data =</span> data_train, <span class="at">family =</span> <span class="fu">binomial</span>())</span>
+<span id="cb363-2"><a href="理解机器学习里数据不均衡.html#cb363-2" tabindex="-1"></a><span class="co"># as.matrix(data.frame(V0 = 1, V1 = data_train$V1, V2 = data_train$V2)) %*% coef(model1)</span></span>
+<span id="cb363-3"><a href="理解机器学习里数据不均衡.html#cb363-3" tabindex="-1"></a>coef1 <span class="ot">=</span> <span class="fu">coef</span>(model1)</span>
+<span id="cb363-4"><a href="理解机器学习里数据不均衡.html#cb363-4" tabindex="-1"></a>coef1</span></code></pre></div>
 <pre><code>## (Intercept)          V1          V2 
 ##  -0.6530901   3.4637531  -3.1321564</code></pre>
-<div class="sourceCode" id="cb364"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb364-1"><a href="理解机器学习里数据不均衡.html#cb364-1" tabindex="-1"></a>beta0 <span class="ot">=</span> coef1[<span class="dv">1</span>]</span>
-<span id="cb364-2"><a href="理解机器学习里数据不均衡.html#cb364-2" tabindex="-1"></a>beta1 <span class="ot">=</span> coef1[<span class="dv">2</span>]</span>
-<span id="cb364-3"><a href="理解机器学习里数据不均衡.html#cb364-3" tabindex="-1"></a>beta2 <span class="ot">=</span> coef1[<span class="dv">3</span>]</span>
-<span id="cb364-4"><a href="理解机器学习里数据不均衡.html#cb364-4" tabindex="-1"></a></span>
-<span id="cb364-5"><a href="理解机器学习里数据不均衡.html#cb364-5" tabindex="-1"></a>data_test <span class="sc">%&gt;%</span> </span>
-<span id="cb364-6"><a href="理解机器学习里数据不均衡.html#cb364-6" tabindex="-1"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span> </span>
-<span id="cb364-7"><a href="理解机器学习里数据不均衡.html#cb364-7" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(V1, V2, <span class="at">color =</span> group, <span class="at">alpha =</span> <span class="fl">0.5</span>)) <span class="sc">+</span> </span>
-<span id="cb364-8"><a href="理解机器学习里数据不均衡.html#cb364-8" tabindex="-1"></a>  <span class="fu">geom_abline</span>(<span class="at">intercept =</span> <span class="sc">-</span>beta0<span class="sc">/</span>beta2, <span class="at">slope =</span> <span class="sc">-</span>beta1<span class="sc">/</span>beta2, </span>
-<span id="cb364-9"><a href="理解机器学习里数据不均衡.html#cb364-9" tabindex="-1"></a>              <span class="at">linetype =</span> <span class="st">&quot;dashed&quot;</span>, <span class="at">linewidth =</span> <span class="dv">1</span>) <span class="sc">+</span> </span>
-<span id="cb364-10"><a href="理解机器学习里数据不均衡.html#cb364-10" tabindex="-1"></a>  <span class="fu">scale_color_aaas</span>() <span class="sc">+</span> </span>
-<span id="cb364-11"><a href="理解机器学习里数据不均衡.html#cb364-11" tabindex="-1"></a>  <span class="fu">xlim</span>(<span class="sc">-</span><span class="dv">4</span>, <span class="dv">5</span>) <span class="sc">+</span></span>
-<span id="cb364-12"><a href="理解机器学习里数据不均衡.html#cb364-12" tabindex="-1"></a>  <span class="fu">ylim</span>(<span class="sc">-</span><span class="dv">4</span>, <span class="dv">5</span>) <span class="sc">+</span></span>
-<span id="cb364-13"><a href="理解机器学习里数据不均衡.html#cb364-13" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">&quot;数据均衡的模型&quot;</span>) <span class="sc">+</span> </span>
-<span id="cb364-14"><a href="理解机器学习里数据不均衡.html#cb364-14" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span> </span>
-<span id="cb364-15"><a href="理解机器学习里数据不均衡.html#cb364-15" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
-<span id="cb364-16"><a href="理解机器学习里数据不均衡.html#cb364-16" tabindex="-1"></a>    <span class="at">legend.position =</span> <span class="st">&quot;top&quot;</span>, </span>
-<span id="cb364-17"><a href="理解机器学习里数据不均衡.html#cb364-17" tabindex="-1"></a>    <span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="fl">0.5</span>)</span>
-<span id="cb364-18"><a href="理解机器学习里数据不均衡.html#cb364-18" tabindex="-1"></a>  )</span></code></pre></div>
+<div class="sourceCode" id="cb365"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb365-1"><a href="理解机器学习里数据不均衡.html#cb365-1" tabindex="-1"></a>beta0 <span class="ot">=</span> coef1[<span class="dv">1</span>]</span>
+<span id="cb365-2"><a href="理解机器学习里数据不均衡.html#cb365-2" tabindex="-1"></a>beta1 <span class="ot">=</span> coef1[<span class="dv">2</span>]</span>
+<span id="cb365-3"><a href="理解机器学习里数据不均衡.html#cb365-3" tabindex="-1"></a>beta2 <span class="ot">=</span> coef1[<span class="dv">3</span>]</span>
+<span id="cb365-4"><a href="理解机器学习里数据不均衡.html#cb365-4" tabindex="-1"></a></span>
+<span id="cb365-5"><a href="理解机器学习里数据不均衡.html#cb365-5" tabindex="-1"></a>data_test <span class="sc">%&gt;%</span> </span>
+<span id="cb365-6"><a href="理解机器学习里数据不均衡.html#cb365-6" tabindex="-1"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span> </span>
+<span id="cb365-7"><a href="理解机器学习里数据不均衡.html#cb365-7" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(V1, V2, <span class="at">color =</span> group, <span class="at">alpha =</span> <span class="fl">0.5</span>)) <span class="sc">+</span> </span>
+<span id="cb365-8"><a href="理解机器学习里数据不均衡.html#cb365-8" tabindex="-1"></a>  <span class="fu">geom_abline</span>(<span class="at">intercept =</span> <span class="sc">-</span>beta0<span class="sc">/</span>beta2, <span class="at">slope =</span> <span class="sc">-</span>beta1<span class="sc">/</span>beta2, </span>
+<span id="cb365-9"><a href="理解机器学习里数据不均衡.html#cb365-9" tabindex="-1"></a>              <span class="at">linetype =</span> <span class="st">&quot;dashed&quot;</span>, <span class="at">linewidth =</span> <span class="dv">1</span>) <span class="sc">+</span> </span>
+<span id="cb365-10"><a href="理解机器学习里数据不均衡.html#cb365-10" tabindex="-1"></a>  <span class="fu">scale_color_aaas</span>() <span class="sc">+</span> </span>
+<span id="cb365-11"><a href="理解机器学习里数据不均衡.html#cb365-11" tabindex="-1"></a>  <span class="fu">xlim</span>(<span class="sc">-</span><span class="dv">4</span>, <span class="dv">5</span>) <span class="sc">+</span></span>
+<span id="cb365-12"><a href="理解机器学习里数据不均衡.html#cb365-12" tabindex="-1"></a>  <span class="fu">ylim</span>(<span class="sc">-</span><span class="dv">4</span>, <span class="dv">5</span>) <span class="sc">+</span></span>
+<span id="cb365-13"><a href="理解机器学习里数据不均衡.html#cb365-13" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">&quot;数据均衡的模型&quot;</span>) <span class="sc">+</span> </span>
+<span id="cb365-14"><a href="理解机器学习里数据不均衡.html#cb365-14" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span> </span>
+<span id="cb365-15"><a href="理解机器学习里数据不均衡.html#cb365-15" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
+<span id="cb365-16"><a href="理解机器学习里数据不均衡.html#cb365-16" tabindex="-1"></a>    <span class="at">legend.position =</span> <span class="st">&quot;top&quot;</span>, </span>
+<span id="cb365-17"><a href="理解机器学习里数据不均衡.html#cb365-17" tabindex="-1"></a>    <span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="fl">0.5</span>)</span>
+<span id="cb365-18"><a href="理解机器学习里数据不均衡.html#cb365-18" tabindex="-1"></a>  )</span></code></pre></div>
 <p><img src="example7_files/figure-html/unnamed-chunk-2-1.png" width="672" /></p>
 </div>
 <div id="数据不均衡的模型" class="section level3 hasAnchor" number="9.2.2">
 <h3><span class="header-section-number">9.2.2</span> 数据不均衡的模型<a href="理解机器学习里数据不均衡.html#数据不均衡的模型" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<div class="sourceCode" id="cb365"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb365-1"><a href="理解机器学习里数据不均衡.html#cb365-1" tabindex="-1"></a>model2 <span class="ot">=</span> <span class="fu">glm</span>(group <span class="sc">~</span> ., <span class="at">data =</span> data_train_un, <span class="at">family =</span> <span class="fu">binomial</span>())</span>
-<span id="cb365-2"><a href="理解机器学习里数据不均衡.html#cb365-2" tabindex="-1"></a></span>
-<span id="cb365-3"><a href="理解机器学习里数据不均衡.html#cb365-3" tabindex="-1"></a>coef2 <span class="ot">=</span> <span class="fu">coef</span>(model2)</span>
-<span id="cb365-4"><a href="理解机器学习里数据不均衡.html#cb365-4" tabindex="-1"></a>coef2</span></code></pre></div>
+<div class="sourceCode" id="cb366"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb366-1"><a href="理解机器学习里数据不均衡.html#cb366-1" tabindex="-1"></a>model2 <span class="ot">=</span> <span class="fu">glm</span>(group <span class="sc">~</span> ., <span class="at">data =</span> data_train_un, <span class="at">family =</span> <span class="fu">binomial</span>())</span>
+<span id="cb366-2"><a href="理解机器学习里数据不均衡.html#cb366-2" tabindex="-1"></a></span>
+<span id="cb366-3"><a href="理解机器学习里数据不均衡.html#cb366-3" tabindex="-1"></a>coef2 <span class="ot">=</span> <span class="fu">coef</span>(model2)</span>
+<span id="cb366-4"><a href="理解机器学习里数据不均衡.html#cb366-4" tabindex="-1"></a>coef2</span></code></pre></div>
 <pre><code>## (Intercept)          V1          V2 
 ##   -2.377790    3.458357   -2.936726</code></pre>
-<div class="sourceCode" id="cb367"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb367-1"><a href="理解机器学习里数据不均衡.html#cb367-1" tabindex="-1"></a>beta0 <span class="ot">=</span> coef2[<span class="dv">1</span>]</span>
-<span id="cb367-2"><a href="理解机器学习里数据不均衡.html#cb367-2" tabindex="-1"></a>beta1 <span class="ot">=</span> coef2[<span class="dv">2</span>]</span>
-<span id="cb367-3"><a href="理解机器学习里数据不均衡.html#cb367-3" tabindex="-1"></a>beta2 <span class="ot">=</span> coef2[<span class="dv">3</span>]</span>
-<span id="cb367-4"><a href="理解机器学习里数据不均衡.html#cb367-4" tabindex="-1"></a></span>
-<span id="cb367-5"><a href="理解机器学习里数据不均衡.html#cb367-5" tabindex="-1"></a>data_test <span class="sc">%&gt;%</span> </span>
-<span id="cb367-6"><a href="理解机器学习里数据不均衡.html#cb367-6" tabindex="-1"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span> </span>
-<span id="cb367-7"><a href="理解机器学习里数据不均衡.html#cb367-7" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(V1, V2, <span class="at">color =</span> group, <span class="at">alpha =</span> <span class="fl">0.5</span>)) <span class="sc">+</span> </span>
-<span id="cb367-8"><a href="理解机器学习里数据不均衡.html#cb367-8" tabindex="-1"></a>  <span class="fu">geom_abline</span>(<span class="at">intercept =</span> <span class="sc">-</span>beta0<span class="sc">/</span>beta2, <span class="at">slope =</span> <span class="sc">-</span>beta1<span class="sc">/</span>beta2, </span>
-<span id="cb367-9"><a href="理解机器学习里数据不均衡.html#cb367-9" tabindex="-1"></a>              <span class="at">linetype =</span> <span class="st">&quot;dashed&quot;</span>, <span class="at">linewidth =</span> <span class="dv">1</span>) <span class="sc">+</span> </span>
-<span id="cb367-10"><a href="理解机器学习里数据不均衡.html#cb367-10" tabindex="-1"></a>  <span class="fu">scale_color_aaas</span>() <span class="sc">+</span> </span>
-<span id="cb367-11"><a href="理解机器学习里数据不均衡.html#cb367-11" tabindex="-1"></a>  <span class="fu">xlim</span>(<span class="sc">-</span><span class="dv">4</span>, <span class="dv">5</span>) <span class="sc">+</span></span>
-<span id="cb367-12"><a href="理解机器学习里数据不均衡.html#cb367-12" tabindex="-1"></a>  <span class="fu">ylim</span>(<span class="sc">-</span><span class="dv">4</span>, <span class="dv">5</span>) <span class="sc">+</span></span>
-<span id="cb367-13"><a href="理解机器学习里数据不均衡.html#cb367-13" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">&quot;数据不均衡的模型&quot;</span>) <span class="sc">+</span> </span>
-<span id="cb367-14"><a href="理解机器学习里数据不均衡.html#cb367-14" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span> </span>
-<span id="cb367-15"><a href="理解机器学习里数据不均衡.html#cb367-15" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
-<span id="cb367-16"><a href="理解机器学习里数据不均衡.html#cb367-16" tabindex="-1"></a>    <span class="at">legend.position =</span> <span class="st">&quot;top&quot;</span>, </span>
-<span id="cb367-17"><a href="理解机器学习里数据不均衡.html#cb367-17" tabindex="-1"></a>    <span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="fl">0.5</span>)</span>
-<span id="cb367-18"><a href="理解机器学习里数据不均衡.html#cb367-18" tabindex="-1"></a>  )</span></code></pre></div>
+<div class="sourceCode" id="cb368"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb368-1"><a href="理解机器学习里数据不均衡.html#cb368-1" tabindex="-1"></a>beta0 <span class="ot">=</span> coef2[<span class="dv">1</span>]</span>
+<span id="cb368-2"><a href="理解机器学习里数据不均衡.html#cb368-2" tabindex="-1"></a>beta1 <span class="ot">=</span> coef2[<span class="dv">2</span>]</span>
+<span id="cb368-3"><a href="理解机器学习里数据不均衡.html#cb368-3" tabindex="-1"></a>beta2 <span class="ot">=</span> coef2[<span class="dv">3</span>]</span>
+<span id="cb368-4"><a href="理解机器学习里数据不均衡.html#cb368-4" tabindex="-1"></a></span>
+<span id="cb368-5"><a href="理解机器学习里数据不均衡.html#cb368-5" tabindex="-1"></a>data_test <span class="sc">%&gt;%</span> </span>
+<span id="cb368-6"><a href="理解机器学习里数据不均衡.html#cb368-6" tabindex="-1"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span> </span>
+<span id="cb368-7"><a href="理解机器学习里数据不均衡.html#cb368-7" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(V1, V2, <span class="at">color =</span> group, <span class="at">alpha =</span> <span class="fl">0.5</span>)) <span class="sc">+</span> </span>
+<span id="cb368-8"><a href="理解机器学习里数据不均衡.html#cb368-8" tabindex="-1"></a>  <span class="fu">geom_abline</span>(<span class="at">intercept =</span> <span class="sc">-</span>beta0<span class="sc">/</span>beta2, <span class="at">slope =</span> <span class="sc">-</span>beta1<span class="sc">/</span>beta2, </span>
+<span id="cb368-9"><a href="理解机器学习里数据不均衡.html#cb368-9" tabindex="-1"></a>              <span class="at">linetype =</span> <span class="st">&quot;dashed&quot;</span>, <span class="at">linewidth =</span> <span class="dv">1</span>) <span class="sc">+</span> </span>
+<span id="cb368-10"><a href="理解机器学习里数据不均衡.html#cb368-10" tabindex="-1"></a>  <span class="fu">scale_color_aaas</span>() <span class="sc">+</span> </span>
+<span id="cb368-11"><a href="理解机器学习里数据不均衡.html#cb368-11" tabindex="-1"></a>  <span class="fu">xlim</span>(<span class="sc">-</span><span class="dv">4</span>, <span class="dv">5</span>) <span class="sc">+</span></span>
+<span id="cb368-12"><a href="理解机器学习里数据不均衡.html#cb368-12" tabindex="-1"></a>  <span class="fu">ylim</span>(<span class="sc">-</span><span class="dv">4</span>, <span class="dv">5</span>) <span class="sc">+</span></span>
+<span id="cb368-13"><a href="理解机器学习里数据不均衡.html#cb368-13" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">&quot;数据不均衡的模型&quot;</span>) <span class="sc">+</span> </span>
+<span id="cb368-14"><a href="理解机器学习里数据不均衡.html#cb368-14" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span> </span>
+<span id="cb368-15"><a href="理解机器学习里数据不均衡.html#cb368-15" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
+<span id="cb368-16"><a href="理解机器学习里数据不均衡.html#cb368-16" tabindex="-1"></a>    <span class="at">legend.position =</span> <span class="st">&quot;top&quot;</span>, </span>
+<span id="cb368-17"><a href="理解机器学习里数据不均衡.html#cb368-17" tabindex="-1"></a>    <span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="fl">0.5</span>)</span>
+<span id="cb368-18"><a href="理解机器学习里数据不均衡.html#cb368-18" tabindex="-1"></a>  )</span></code></pre></div>
 <p><img src="example7_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
-<div class="sourceCode" id="cb368"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb368-1"><a href="理解机器学习里数据不均衡.html#cb368-1" tabindex="-1"></a>coef1; coef2</span></code></pre></div>
+<div class="sourceCode" id="cb369"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb369-1"><a href="理解机器学习里数据不均衡.html#cb369-1" tabindex="-1"></a>coef1; coef2</span></code></pre></div>
 <pre><code>## (Intercept)          V1          V2 
 ##  -0.6530901   3.4637531  -3.1321564</code></pre>
 <pre><code>## (Intercept)          V1          V2 
@@ -472,118 +472,90 @@ div.csl-indent {
 </div>
 <div id="训练集上后处理准确率的模型" class="section level3 hasAnchor" number="9.2.3">
 <h3><span class="header-section-number">9.2.3</span> 训练集上后处理准确率的模型<a href="理解机器学习里数据不均衡.html#训练集上后处理准确率的模型" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<div class="sourceCode" id="cb371"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb371-1"><a href="理解机器学习里数据不均衡.html#cb371-1" tabindex="-1"></a>model2 <span class="ot">=</span> <span class="fu">glm</span>(group <span class="sc">~</span> ., <span class="at">data =</span> data_train_un, <span class="at">family =</span> <span class="fu">binomial</span>())</span>
-<span id="cb371-2"><a href="理解机器学习里数据不均衡.html#cb371-2" tabindex="-1"></a></span>
-<span id="cb371-3"><a href="理解机器学习里数据不均衡.html#cb371-3" tabindex="-1"></a>coef2 <span class="ot">=</span> <span class="fu">coef</span>(model2)</span>
-<span id="cb371-4"><a href="理解机器学习里数据不均衡.html#cb371-4" tabindex="-1"></a>coef2</span></code></pre></div>
+<div class="sourceCode" id="cb372"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb372-1"><a href="理解机器学习里数据不均衡.html#cb372-1" tabindex="-1"></a>model2 <span class="ot">=</span> <span class="fu">glm</span>(group <span class="sc">~</span> ., <span class="at">data =</span> data_train_un, <span class="at">family =</span> <span class="fu">binomial</span>())</span>
+<span id="cb372-2"><a href="理解机器学习里数据不均衡.html#cb372-2" tabindex="-1"></a></span>
+<span id="cb372-3"><a href="理解机器学习里数据不均衡.html#cb372-3" tabindex="-1"></a>coef2 <span class="ot">=</span> <span class="fu">coef</span>(model2)</span>
+<span id="cb372-4"><a href="理解机器学习里数据不均衡.html#cb372-4" tabindex="-1"></a>coef2</span></code></pre></div>
 <pre><code>## (Intercept)          V1          V2 
 ##   -2.377790    3.458357   -2.936726</code></pre>
-<div class="sourceCode" id="cb373"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb373-1"><a href="理解机器学习里数据不均衡.html#cb373-1" tabindex="-1"></a>beta0 <span class="ot">=</span> coef2[<span class="dv">1</span>]</span>
-<span id="cb373-2"><a href="理解机器学习里数据不均衡.html#cb373-2" tabindex="-1"></a>beta1 <span class="ot">=</span> coef2[<span class="dv">2</span>]</span>
-<span id="cb373-3"><a href="理解机器学习里数据不均衡.html#cb373-3" tabindex="-1"></a>beta2 <span class="ot">=</span> coef2[<span class="dv">3</span>]</span>
-<span id="cb373-4"><a href="理解机器学习里数据不均衡.html#cb373-4" tabindex="-1"></a></span>
-<span id="cb373-5"><a href="理解机器学习里数据不均衡.html#cb373-5" tabindex="-1"></a>logit <span class="ot">=</span> <span class="cf">function</span>(x) <span class="fu">exp</span>(x) <span class="sc">/</span> (<span class="fu">exp</span>(x) <span class="sc">+</span> <span class="dv">1</span>)</span>
-<span id="cb373-6"><a href="理解机器学习里数据不均衡.html#cb373-6" tabindex="-1"></a>logit_inverse <span class="ot">=</span> <span class="cf">function</span>(y) <span class="fu">log</span>(y) <span class="sc">-</span> <span class="fu">log</span>(<span class="dv">1</span><span class="sc">-</span>y)</span>
-<span id="cb373-7"><a href="理解机器学习里数据不均衡.html#cb373-7" tabindex="-1"></a>acc <span class="ot">=</span> <span class="cf">function</span>(truth, response) <span class="fu">sum</span>(truth <span class="sc">-</span> response <span class="sc">==</span> <span class="dv">0</span>)<span class="sc">/</span><span class="fu">length</span>(truth)</span>
-<span id="cb373-8"><a href="理解机器学习里数据不均衡.html#cb373-8" tabindex="-1"></a>decide <span class="ot">=</span> <span class="cf">function</span>(response, <span class="at">thres=</span><span class="fl">0.5</span>) <span class="fu">ifelse</span>(response <span class="sc">&gt;</span> thres, <span class="dv">1</span>, <span class="dv">0</span>)</span>
-<span id="cb373-9"><a href="理解机器学习里数据不均衡.html#cb373-9" tabindex="-1"></a></span>
-<span id="cb373-10"><a href="理解机器学习里数据不均衡.html#cb373-10" tabindex="-1"></a><span class="co"># acc(as.numeric(data_train_un$group) - 1, decide(logit(predict(model, data_train_un))))</span></span>
-<span id="cb373-11"><a href="理解机器学习里数据不均衡.html#cb373-11" tabindex="-1"></a>post <span class="ot">=</span> <span class="fu">optimize</span>(\(x) <span class="sc">-</span><span class="fu">acc</span>(<span class="fu">as.numeric</span>(data_train_un<span class="sc">$</span>group) <span class="sc">-</span> <span class="dv">1</span>, <span class="fu">decide</span>(<span class="fu">logit</span>(<span class="fu">predict</span>(model2, data_train_un)), <span class="at">thres=</span>x)), <span class="at">lower =</span> <span class="dv">0</span>, <span class="at">upper =</span> <span class="dv">1</span>)</span>
-<span id="cb373-12"><a href="理解机器学习里数据不均衡.html#cb373-12" tabindex="-1"></a>Z <span class="ot">=</span> post<span class="sc">$</span>minimum</span>
-<span id="cb373-13"><a href="理解机器学习里数据不均衡.html#cb373-13" tabindex="-1"></a>post</span></code></pre></div>
+<div class="sourceCode" id="cb374"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb374-1"><a href="理解机器学习里数据不均衡.html#cb374-1" tabindex="-1"></a>beta0 <span class="ot">=</span> coef2[<span class="dv">1</span>]</span>
+<span id="cb374-2"><a href="理解机器学习里数据不均衡.html#cb374-2" tabindex="-1"></a>beta1 <span class="ot">=</span> coef2[<span class="dv">2</span>]</span>
+<span id="cb374-3"><a href="理解机器学习里数据不均衡.html#cb374-3" tabindex="-1"></a>beta2 <span class="ot">=</span> coef2[<span class="dv">3</span>]</span>
+<span id="cb374-4"><a href="理解机器学习里数据不均衡.html#cb374-4" tabindex="-1"></a></span>
+<span id="cb374-5"><a href="理解机器学习里数据不均衡.html#cb374-5" tabindex="-1"></a>logit <span class="ot">=</span> <span class="cf">function</span>(x) <span class="fu">exp</span>(x) <span class="sc">/</span> (<span class="fu">exp</span>(x) <span class="sc">+</span> <span class="dv">1</span>)</span>
+<span id="cb374-6"><a href="理解机器学习里数据不均衡.html#cb374-6" tabindex="-1"></a>logit_inverse <span class="ot">=</span> <span class="cf">function</span>(y) <span class="fu">log</span>(y) <span class="sc">-</span> <span class="fu">log</span>(<span class="dv">1</span><span class="sc">-</span>y)</span>
+<span id="cb374-7"><a href="理解机器学习里数据不均衡.html#cb374-7" tabindex="-1"></a>acc <span class="ot">=</span> <span class="cf">function</span>(truth, response) <span class="fu">sum</span>(truth <span class="sc">-</span> response <span class="sc">==</span> <span class="dv">0</span>)<span class="sc">/</span><span class="fu">length</span>(truth)</span>
+<span id="cb374-8"><a href="理解机器学习里数据不均衡.html#cb374-8" tabindex="-1"></a>decide <span class="ot">=</span> <span class="cf">function</span>(response, <span class="at">thres=</span><span class="fl">0.5</span>) <span class="fu">ifelse</span>(response <span class="sc">&gt;</span> thres, <span class="dv">1</span>, <span class="dv">0</span>)</span>
+<span id="cb374-9"><a href="理解机器学习里数据不均衡.html#cb374-9" tabindex="-1"></a></span>
+<span id="cb374-10"><a href="理解机器学习里数据不均衡.html#cb374-10" tabindex="-1"></a><span class="co"># acc(as.numeric(data_train_un$group) - 1, decide(logit(predict(model, data_train_un))))</span></span>
+<span id="cb374-11"><a href="理解机器学习里数据不均衡.html#cb374-11" tabindex="-1"></a>post <span class="ot">=</span> <span class="fu">optimize</span>(\(x) <span class="sc">-</span><span class="fu">acc</span>(<span class="fu">as.numeric</span>(data_train_un<span class="sc">$</span>group) <span class="sc">-</span> <span class="dv">1</span>, <span class="fu">decide</span>(<span class="fu">logit</span>(<span class="fu">predict</span>(model2, data_train_un)), <span class="at">thres=</span>x)), <span class="at">lower =</span> <span class="dv">0</span>, <span class="at">upper =</span> <span class="dv">1</span>)</span>
+<span id="cb374-12"><a href="理解机器学习里数据不均衡.html#cb374-12" tabindex="-1"></a>Z <span class="ot">=</span> post<span class="sc">$</span>minimum</span>
+<span id="cb374-13"><a href="理解机器学习里数据不均衡.html#cb374-13" tabindex="-1"></a>post</span></code></pre></div>
 <pre><code>## $minimum
 ## [1] 0.5305961
 ## 
 ## $objective
 ## [1] -0.9608333</code></pre>
-<div class="sourceCode" id="cb375"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb375-1"><a href="理解机器学习里数据不均衡.html#cb375-1" tabindex="-1"></a>data_test <span class="sc">%&gt;%</span> </span>
-<span id="cb375-2"><a href="理解机器学习里数据不均衡.html#cb375-2" tabindex="-1"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span> </span>
-<span id="cb375-3"><a href="理解机器学习里数据不均衡.html#cb375-3" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(V1, V2, <span class="at">color =</span> group, <span class="at">alpha =</span> <span class="fl">0.5</span>)) <span class="sc">+</span> </span>
-<span id="cb375-4"><a href="理解机器学习里数据不均衡.html#cb375-4" tabindex="-1"></a>  <span class="fu">geom_abline</span>(<span class="at">intercept =</span> Z<span class="sc">/</span>beta2 <span class="sc">-</span> beta0<span class="sc">/</span>beta2, <span class="at">slope =</span> <span class="sc">-</span>beta1<span class="sc">/</span>beta2, </span>
-<span id="cb375-5"><a href="理解机器学习里数据不均衡.html#cb375-5" tabindex="-1"></a>              <span class="at">linetype =</span> <span class="st">&quot;dashed&quot;</span>, <span class="at">linewidth =</span> <span class="dv">1</span>) <span class="sc">+</span> </span>
-<span id="cb375-6"><a href="理解机器学习里数据不均衡.html#cb375-6" tabindex="-1"></a>  <span class="fu">scale_color_aaas</span>() <span class="sc">+</span> </span>
-<span id="cb375-7"><a href="理解机器学习里数据不均衡.html#cb375-7" tabindex="-1"></a>  <span class="fu">xlim</span>(<span class="sc">-</span><span class="dv">4</span>, <span class="dv">5</span>) <span class="sc">+</span></span>
-<span id="cb375-8"><a href="理解机器学习里数据不均衡.html#cb375-8" tabindex="-1"></a>  <span class="fu">ylim</span>(<span class="sc">-</span><span class="dv">4</span>, <span class="dv">5</span>) <span class="sc">+</span></span>
-<span id="cb375-9"><a href="理解机器学习里数据不均衡.html#cb375-9" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">&quot;训练集上后处理准确率的模型&quot;</span>) <span class="sc">+</span> </span>
-<span id="cb375-10"><a href="理解机器学习里数据不均衡.html#cb375-10" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span> </span>
-<span id="cb375-11"><a href="理解机器学习里数据不均衡.html#cb375-11" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
-<span id="cb375-12"><a href="理解机器学习里数据不均衡.html#cb375-12" tabindex="-1"></a>    <span class="at">legend.position =</span> <span class="st">&quot;top&quot;</span>, </span>
-<span id="cb375-13"><a href="理解机器学习里数据不均衡.html#cb375-13" tabindex="-1"></a>    <span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="fl">0.5</span>)</span>
-<span id="cb375-14"><a href="理解机器学习里数据不均衡.html#cb375-14" tabindex="-1"></a>  )</span></code></pre></div>
+<div class="sourceCode" id="cb376"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb376-1"><a href="理解机器学习里数据不均衡.html#cb376-1" tabindex="-1"></a>data_test <span class="sc">%&gt;%</span> </span>
+<span id="cb376-2"><a href="理解机器学习里数据不均衡.html#cb376-2" tabindex="-1"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span> </span>
+<span id="cb376-3"><a href="理解机器学习里数据不均衡.html#cb376-3" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(V1, V2, <span class="at">color =</span> group, <span class="at">alpha =</span> <span class="fl">0.5</span>)) <span class="sc">+</span> </span>
+<span id="cb376-4"><a href="理解机器学习里数据不均衡.html#cb376-4" tabindex="-1"></a>  <span class="fu">geom_abline</span>(<span class="at">intercept =</span> Z<span class="sc">/</span>beta2 <span class="sc">-</span> beta0<span class="sc">/</span>beta2, <span class="at">slope =</span> <span class="sc">-</span>beta1<span class="sc">/</span>beta2, </span>
+<span id="cb376-5"><a href="理解机器学习里数据不均衡.html#cb376-5" tabindex="-1"></a>              <span class="at">linetype =</span> <span class="st">&quot;dashed&quot;</span>, <span class="at">linewidth =</span> <span class="dv">1</span>) <span class="sc">+</span> </span>
+<span id="cb376-6"><a href="理解机器学习里数据不均衡.html#cb376-6" tabindex="-1"></a>  <span class="fu">scale_color_aaas</span>() <span class="sc">+</span> </span>
+<span id="cb376-7"><a href="理解机器学习里数据不均衡.html#cb376-7" tabindex="-1"></a>  <span class="fu">xlim</span>(<span class="sc">-</span><span class="dv">4</span>, <span class="dv">5</span>) <span class="sc">+</span></span>
+<span id="cb376-8"><a href="理解机器学习里数据不均衡.html#cb376-8" tabindex="-1"></a>  <span class="fu">ylim</span>(<span class="sc">-</span><span class="dv">4</span>, <span class="dv">5</span>) <span class="sc">+</span></span>
+<span id="cb376-9"><a href="理解机器学习里数据不均衡.html#cb376-9" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">&quot;训练集上后处理准确率的模型&quot;</span>) <span class="sc">+</span> </span>
+<span id="cb376-10"><a href="理解机器学习里数据不均衡.html#cb376-10" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span> </span>
+<span id="cb376-11"><a href="理解机器学习里数据不均衡.html#cb376-11" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
+<span id="cb376-12"><a href="理解机器学习里数据不均衡.html#cb376-12" tabindex="-1"></a>    <span class="at">legend.position =</span> <span class="st">&quot;top&quot;</span>, </span>
+<span id="cb376-13"><a href="理解机器学习里数据不均衡.html#cb376-13" tabindex="-1"></a>    <span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="fl">0.5</span>)</span>
+<span id="cb376-14"><a href="理解机器学习里数据不均衡.html#cb376-14" tabindex="-1"></a>  )</span></code></pre></div>
 <p><img src="example7_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
 </div>
 <div id="测试集上后处理准确率" class="section level3 hasAnchor" number="9.2.4">
 <h3><span class="header-section-number">9.2.4</span> 测试集上后处理准确率<a href="理解机器学习里数据不均衡.html#测试集上后处理准确率" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<div class="sourceCode" id="cb376"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb376-1"><a href="理解机器学习里数据不均衡.html#cb376-1" tabindex="-1"></a>model2 <span class="ot">=</span> <span class="fu">glm</span>(group <span class="sc">~</span> ., <span class="at">data =</span> data_train_un, <span class="at">family =</span> <span class="fu">binomial</span>())</span>
-<span id="cb376-2"><a href="理解机器学习里数据不均衡.html#cb376-2" tabindex="-1"></a></span>
-<span id="cb376-3"><a href="理解机器学习里数据不均衡.html#cb376-3" tabindex="-1"></a>coef2 <span class="ot">=</span> <span class="fu">coef</span>(model2)</span>
-<span id="cb376-4"><a href="理解机器学习里数据不均衡.html#cb376-4" tabindex="-1"></a>coef2</span></code></pre></div>
+<div class="sourceCode" id="cb377"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb377-1"><a href="理解机器学习里数据不均衡.html#cb377-1" tabindex="-1"></a>model2 <span class="ot">=</span> <span class="fu">glm</span>(group <span class="sc">~</span> ., <span class="at">data =</span> data_train_un, <span class="at">family =</span> <span class="fu">binomial</span>())</span>
+<span id="cb377-2"><a href="理解机器学习里数据不均衡.html#cb377-2" tabindex="-1"></a></span>
+<span id="cb377-3"><a href="理解机器学习里数据不均衡.html#cb377-3" tabindex="-1"></a>coef2 <span class="ot">=</span> <span class="fu">coef</span>(model2)</span>
+<span id="cb377-4"><a href="理解机器学习里数据不均衡.html#cb377-4" tabindex="-1"></a>coef2</span></code></pre></div>
 <pre><code>## (Intercept)          V1          V2 
 ##   -2.377790    3.458357   -2.936726</code></pre>
-<div class="sourceCode" id="cb378"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb378-1"><a href="理解机器学习里数据不均衡.html#cb378-1" tabindex="-1"></a>beta0 <span class="ot">=</span> coef2[<span class="dv">1</span>]</span>
-<span id="cb378-2"><a href="理解机器学习里数据不均衡.html#cb378-2" tabindex="-1"></a>beta1 <span class="ot">=</span> coef2[<span class="dv">2</span>]</span>
-<span id="cb378-3"><a href="理解机器学习里数据不均衡.html#cb378-3" tabindex="-1"></a>beta2 <span class="ot">=</span> coef2[<span class="dv">3</span>]</span>
-<span id="cb378-4"><a href="理解机器学习里数据不均衡.html#cb378-4" tabindex="-1"></a></span>
-<span id="cb378-5"><a href="理解机器学习里数据不均衡.html#cb378-5" tabindex="-1"></a>post <span class="ot">=</span> <span class="fu">optimize</span>(\(x) <span class="sc">-</span><span class="fu">acc</span>(<span class="fu">as.numeric</span>(data_test<span class="sc">$</span>group) <span class="sc">-</span> <span class="dv">1</span>, <span class="fu">decide</span>(<span class="fu">logit</span>(<span class="fu">predict</span>(model2, data_test)), <span class="at">thres=</span>x)), <span class="at">lower =</span> <span class="dv">0</span>, <span class="at">upper =</span> <span class="dv">1</span>)</span>
-<span id="cb378-6"><a href="理解机器学习里数据不均衡.html#cb378-6" tabindex="-1"></a>Z <span class="ot">=</span> post<span class="sc">$</span>minimum</span>
-<span id="cb378-7"><a href="理解机器学习里数据不均衡.html#cb378-7" tabindex="-1"></a>post</span></code></pre></div>
+<div class="sourceCode" id="cb379"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb379-1"><a href="理解机器学习里数据不均衡.html#cb379-1" tabindex="-1"></a>beta0 <span class="ot">=</span> coef2[<span class="dv">1</span>]</span>
+<span id="cb379-2"><a href="理解机器学习里数据不均衡.html#cb379-2" tabindex="-1"></a>beta1 <span class="ot">=</span> coef2[<span class="dv">2</span>]</span>
+<span id="cb379-3"><a href="理解机器学习里数据不均衡.html#cb379-3" tabindex="-1"></a>beta2 <span class="ot">=</span> coef2[<span class="dv">3</span>]</span>
+<span id="cb379-4"><a href="理解机器学习里数据不均衡.html#cb379-4" tabindex="-1"></a></span>
+<span id="cb379-5"><a href="理解机器学习里数据不均衡.html#cb379-5" tabindex="-1"></a>post <span class="ot">=</span> <span class="fu">optimize</span>(\(x) <span class="sc">-</span><span class="fu">acc</span>(<span class="fu">as.numeric</span>(data_test<span class="sc">$</span>group) <span class="sc">-</span> <span class="dv">1</span>, <span class="fu">decide</span>(<span class="fu">logit</span>(<span class="fu">predict</span>(model2, data_test)), <span class="at">thres=</span>x)), <span class="at">lower =</span> <span class="dv">0</span>, <span class="at">upper =</span> <span class="dv">1</span>)</span>
+<span id="cb379-6"><a href="理解机器学习里数据不均衡.html#cb379-6" tabindex="-1"></a>Z <span class="ot">=</span> post<span class="sc">$</span>minimum</span>
+<span id="cb379-7"><a href="理解机器学习里数据不均衡.html#cb379-7" tabindex="-1"></a>post</span></code></pre></div>
 <pre><code>## $minimum
 ## [1] 0.2293371
 ## 
 ## $objective
 ## [1] -0.909</code></pre>
-<div class="sourceCode" id="cb380"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb380-1"><a href="理解机器学习里数据不均衡.html#cb380-1" tabindex="-1"></a>data_test <span class="sc">%&gt;%</span> </span>
-<span id="cb380-2"><a href="理解机器学习里数据不均衡.html#cb380-2" tabindex="-1"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span> </span>
-<span id="cb380-3"><a href="理解机器学习里数据不均衡.html#cb380-3" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(V1, V2, <span class="at">color =</span> group, <span class="at">alpha =</span> <span class="fl">0.5</span>)) <span class="sc">+</span> </span>
-<span id="cb380-4"><a href="理解机器学习里数据不均衡.html#cb380-4" tabindex="-1"></a>  <span class="fu">geom_abline</span>(<span class="at">intercept =</span> Z<span class="sc">/</span>beta2 <span class="sc">-</span> beta0<span class="sc">/</span>beta2, <span class="at">slope =</span> <span class="sc">-</span>beta1<span class="sc">/</span>beta2, </span>
-<span id="cb380-5"><a href="理解机器学习里数据不均衡.html#cb380-5" tabindex="-1"></a>              <span class="at">linetype =</span> <span class="st">&quot;dashed&quot;</span>, <span class="at">linewidth =</span> <span class="dv">1</span>) <span class="sc">+</span> </span>
-<span id="cb380-6"><a href="理解机器学习里数据不均衡.html#cb380-6" tabindex="-1"></a>  <span class="fu">scale_color_aaas</span>() <span class="sc">+</span> </span>
-<span id="cb380-7"><a href="理解机器学习里数据不均衡.html#cb380-7" tabindex="-1"></a>  <span class="fu">xlim</span>(<span class="sc">-</span><span class="dv">4</span>, <span class="dv">5</span>) <span class="sc">+</span></span>
-<span id="cb380-8"><a href="理解机器学习里数据不均衡.html#cb380-8" tabindex="-1"></a>  <span class="fu">ylim</span>(<span class="sc">-</span><span class="dv">4</span>, <span class="dv">5</span>) <span class="sc">+</span></span>
-<span id="cb380-9"><a href="理解机器学习里数据不均衡.html#cb380-9" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">&quot;测试集上后处理准确率&quot;</span>) <span class="sc">+</span> </span>
-<span id="cb380-10"><a href="理解机器学习里数据不均衡.html#cb380-10" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span> </span>
-<span id="cb380-11"><a href="理解机器学习里数据不均衡.html#cb380-11" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
-<span id="cb380-12"><a href="理解机器学习里数据不均衡.html#cb380-12" tabindex="-1"></a>    <span class="at">legend.position =</span> <span class="st">&quot;top&quot;</span>, </span>
-<span id="cb380-13"><a href="理解机器学习里数据不均衡.html#cb380-13" tabindex="-1"></a>    <span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="fl">0.5</span>)</span>
-<span id="cb380-14"><a href="理解机器学习里数据不均衡.html#cb380-14" tabindex="-1"></a>  )</span></code></pre></div>
+<div class="sourceCode" id="cb381"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb381-1"><a href="理解机器学习里数据不均衡.html#cb381-1" tabindex="-1"></a>data_test <span class="sc">%&gt;%</span> </span>
+<span id="cb381-2"><a href="理解机器学习里数据不均衡.html#cb381-2" tabindex="-1"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span> </span>
+<span id="cb381-3"><a href="理解机器学习里数据不均衡.html#cb381-3" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(V1, V2, <span class="at">color =</span> group, <span class="at">alpha =</span> <span class="fl">0.5</span>)) <span class="sc">+</span> </span>
+<span id="cb381-4"><a href="理解机器学习里数据不均衡.html#cb381-4" tabindex="-1"></a>  <span class="fu">geom_abline</span>(<span class="at">intercept =</span> Z<span class="sc">/</span>beta2 <span class="sc">-</span> beta0<span class="sc">/</span>beta2, <span class="at">slope =</span> <span class="sc">-</span>beta1<span class="sc">/</span>beta2, </span>
+<span id="cb381-5"><a href="理解机器学习里数据不均衡.html#cb381-5" tabindex="-1"></a>              <span class="at">linetype =</span> <span class="st">&quot;dashed&quot;</span>, <span class="at">linewidth =</span> <span class="dv">1</span>) <span class="sc">+</span> </span>
+<span id="cb381-6"><a href="理解机器学习里数据不均衡.html#cb381-6" tabindex="-1"></a>  <span class="fu">scale_color_aaas</span>() <span class="sc">+</span> </span>
+<span id="cb381-7"><a href="理解机器学习里数据不均衡.html#cb381-7" tabindex="-1"></a>  <span class="fu">xlim</span>(<span class="sc">-</span><span class="dv">4</span>, <span class="dv">5</span>) <span class="sc">+</span></span>
+<span id="cb381-8"><a href="理解机器学习里数据不均衡.html#cb381-8" tabindex="-1"></a>  <span class="fu">ylim</span>(<span class="sc">-</span><span class="dv">4</span>, <span class="dv">5</span>) <span class="sc">+</span></span>
+<span id="cb381-9"><a href="理解机器学习里数据不均衡.html#cb381-9" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">&quot;测试集上后处理准确率&quot;</span>) <span class="sc">+</span> </span>
+<span id="cb381-10"><a href="理解机器学习里数据不均衡.html#cb381-10" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span> </span>
+<span id="cb381-11"><a href="理解机器学习里数据不均衡.html#cb381-11" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
+<span id="cb381-12"><a href="理解机器学习里数据不均衡.html#cb381-12" tabindex="-1"></a>    <span class="at">legend.position =</span> <span class="st">&quot;top&quot;</span>, </span>
+<span id="cb381-13"><a href="理解机器学习里数据不均衡.html#cb381-13" tabindex="-1"></a>    <span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="fl">0.5</span>)</span>
+<span id="cb381-14"><a href="理解机器学习里数据不均衡.html#cb381-14" tabindex="-1"></a>  )</span></code></pre></div>
 <p><img src="example7_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
 </div>
 <div id="过采样的模型" class="section level3 hasAnchor" number="9.2.5">
 <h3><span class="header-section-number">9.2.5</span> 过采样的模型<a href="理解机器学习里数据不均衡.html#过采样的模型" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<div class="sourceCode" id="cb381"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb381-1"><a href="理解机器学习里数据不均衡.html#cb381-1" tabindex="-1"></a>up_sample <span class="ot">=</span> <span class="cf">function</span>(tb, index) tb[<span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">1000</span>, <span class="fu">sample</span>(index, <span class="dv">1000</span>, <span class="at">replace =</span> T)), ]</span>
-<span id="cb381-2"><a href="理解机器学习里数据不均衡.html#cb381-2" tabindex="-1"></a>data_train_un_up   <span class="ot">=</span> <span class="fu">up_sample</span>(data_train_un, <span class="dv">1001</span><span class="sc">:</span><span class="dv">1200</span>)</span>
-<span id="cb381-3"><a href="理解机器学习里数据不均衡.html#cb381-3" tabindex="-1"></a></span>
-<span id="cb381-4"><a href="理解机器学习里数据不均衡.html#cb381-4" tabindex="-1"></a>model_up <span class="ot">=</span> <span class="fu">glm</span>(group <span class="sc">~</span> ., <span class="at">data =</span> data_train_un_up, <span class="at">family =</span> <span class="fu">binomial</span>())</span>
-<span id="cb381-5"><a href="理解机器学习里数据不均衡.html#cb381-5" tabindex="-1"></a></span>
-<span id="cb381-6"><a href="理解机器学习里数据不均衡.html#cb381-6" tabindex="-1"></a>coef2 <span class="ot">=</span> <span class="fu">coef</span>(model_up)</span>
-<span id="cb381-7"><a href="理解机器学习里数据不均衡.html#cb381-7" tabindex="-1"></a>beta0 <span class="ot">=</span> coef2[<span class="dv">1</span>]</span>
-<span id="cb381-8"><a href="理解机器学习里数据不均衡.html#cb381-8" tabindex="-1"></a>beta1 <span class="ot">=</span> coef2[<span class="dv">2</span>]</span>
-<span id="cb381-9"><a href="理解机器学习里数据不均衡.html#cb381-9" tabindex="-1"></a>beta2 <span class="ot">=</span> coef2[<span class="dv">3</span>]</span>
-<span id="cb381-10"><a href="理解机器学习里数据不均衡.html#cb381-10" tabindex="-1"></a></span>
-<span id="cb381-11"><a href="理解机器学习里数据不均衡.html#cb381-11" tabindex="-1"></a>data_test <span class="sc">%&gt;%</span> </span>
-<span id="cb381-12"><a href="理解机器学习里数据不均衡.html#cb381-12" tabindex="-1"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span> </span>
-<span id="cb381-13"><a href="理解机器学习里数据不均衡.html#cb381-13" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(V1, V2, <span class="at">color =</span> group, <span class="at">alpha =</span> <span class="fl">0.5</span>)) <span class="sc">+</span> </span>
-<span id="cb381-14"><a href="理解机器学习里数据不均衡.html#cb381-14" tabindex="-1"></a>  <span class="fu">geom_abline</span>(<span class="at">intercept =</span> <span class="sc">-</span>beta0<span class="sc">/</span>beta2, <span class="at">slope =</span> <span class="sc">-</span>beta1<span class="sc">/</span>beta2, </span>
-<span id="cb381-15"><a href="理解机器学习里数据不均衡.html#cb381-15" tabindex="-1"></a>              <span class="at">linetype =</span> <span class="st">&quot;dashed&quot;</span>, <span class="at">linewidth =</span> <span class="dv">1</span>) <span class="sc">+</span> </span>
-<span id="cb381-16"><a href="理解机器学习里数据不均衡.html#cb381-16" tabindex="-1"></a>  <span class="fu">scale_color_aaas</span>() <span class="sc">+</span> </span>
-<span id="cb381-17"><a href="理解机器学习里数据不均衡.html#cb381-17" tabindex="-1"></a>  <span class="fu">xlim</span>(<span class="sc">-</span><span class="dv">4</span>, <span class="dv">5</span>) <span class="sc">+</span></span>
-<span id="cb381-18"><a href="理解机器学习里数据不均衡.html#cb381-18" tabindex="-1"></a>  <span class="fu">ylim</span>(<span class="sc">-</span><span class="dv">4</span>, <span class="dv">5</span>) <span class="sc">+</span></span>
-<span id="cb381-19"><a href="理解机器学习里数据不均衡.html#cb381-19" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">&quot;过采样的模型&quot;</span>) <span class="sc">+</span> </span>
-<span id="cb381-20"><a href="理解机器学习里数据不均衡.html#cb381-20" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span> </span>
-<span id="cb381-21"><a href="理解机器学习里数据不均衡.html#cb381-21" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
-<span id="cb381-22"><a href="理解机器学习里数据不均衡.html#cb381-22" tabindex="-1"></a>    <span class="at">legend.position =</span> <span class="st">&quot;top&quot;</span>, </span>
-<span id="cb381-23"><a href="理解机器学习里数据不均衡.html#cb381-23" tabindex="-1"></a>    <span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="fl">0.5</span>)</span>
-<span id="cb381-24"><a href="理解机器学习里数据不均衡.html#cb381-24" tabindex="-1"></a>  )</span></code></pre></div>
-<p><img src="example7_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
-</div>
-<div id="欠采样的模型" class="section level3 hasAnchor" number="9.2.6">
-<h3><span class="header-section-number">9.2.6</span> 欠采样的模型<a href="理解机器学习里数据不均衡.html#欠采样的模型" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<div class="sourceCode" id="cb382"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb382-1"><a href="理解机器学习里数据不均衡.html#cb382-1" tabindex="-1"></a>down_sample <span class="ot">=</span> <span class="cf">function</span>(tb, index) tb[<span class="fu">c</span>(<span class="dv">1001</span><span class="sc">:</span><span class="dv">1200</span>, <span class="fu">sample</span>(index, <span class="dv">200</span>)), ]</span>
-<span id="cb382-2"><a href="理解机器学习里数据不均衡.html#cb382-2" tabindex="-1"></a>data_train_un_down <span class="ot">=</span> <span class="fu">down_sample</span>(data_train_un, <span class="dv">1</span><span class="sc">:</span><span class="dv">1000</span>)</span>
+<div class="sourceCode" id="cb382"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb382-1"><a href="理解机器学习里数据不均衡.html#cb382-1" tabindex="-1"></a>up_sample <span class="ot">=</span> <span class="cf">function</span>(tb, index) tb[<span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">1000</span>, <span class="fu">sample</span>(index, <span class="dv">1000</span>, <span class="at">replace =</span> T)), ]</span>
+<span id="cb382-2"><a href="理解机器学习里数据不均衡.html#cb382-2" tabindex="-1"></a>data_train_un_up   <span class="ot">=</span> <span class="fu">up_sample</span>(data_train_un, <span class="dv">1001</span><span class="sc">:</span><span class="dv">1200</span>)</span>
 <span id="cb382-3"><a href="理解机器学习里数据不均衡.html#cb382-3" tabindex="-1"></a></span>
-<span id="cb382-4"><a href="理解机器学习里数据不均衡.html#cb382-4" tabindex="-1"></a>model_down <span class="ot">=</span> <span class="fu">glm</span>(group <span class="sc">~</span> ., <span class="at">data =</span> data_train_un_down, <span class="at">family =</span> <span class="fu">binomial</span>())</span>
+<span id="cb382-4"><a href="理解机器学习里数据不均衡.html#cb382-4" tabindex="-1"></a>model_up <span class="ot">=</span> <span class="fu">glm</span>(group <span class="sc">~</span> ., <span class="at">data =</span> data_train_un_up, <span class="at">family =</span> <span class="fu">binomial</span>())</span>
 <span id="cb382-5"><a href="理解机器学习里数据不均衡.html#cb382-5" tabindex="-1"></a></span>
-<span id="cb382-6"><a href="理解机器学习里数据不均衡.html#cb382-6" tabindex="-1"></a>coef2 <span class="ot">=</span> <span class="fu">coef</span>(model_down)</span>
+<span id="cb382-6"><a href="理解机器学习里数据不均衡.html#cb382-6" tabindex="-1"></a>coef2 <span class="ot">=</span> <span class="fu">coef</span>(model_up)</span>
 <span id="cb382-7"><a href="理解机器学习里数据不均衡.html#cb382-7" tabindex="-1"></a>beta0 <span class="ot">=</span> coef2[<span class="dv">1</span>]</span>
 <span id="cb382-8"><a href="理解机器学习里数据不均衡.html#cb382-8" tabindex="-1"></a>beta1 <span class="ot">=</span> coef2[<span class="dv">2</span>]</span>
 <span id="cb382-9"><a href="理解机器学习里数据不均衡.html#cb382-9" tabindex="-1"></a>beta2 <span class="ot">=</span> coef2[<span class="dv">3</span>]</span>
@@ -596,128 +568,156 @@ div.csl-indent {
 <span id="cb382-16"><a href="理解机器学习里数据不均衡.html#cb382-16" tabindex="-1"></a>  <span class="fu">scale_color_aaas</span>() <span class="sc">+</span> </span>
 <span id="cb382-17"><a href="理解机器学习里数据不均衡.html#cb382-17" tabindex="-1"></a>  <span class="fu">xlim</span>(<span class="sc">-</span><span class="dv">4</span>, <span class="dv">5</span>) <span class="sc">+</span></span>
 <span id="cb382-18"><a href="理解机器学习里数据不均衡.html#cb382-18" tabindex="-1"></a>  <span class="fu">ylim</span>(<span class="sc">-</span><span class="dv">4</span>, <span class="dv">5</span>) <span class="sc">+</span></span>
-<span id="cb382-19"><a href="理解机器学习里数据不均衡.html#cb382-19" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">&quot;欠采样的模型&quot;</span>) <span class="sc">+</span> </span>
+<span id="cb382-19"><a href="理解机器学习里数据不均衡.html#cb382-19" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">&quot;过采样的模型&quot;</span>) <span class="sc">+</span> </span>
 <span id="cb382-20"><a href="理解机器学习里数据不均衡.html#cb382-20" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span> </span>
 <span id="cb382-21"><a href="理解机器学习里数据不均衡.html#cb382-21" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
 <span id="cb382-22"><a href="理解机器学习里数据不均衡.html#cb382-22" tabindex="-1"></a>    <span class="at">legend.position =</span> <span class="st">&quot;top&quot;</span>, </span>
 <span id="cb382-23"><a href="理解机器学习里数据不均衡.html#cb382-23" tabindex="-1"></a>    <span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="fl">0.5</span>)</span>
 <span id="cb382-24"><a href="理解机器学习里数据不均衡.html#cb382-24" tabindex="-1"></a>  )</span></code></pre></div>
+<p><img src="example7_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
+</div>
+<div id="欠采样的模型" class="section level3 hasAnchor" number="9.2.6">
+<h3><span class="header-section-number">9.2.6</span> 欠采样的模型<a href="理解机器学习里数据不均衡.html#欠采样的模型" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div class="sourceCode" id="cb383"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb383-1"><a href="理解机器学习里数据不均衡.html#cb383-1" tabindex="-1"></a>down_sample <span class="ot">=</span> <span class="cf">function</span>(tb, index) tb[<span class="fu">c</span>(<span class="dv">1001</span><span class="sc">:</span><span class="dv">1200</span>, <span class="fu">sample</span>(index, <span class="dv">200</span>)), ]</span>
+<span id="cb383-2"><a href="理解机器学习里数据不均衡.html#cb383-2" tabindex="-1"></a>data_train_un_down <span class="ot">=</span> <span class="fu">down_sample</span>(data_train_un, <span class="dv">1</span><span class="sc">:</span><span class="dv">1000</span>)</span>
+<span id="cb383-3"><a href="理解机器学习里数据不均衡.html#cb383-3" tabindex="-1"></a></span>
+<span id="cb383-4"><a href="理解机器学习里数据不均衡.html#cb383-4" tabindex="-1"></a>model_down <span class="ot">=</span> <span class="fu">glm</span>(group <span class="sc">~</span> ., <span class="at">data =</span> data_train_un_down, <span class="at">family =</span> <span class="fu">binomial</span>())</span>
+<span id="cb383-5"><a href="理解机器学习里数据不均衡.html#cb383-5" tabindex="-1"></a></span>
+<span id="cb383-6"><a href="理解机器学习里数据不均衡.html#cb383-6" tabindex="-1"></a>coef2 <span class="ot">=</span> <span class="fu">coef</span>(model_down)</span>
+<span id="cb383-7"><a href="理解机器学习里数据不均衡.html#cb383-7" tabindex="-1"></a>beta0 <span class="ot">=</span> coef2[<span class="dv">1</span>]</span>
+<span id="cb383-8"><a href="理解机器学习里数据不均衡.html#cb383-8" tabindex="-1"></a>beta1 <span class="ot">=</span> coef2[<span class="dv">2</span>]</span>
+<span id="cb383-9"><a href="理解机器学习里数据不均衡.html#cb383-9" tabindex="-1"></a>beta2 <span class="ot">=</span> coef2[<span class="dv">3</span>]</span>
+<span id="cb383-10"><a href="理解机器学习里数据不均衡.html#cb383-10" tabindex="-1"></a></span>
+<span id="cb383-11"><a href="理解机器学习里数据不均衡.html#cb383-11" tabindex="-1"></a>data_test <span class="sc">%&gt;%</span> </span>
+<span id="cb383-12"><a href="理解机器学习里数据不均衡.html#cb383-12" tabindex="-1"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span> </span>
+<span id="cb383-13"><a href="理解机器学习里数据不均衡.html#cb383-13" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(V1, V2, <span class="at">color =</span> group, <span class="at">alpha =</span> <span class="fl">0.5</span>)) <span class="sc">+</span> </span>
+<span id="cb383-14"><a href="理解机器学习里数据不均衡.html#cb383-14" tabindex="-1"></a>  <span class="fu">geom_abline</span>(<span class="at">intercept =</span> <span class="sc">-</span>beta0<span class="sc">/</span>beta2, <span class="at">slope =</span> <span class="sc">-</span>beta1<span class="sc">/</span>beta2, </span>
+<span id="cb383-15"><a href="理解机器学习里数据不均衡.html#cb383-15" tabindex="-1"></a>              <span class="at">linetype =</span> <span class="st">&quot;dashed&quot;</span>, <span class="at">linewidth =</span> <span class="dv">1</span>) <span class="sc">+</span> </span>
+<span id="cb383-16"><a href="理解机器学习里数据不均衡.html#cb383-16" tabindex="-1"></a>  <span class="fu">scale_color_aaas</span>() <span class="sc">+</span> </span>
+<span id="cb383-17"><a href="理解机器学习里数据不均衡.html#cb383-17" tabindex="-1"></a>  <span class="fu">xlim</span>(<span class="sc">-</span><span class="dv">4</span>, <span class="dv">5</span>) <span class="sc">+</span></span>
+<span id="cb383-18"><a href="理解机器学习里数据不均衡.html#cb383-18" tabindex="-1"></a>  <span class="fu">ylim</span>(<span class="sc">-</span><span class="dv">4</span>, <span class="dv">5</span>) <span class="sc">+</span></span>
+<span id="cb383-19"><a href="理解机器学习里数据不均衡.html#cb383-19" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">&quot;欠采样的模型&quot;</span>) <span class="sc">+</span> </span>
+<span id="cb383-20"><a href="理解机器学习里数据不均衡.html#cb383-20" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span> </span>
+<span id="cb383-21"><a href="理解机器学习里数据不均衡.html#cb383-21" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
+<span id="cb383-22"><a href="理解机器学习里数据不均衡.html#cb383-22" tabindex="-1"></a>    <span class="at">legend.position =</span> <span class="st">&quot;top&quot;</span>, </span>
+<span id="cb383-23"><a href="理解机器学习里数据不均衡.html#cb383-23" tabindex="-1"></a>    <span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="fl">0.5</span>)</span>
+<span id="cb383-24"><a href="理解机器学习里数据不均衡.html#cb383-24" tabindex="-1"></a>  )</span></code></pre></div>
 <p><img src="example7_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
 </div>
 <div id="添加权重的模型" class="section level3 hasAnchor" number="9.2.7">
 <h3><span class="header-section-number">9.2.7</span> 添加权重的模型<a href="理解机器学习里数据不均衡.html#添加权重的模型" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<div class="sourceCode" id="cb383"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb383-1"><a href="理解机器学习里数据不均衡.html#cb383-1" tabindex="-1"></a>model3 <span class="ot">=</span> <span class="fu">glm</span>(group <span class="sc">~</span> ., <span class="at">data =</span> data_train_un, <span class="at">family =</span> <span class="fu">binomial</span>(), <span class="at">weights =</span> <span class="fu">rep</span>(<span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">5</span>), <span class="fu">c</span>(<span class="dv">1000</span>, <span class="dv">200</span>)))</span>
-<span id="cb383-2"><a href="理解机器学习里数据不均衡.html#cb383-2" tabindex="-1"></a></span>
-<span id="cb383-3"><a href="理解机器学习里数据不均衡.html#cb383-3" tabindex="-1"></a>coef3 <span class="ot">=</span> <span class="fu">coef</span>(model3)</span>
-<span id="cb383-4"><a href="理解机器学习里数据不均衡.html#cb383-4" tabindex="-1"></a>coef3</span></code></pre></div>
+<div class="sourceCode" id="cb384"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb384-1"><a href="理解机器学习里数据不均衡.html#cb384-1" tabindex="-1"></a>model3 <span class="ot">=</span> <span class="fu">glm</span>(group <span class="sc">~</span> ., <span class="at">data =</span> data_train_un, <span class="at">family =</span> <span class="fu">binomial</span>(), <span class="at">weights =</span> <span class="fu">rep</span>(<span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">5</span>), <span class="fu">c</span>(<span class="dv">1000</span>, <span class="dv">200</span>)))</span>
+<span id="cb384-2"><a href="理解机器学习里数据不均衡.html#cb384-2" tabindex="-1"></a></span>
+<span id="cb384-3"><a href="理解机器学习里数据不均衡.html#cb384-3" tabindex="-1"></a>coef3 <span class="ot">=</span> <span class="fu">coef</span>(model3)</span>
+<span id="cb384-4"><a href="理解机器学习里数据不均衡.html#cb384-4" tabindex="-1"></a>coef3</span></code></pre></div>
 <pre><code>## (Intercept)          V1          V2 
 ##  -0.7018305   3.1359096  -2.6647095</code></pre>
-<div class="sourceCode" id="cb385"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb385-1"><a href="理解机器学习里数据不均衡.html#cb385-1" tabindex="-1"></a>beta0 <span class="ot">=</span> coef3[<span class="dv">1</span>]</span>
-<span id="cb385-2"><a href="理解机器学习里数据不均衡.html#cb385-2" tabindex="-1"></a>beta1 <span class="ot">=</span> coef3[<span class="dv">2</span>]</span>
-<span id="cb385-3"><a href="理解机器学习里数据不均衡.html#cb385-3" tabindex="-1"></a>beta2 <span class="ot">=</span> coef3[<span class="dv">3</span>]</span>
-<span id="cb385-4"><a href="理解机器学习里数据不均衡.html#cb385-4" tabindex="-1"></a></span>
-<span id="cb385-5"><a href="理解机器学习里数据不均衡.html#cb385-5" tabindex="-1"></a>data_test <span class="sc">%&gt;%</span> </span>
-<span id="cb385-6"><a href="理解机器学习里数据不均衡.html#cb385-6" tabindex="-1"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span> </span>
-<span id="cb385-7"><a href="理解机器学习里数据不均衡.html#cb385-7" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(V1, V2, <span class="at">color =</span> group, <span class="at">alpha =</span> <span class="fl">0.5</span>)) <span class="sc">+</span> </span>
-<span id="cb385-8"><a href="理解机器学习里数据不均衡.html#cb385-8" tabindex="-1"></a>  <span class="fu">geom_abline</span>(<span class="at">intercept =</span> <span class="sc">-</span>beta0<span class="sc">/</span>beta2, <span class="at">slope =</span> <span class="sc">-</span>beta1<span class="sc">/</span>beta2, </span>
-<span id="cb385-9"><a href="理解机器学习里数据不均衡.html#cb385-9" tabindex="-1"></a>              <span class="at">linetype =</span> <span class="st">&quot;dashed&quot;</span>, <span class="at">linewidth =</span> <span class="dv">1</span>) <span class="sc">+</span> </span>
-<span id="cb385-10"><a href="理解机器学习里数据不均衡.html#cb385-10" tabindex="-1"></a>  <span class="fu">scale_color_aaas</span>() <span class="sc">+</span> </span>
-<span id="cb385-11"><a href="理解机器学习里数据不均衡.html#cb385-11" tabindex="-1"></a>  <span class="fu">xlim</span>(<span class="sc">-</span><span class="dv">4</span>, <span class="dv">5</span>) <span class="sc">+</span></span>
-<span id="cb385-12"><a href="理解机器学习里数据不均衡.html#cb385-12" tabindex="-1"></a>  <span class="fu">ylim</span>(<span class="sc">-</span><span class="dv">4</span>, <span class="dv">5</span>) <span class="sc">+</span></span>
-<span id="cb385-13"><a href="理解机器学习里数据不均衡.html#cb385-13" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">&quot;添加权重的模型&quot;</span>) <span class="sc">+</span> </span>
-<span id="cb385-14"><a href="理解机器学习里数据不均衡.html#cb385-14" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span> </span>
-<span id="cb385-15"><a href="理解机器学习里数据不均衡.html#cb385-15" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
-<span id="cb385-16"><a href="理解机器学习里数据不均衡.html#cb385-16" tabindex="-1"></a>    <span class="at">legend.position =</span> <span class="st">&quot;top&quot;</span>, </span>
-<span id="cb385-17"><a href="理解机器学习里数据不均衡.html#cb385-17" tabindex="-1"></a>    <span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="fl">0.5</span>)</span>
-<span id="cb385-18"><a href="理解机器学习里数据不均衡.html#cb385-18" tabindex="-1"></a>  )</span></code></pre></div>
+<div class="sourceCode" id="cb386"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb386-1"><a href="理解机器学习里数据不均衡.html#cb386-1" tabindex="-1"></a>beta0 <span class="ot">=</span> coef3[<span class="dv">1</span>]</span>
+<span id="cb386-2"><a href="理解机器学习里数据不均衡.html#cb386-2" tabindex="-1"></a>beta1 <span class="ot">=</span> coef3[<span class="dv">2</span>]</span>
+<span id="cb386-3"><a href="理解机器学习里数据不均衡.html#cb386-3" tabindex="-1"></a>beta2 <span class="ot">=</span> coef3[<span class="dv">3</span>]</span>
+<span id="cb386-4"><a href="理解机器学习里数据不均衡.html#cb386-4" tabindex="-1"></a></span>
+<span id="cb386-5"><a href="理解机器学习里数据不均衡.html#cb386-5" tabindex="-1"></a>data_test <span class="sc">%&gt;%</span> </span>
+<span id="cb386-6"><a href="理解机器学习里数据不均衡.html#cb386-6" tabindex="-1"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span> </span>
+<span id="cb386-7"><a href="理解机器学习里数据不均衡.html#cb386-7" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(V1, V2, <span class="at">color =</span> group, <span class="at">alpha =</span> <span class="fl">0.5</span>)) <span class="sc">+</span> </span>
+<span id="cb386-8"><a href="理解机器学习里数据不均衡.html#cb386-8" tabindex="-1"></a>  <span class="fu">geom_abline</span>(<span class="at">intercept =</span> <span class="sc">-</span>beta0<span class="sc">/</span>beta2, <span class="at">slope =</span> <span class="sc">-</span>beta1<span class="sc">/</span>beta2, </span>
+<span id="cb386-9"><a href="理解机器学习里数据不均衡.html#cb386-9" tabindex="-1"></a>              <span class="at">linetype =</span> <span class="st">&quot;dashed&quot;</span>, <span class="at">linewidth =</span> <span class="dv">1</span>) <span class="sc">+</span> </span>
+<span id="cb386-10"><a href="理解机器学习里数据不均衡.html#cb386-10" tabindex="-1"></a>  <span class="fu">scale_color_aaas</span>() <span class="sc">+</span> </span>
+<span id="cb386-11"><a href="理解机器学习里数据不均衡.html#cb386-11" tabindex="-1"></a>  <span class="fu">xlim</span>(<span class="sc">-</span><span class="dv">4</span>, <span class="dv">5</span>) <span class="sc">+</span></span>
+<span id="cb386-12"><a href="理解机器学习里数据不均衡.html#cb386-12" tabindex="-1"></a>  <span class="fu">ylim</span>(<span class="sc">-</span><span class="dv">4</span>, <span class="dv">5</span>) <span class="sc">+</span></span>
+<span id="cb386-13"><a href="理解机器学习里数据不均衡.html#cb386-13" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">&quot;添加权重的模型&quot;</span>) <span class="sc">+</span> </span>
+<span id="cb386-14"><a href="理解机器学习里数据不均衡.html#cb386-14" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span> </span>
+<span id="cb386-15"><a href="理解机器学习里数据不均衡.html#cb386-15" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
+<span id="cb386-16"><a href="理解机器学习里数据不均衡.html#cb386-16" tabindex="-1"></a>    <span class="at">legend.position =</span> <span class="st">&quot;top&quot;</span>, </span>
+<span id="cb386-17"><a href="理解机器学习里数据不均衡.html#cb386-17" tabindex="-1"></a>    <span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="fl">0.5</span>)</span>
+<span id="cb386-18"><a href="理解机器学习里数据不均衡.html#cb386-18" tabindex="-1"></a>  )</span></code></pre></div>
 <p><img src="example7_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
-<div class="sourceCode" id="cb386"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb386-1"><a href="理解机器学习里数据不均衡.html#cb386-1" tabindex="-1"></a><span class="fu">library</span>(mlr3verse)</span></code></pre></div>
+<div class="sourceCode" id="cb387"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb387-1"><a href="理解机器学习里数据不均衡.html#cb387-1" tabindex="-1"></a><span class="fu">library</span>(mlr3verse)</span></code></pre></div>
 <pre><code>## Loading required package: mlr3</code></pre>
 <pre><code>## Warning: package &#39;mlr3&#39; was built under R version 4.3.2</code></pre>
-<div class="sourceCode" id="cb389"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb389-1"><a href="理解机器学习里数据不均衡.html#cb389-1" tabindex="-1"></a>pre <span class="ot">=</span> <span class="fu">data.table</span>(</span>
-<span id="cb389-2"><a href="理解机器学习里数据不均衡.html#cb389-2" tabindex="-1"></a>  <span class="at">row_ids =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">2000</span>, </span>
-<span id="cb389-3"><a href="理解机器学习里数据不均衡.html#cb389-3" tabindex="-1"></a>  <span class="at">truth =</span> <span class="fu">factor</span>(<span class="fu">as.numeric</span>(data_train<span class="sc">$</span>group) <span class="sc">-</span> <span class="dv">1</span>),</span>
-<span id="cb389-4"><a href="理解机器学习里数据不均衡.html#cb389-4" tabindex="-1"></a>  <span class="at">response =</span> <span class="fu">factor</span>(<span class="fu">round</span>(<span class="fu">logit</span>(<span class="fu">predict</span>(model1, data_train)))), </span>
-<span id="cb389-5"><a href="理解机器学习里数据不均衡.html#cb389-5" tabindex="-1"></a>  <span class="at">prob.0 =</span> <span class="dv">1</span><span class="sc">-</span><span class="fu">logit</span>(<span class="fu">predict</span>(model1, data_train)), </span>
-<span id="cb389-6"><a href="理解机器学习里数据不均衡.html#cb389-6" tabindex="-1"></a>  <span class="at">prob.1 =</span> <span class="fu">logit</span>(<span class="fu">predict</span>(model1, data_train))</span>
-<span id="cb389-7"><a href="理解机器学习里数据不均衡.html#cb389-7" tabindex="-1"></a>) <span class="sc">%&gt;%</span> <span class="fu">as_prediction_classif</span>()</span>
-<span id="cb389-8"><a href="理解机器学习里数据不均衡.html#cb389-8" tabindex="-1"></a></span>
-<span id="cb389-9"><a href="理解机器学习里数据不均衡.html#cb389-9" tabindex="-1"></a>pre<span class="sc">$</span><span class="fu">score</span>(<span class="fu">msr</span>(<span class="st">&quot;classif.prauc&quot;</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb390"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb390-1"><a href="理解机器学习里数据不均衡.html#cb390-1" tabindex="-1"></a>pre <span class="ot">=</span> <span class="fu">data.table</span>(</span>
+<span id="cb390-2"><a href="理解机器学习里数据不均衡.html#cb390-2" tabindex="-1"></a>  <span class="at">row_ids =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">2000</span>, </span>
+<span id="cb390-3"><a href="理解机器学习里数据不均衡.html#cb390-3" tabindex="-1"></a>  <span class="at">truth =</span> <span class="fu">factor</span>(<span class="fu">as.numeric</span>(data_train<span class="sc">$</span>group) <span class="sc">-</span> <span class="dv">1</span>),</span>
+<span id="cb390-4"><a href="理解机器学习里数据不均衡.html#cb390-4" tabindex="-1"></a>  <span class="at">response =</span> <span class="fu">factor</span>(<span class="fu">round</span>(<span class="fu">logit</span>(<span class="fu">predict</span>(model1, data_train)))), </span>
+<span id="cb390-5"><a href="理解机器学习里数据不均衡.html#cb390-5" tabindex="-1"></a>  <span class="at">prob.0 =</span> <span class="dv">1</span><span class="sc">-</span><span class="fu">logit</span>(<span class="fu">predict</span>(model1, data_train)), </span>
+<span id="cb390-6"><a href="理解机器学习里数据不均衡.html#cb390-6" tabindex="-1"></a>  <span class="at">prob.1 =</span> <span class="fu">logit</span>(<span class="fu">predict</span>(model1, data_train))</span>
+<span id="cb390-7"><a href="理解机器学习里数据不均衡.html#cb390-7" tabindex="-1"></a>) <span class="sc">%&gt;%</span> <span class="fu">as_prediction_classif</span>()</span>
+<span id="cb390-8"><a href="理解机器学习里数据不均衡.html#cb390-8" tabindex="-1"></a></span>
+<span id="cb390-9"><a href="理解机器学习里数据不均衡.html#cb390-9" tabindex="-1"></a>pre<span class="sc">$</span><span class="fu">score</span>(<span class="fu">msr</span>(<span class="st">&quot;classif.prauc&quot;</span>))</span></code></pre></div>
 <pre><code>## classif.prauc 
 ##     0.9766404</code></pre>
 </div>
 </div>
 <div id="rough-edged" class="section level2 hasAnchor" number="9.3">
 <h2><span class="header-section-number">9.3</span> rough edged<a href="理解机器学习里数据不均衡.html#rough-edged" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<div class="sourceCode" id="cb391"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb391-1"><a href="理解机器学习里数据不均衡.html#cb391-1" tabindex="-1"></a>angle <span class="ot">=</span> <span class="sc">-</span><span class="dv">30</span></span>
-<span id="cb391-2"><a href="理解机器学习里数据不均衡.html#cb391-2" tabindex="-1"></a>mat3 <span class="ot">=</span> mat1 <span class="sc">%*%</span> <span class="fu">matrix</span>(<span class="fu">c</span>(<span class="fu">sin</span>(angle), <span class="fu">cos</span>(angle), <span class="fu">cos</span>(angle), <span class="sc">-</span><span class="fu">sin</span>(angle)), <span class="at">ncol =</span> <span class="dv">2</span>) <span class="sc">+</span> <span class="fu">matrix</span>(<span class="fu">rep</span>(<span class="fu">c</span>(<span class="fl">0.5</span>, <span class="fl">3.5</span>), <span class="at">each =</span> <span class="dv">1000</span>), <span class="at">ncol=</span><span class="dv">2</span>)</span>
-<span id="cb391-3"><a href="理解机器学习里数据不均衡.html#cb391-3" tabindex="-1"></a>mat4 <span class="ot">=</span> <span class="fu">rbind</span>(mat1, mat3)</span>
-<span id="cb391-4"><a href="理解机器学习里数据不均衡.html#cb391-4" tabindex="-1"></a></span>
-<span id="cb391-5"><a href="理解机器学习里数据不均衡.html#cb391-5" tabindex="-1"></a>ind <span class="ot">=</span> <span class="fu">sample</span>(<span class="dv">2000</span>, <span class="dv">1000</span>)</span>
-<span id="cb391-6"><a href="理解机器学习里数据不均衡.html#cb391-6" tabindex="-1"></a>data_train_r <span class="ot">=</span> <span class="fu">rbind</span>(mat4[ind, ], mat2) <span class="sc">%&gt;%</span> </span>
-<span id="cb391-7"><a href="理解机器学习里数据不均衡.html#cb391-7" tabindex="-1"></a>  <span class="fu">as_tibble</span>() <span class="sc">%&gt;%</span> </span>
-<span id="cb391-8"><a href="理解机器学习里数据不均衡.html#cb391-8" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">group =</span> <span class="fu">factor</span>(<span class="fu">rep</span>(<span class="fu">c</span>(<span class="st">&quot;G1&quot;</span>, <span class="st">&quot;G2&quot;</span>), <span class="at">each =</span> <span class="dv">1000</span>)))</span>
-<span id="cb391-9"><a href="理解机器学习里数据不均衡.html#cb391-9" tabindex="-1"></a></span>
-<span id="cb391-10"><a href="理解机器学习里数据不均衡.html#cb391-10" tabindex="-1"></a>num <span class="ot">=</span> <span class="dv">200</span></span>
-<span id="cb391-11"><a href="理解机器学习里数据不均衡.html#cb391-11" tabindex="-1"></a>data_train_r_un <span class="ot">=</span> <span class="fu">rbind</span>(mat4[ind, ], mat2[<span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">1000</span>, num), ]) <span class="sc">%&gt;%</span> </span>
-<span id="cb391-12"><a href="理解机器学习里数据不均衡.html#cb391-12" tabindex="-1"></a>  <span class="fu">as_tibble</span>() <span class="sc">%&gt;%</span> </span>
-<span id="cb391-13"><a href="理解机器学习里数据不均衡.html#cb391-13" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">group =</span> <span class="fu">factor</span>(<span class="fu">rep</span>(<span class="fu">c</span>(<span class="st">&quot;G1&quot;</span>, <span class="st">&quot;G2&quot;</span>), <span class="fu">c</span>(<span class="dv">1000</span>, num))))</span>
-<span id="cb391-14"><a href="理解机器学习里数据不均衡.html#cb391-14" tabindex="-1"></a></span>
-<span id="cb391-15"><a href="理解机器学习里数据不均衡.html#cb391-15" tabindex="-1"></a>data_test_r <span class="ot">=</span> <span class="fu">rbind</span>(</span>
-<span id="cb391-16"><a href="理解机器学习里数据不均衡.html#cb391-16" tabindex="-1"></a>  mat4[<span class="sc">-</span>ind, ][<span class="fu">sample</span>(<span class="dv">1000</span>, <span class="dv">500</span>), ], </span>
-<span id="cb391-17"><a href="理解机器学习里数据不均衡.html#cb391-17" tabindex="-1"></a>  <span class="fu">mvrnorm</span>(<span class="at">n =</span> <span class="dv">500</span>, <span class="at">mu =</span> mu, <span class="at">Sigma =</span> Sigma2) <span class="sc">+</span> <span class="fu">matrix</span>(<span class="fu">rep</span>(<span class="fu">c</span>(<span class="fl">1.5</span>, <span class="dv">0</span>), <span class="at">each =</span> <span class="dv">500</span>), <span class="at">ncol=</span><span class="dv">2</span>)</span>
-<span id="cb391-18"><a href="理解机器学习里数据不均衡.html#cb391-18" tabindex="-1"></a>) <span class="sc">%&gt;%</span> <span class="fu">as_tibble</span>() <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">group =</span> <span class="fu">factor</span>(<span class="fu">rep</span>(<span class="fu">c</span>(<span class="st">&quot;G1&quot;</span>, <span class="st">&quot;G2&quot;</span>), <span class="at">each =</span> <span class="dv">500</span>)))</span>
-<span id="cb391-19"><a href="理解机器学习里数据不均衡.html#cb391-19" tabindex="-1"></a></span>
-<span id="cb391-20"><a href="理解机器学习里数据不均衡.html#cb391-20" tabindex="-1"></a><span class="co">#</span></span>
-<span id="cb391-21"><a href="理解机器学习里数据不均衡.html#cb391-21" tabindex="-1"></a></span>
-<span id="cb391-22"><a href="理解机器学习里数据不均衡.html#cb391-22" tabindex="-1"></a>model_r1 <span class="ot">=</span> <span class="fu">glm</span>(group <span class="sc">~</span> ., <span class="at">data =</span> data_train_r, <span class="at">family =</span> <span class="fu">binomial</span>())</span>
-<span id="cb391-23"><a href="理解机器学习里数据不均衡.html#cb391-23" tabindex="-1"></a>coef1 <span class="ot">=</span> <span class="fu">coef</span>(model_r1)</span>
-<span id="cb391-24"><a href="理解机器学习里数据不均衡.html#cb391-24" tabindex="-1"></a>coef1</span></code></pre></div>
+<div class="sourceCode" id="cb392"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb392-1"><a href="理解机器学习里数据不均衡.html#cb392-1" tabindex="-1"></a>angle <span class="ot">=</span> <span class="sc">-</span><span class="dv">30</span></span>
+<span id="cb392-2"><a href="理解机器学习里数据不均衡.html#cb392-2" tabindex="-1"></a>mat3 <span class="ot">=</span> mat1 <span class="sc">%*%</span> <span class="fu">matrix</span>(<span class="fu">c</span>(<span class="fu">sin</span>(angle), <span class="fu">cos</span>(angle), <span class="fu">cos</span>(angle), <span class="sc">-</span><span class="fu">sin</span>(angle)), <span class="at">ncol =</span> <span class="dv">2</span>) <span class="sc">+</span> <span class="fu">matrix</span>(<span class="fu">rep</span>(<span class="fu">c</span>(<span class="fl">0.5</span>, <span class="fl">3.5</span>), <span class="at">each =</span> <span class="dv">1000</span>), <span class="at">ncol=</span><span class="dv">2</span>)</span>
+<span id="cb392-3"><a href="理解机器学习里数据不均衡.html#cb392-3" tabindex="-1"></a>mat4 <span class="ot">=</span> <span class="fu">rbind</span>(mat1, mat3)</span>
+<span id="cb392-4"><a href="理解机器学习里数据不均衡.html#cb392-4" tabindex="-1"></a></span>
+<span id="cb392-5"><a href="理解机器学习里数据不均衡.html#cb392-5" tabindex="-1"></a>ind <span class="ot">=</span> <span class="fu">sample</span>(<span class="dv">2000</span>, <span class="dv">1000</span>)</span>
+<span id="cb392-6"><a href="理解机器学习里数据不均衡.html#cb392-6" tabindex="-1"></a>data_train_r <span class="ot">=</span> <span class="fu">rbind</span>(mat4[ind, ], mat2) <span class="sc">%&gt;%</span> </span>
+<span id="cb392-7"><a href="理解机器学习里数据不均衡.html#cb392-7" tabindex="-1"></a>  <span class="fu">as_tibble</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb392-8"><a href="理解机器学习里数据不均衡.html#cb392-8" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">group =</span> <span class="fu">factor</span>(<span class="fu">rep</span>(<span class="fu">c</span>(<span class="st">&quot;G1&quot;</span>, <span class="st">&quot;G2&quot;</span>), <span class="at">each =</span> <span class="dv">1000</span>)))</span>
+<span id="cb392-9"><a href="理解机器学习里数据不均衡.html#cb392-9" tabindex="-1"></a></span>
+<span id="cb392-10"><a href="理解机器学习里数据不均衡.html#cb392-10" tabindex="-1"></a>num <span class="ot">=</span> <span class="dv">200</span></span>
+<span id="cb392-11"><a href="理解机器学习里数据不均衡.html#cb392-11" tabindex="-1"></a>data_train_r_un <span class="ot">=</span> <span class="fu">rbind</span>(mat4[ind, ], mat2[<span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">1000</span>, num), ]) <span class="sc">%&gt;%</span> </span>
+<span id="cb392-12"><a href="理解机器学习里数据不均衡.html#cb392-12" tabindex="-1"></a>  <span class="fu">as_tibble</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb392-13"><a href="理解机器学习里数据不均衡.html#cb392-13" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">group =</span> <span class="fu">factor</span>(<span class="fu">rep</span>(<span class="fu">c</span>(<span class="st">&quot;G1&quot;</span>, <span class="st">&quot;G2&quot;</span>), <span class="fu">c</span>(<span class="dv">1000</span>, num))))</span>
+<span id="cb392-14"><a href="理解机器学习里数据不均衡.html#cb392-14" tabindex="-1"></a></span>
+<span id="cb392-15"><a href="理解机器学习里数据不均衡.html#cb392-15" tabindex="-1"></a>data_test_r <span class="ot">=</span> <span class="fu">rbind</span>(</span>
+<span id="cb392-16"><a href="理解机器学习里数据不均衡.html#cb392-16" tabindex="-1"></a>  mat4[<span class="sc">-</span>ind, ][<span class="fu">sample</span>(<span class="dv">1000</span>, <span class="dv">500</span>), ], </span>
+<span id="cb392-17"><a href="理解机器学习里数据不均衡.html#cb392-17" tabindex="-1"></a>  <span class="fu">mvrnorm</span>(<span class="at">n =</span> <span class="dv">500</span>, <span class="at">mu =</span> mu, <span class="at">Sigma =</span> Sigma2) <span class="sc">+</span> <span class="fu">matrix</span>(<span class="fu">rep</span>(<span class="fu">c</span>(<span class="fl">1.5</span>, <span class="dv">0</span>), <span class="at">each =</span> <span class="dv">500</span>), <span class="at">ncol=</span><span class="dv">2</span>)</span>
+<span id="cb392-18"><a href="理解机器学习里数据不均衡.html#cb392-18" tabindex="-1"></a>) <span class="sc">%&gt;%</span> <span class="fu">as_tibble</span>() <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">group =</span> <span class="fu">factor</span>(<span class="fu">rep</span>(<span class="fu">c</span>(<span class="st">&quot;G1&quot;</span>, <span class="st">&quot;G2&quot;</span>), <span class="at">each =</span> <span class="dv">500</span>)))</span>
+<span id="cb392-19"><a href="理解机器学习里数据不均衡.html#cb392-19" tabindex="-1"></a></span>
+<span id="cb392-20"><a href="理解机器学习里数据不均衡.html#cb392-20" tabindex="-1"></a><span class="co">#</span></span>
+<span id="cb392-21"><a href="理解机器学习里数据不均衡.html#cb392-21" tabindex="-1"></a></span>
+<span id="cb392-22"><a href="理解机器学习里数据不均衡.html#cb392-22" tabindex="-1"></a>model_r1 <span class="ot">=</span> <span class="fu">glm</span>(group <span class="sc">~</span> ., <span class="at">data =</span> data_train_r, <span class="at">family =</span> <span class="fu">binomial</span>())</span>
+<span id="cb392-23"><a href="理解机器学习里数据不均衡.html#cb392-23" tabindex="-1"></a>coef1 <span class="ot">=</span> <span class="fu">coef</span>(model_r1)</span>
+<span id="cb392-24"><a href="理解机器学习里数据不均衡.html#cb392-24" tabindex="-1"></a>coef1</span></code></pre></div>
 <pre><code>## (Intercept)          V1          V2 
 ## -0.06661368  2.13031750 -2.58225266</code></pre>
-<div class="sourceCode" id="cb393"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb393-1"><a href="理解机器学习里数据不均衡.html#cb393-1" tabindex="-1"></a>beta0 <span class="ot">=</span> coef1[<span class="dv">1</span>]</span>
-<span id="cb393-2"><a href="理解机器学习里数据不均衡.html#cb393-2" tabindex="-1"></a>beta1 <span class="ot">=</span> coef1[<span class="dv">2</span>]</span>
-<span id="cb393-3"><a href="理解机器学习里数据不均衡.html#cb393-3" tabindex="-1"></a>beta2 <span class="ot">=</span> coef1[<span class="dv">3</span>]</span>
-<span id="cb393-4"><a href="理解机器学习里数据不均衡.html#cb393-4" tabindex="-1"></a></span>
-<span id="cb393-5"><a href="理解机器学习里数据不均衡.html#cb393-5" tabindex="-1"></a>data_test_r <span class="sc">%&gt;%</span> </span>
-<span id="cb393-6"><a href="理解机器学习里数据不均衡.html#cb393-6" tabindex="-1"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span> </span>
-<span id="cb393-7"><a href="理解机器学习里数据不均衡.html#cb393-7" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(V1, V2, <span class="at">color =</span> group, <span class="at">alpha =</span> <span class="fl">0.5</span>)) <span class="sc">+</span> </span>
-<span id="cb393-8"><a href="理解机器学习里数据不均衡.html#cb393-8" tabindex="-1"></a>  <span class="fu">geom_abline</span>(<span class="at">intercept =</span> <span class="sc">-</span>beta0<span class="sc">/</span>beta2, <span class="at">slope =</span> <span class="sc">-</span>beta1<span class="sc">/</span>beta2, </span>
-<span id="cb393-9"><a href="理解机器学习里数据不均衡.html#cb393-9" tabindex="-1"></a>              <span class="at">linetype =</span> <span class="st">&quot;dashed&quot;</span>, <span class="at">linewidth =</span> <span class="dv">1</span>) <span class="sc">+</span> </span>
-<span id="cb393-10"><a href="理解机器学习里数据不均衡.html#cb393-10" tabindex="-1"></a>  <span class="fu">scale_color_aaas</span>() <span class="sc">+</span> </span>
-<span id="cb393-11"><a href="理解机器学习里数据不均衡.html#cb393-11" tabindex="-1"></a>  <span class="fu">xlim</span>(<span class="sc">-</span><span class="dv">4</span>, <span class="dv">5</span>) <span class="sc">+</span></span>
-<span id="cb393-12"><a href="理解机器学习里数据不均衡.html#cb393-12" tabindex="-1"></a>  <span class="fu">ylim</span>(<span class="sc">-</span><span class="dv">4</span>, <span class="dv">5</span>) <span class="sc">+</span></span>
-<span id="cb393-13"><a href="理解机器学习里数据不均衡.html#cb393-13" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">&quot;线性不可分的均衡数据上的决策边界&quot;</span>) <span class="sc">+</span> </span>
-<span id="cb393-14"><a href="理解机器学习里数据不均衡.html#cb393-14" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span> </span>
-<span id="cb393-15"><a href="理解机器学习里数据不均衡.html#cb393-15" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
-<span id="cb393-16"><a href="理解机器学习里数据不均衡.html#cb393-16" tabindex="-1"></a>    <span class="at">legend.position =</span> <span class="st">&quot;top&quot;</span>, </span>
-<span id="cb393-17"><a href="理解机器学习里数据不均衡.html#cb393-17" tabindex="-1"></a>    <span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="fl">0.5</span>)</span>
-<span id="cb393-18"><a href="理解机器学习里数据不均衡.html#cb393-18" tabindex="-1"></a>  )</span></code></pre></div>
+<div class="sourceCode" id="cb394"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb394-1"><a href="理解机器学习里数据不均衡.html#cb394-1" tabindex="-1"></a>beta0 <span class="ot">=</span> coef1[<span class="dv">1</span>]</span>
+<span id="cb394-2"><a href="理解机器学习里数据不均衡.html#cb394-2" tabindex="-1"></a>beta1 <span class="ot">=</span> coef1[<span class="dv">2</span>]</span>
+<span id="cb394-3"><a href="理解机器学习里数据不均衡.html#cb394-3" tabindex="-1"></a>beta2 <span class="ot">=</span> coef1[<span class="dv">3</span>]</span>
+<span id="cb394-4"><a href="理解机器学习里数据不均衡.html#cb394-4" tabindex="-1"></a></span>
+<span id="cb394-5"><a href="理解机器学习里数据不均衡.html#cb394-5" tabindex="-1"></a>data_test_r <span class="sc">%&gt;%</span> </span>
+<span id="cb394-6"><a href="理解机器学习里数据不均衡.html#cb394-6" tabindex="-1"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span> </span>
+<span id="cb394-7"><a href="理解机器学习里数据不均衡.html#cb394-7" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(V1, V2, <span class="at">color =</span> group, <span class="at">alpha =</span> <span class="fl">0.5</span>)) <span class="sc">+</span> </span>
+<span id="cb394-8"><a href="理解机器学习里数据不均衡.html#cb394-8" tabindex="-1"></a>  <span class="fu">geom_abline</span>(<span class="at">intercept =</span> <span class="sc">-</span>beta0<span class="sc">/</span>beta2, <span class="at">slope =</span> <span class="sc">-</span>beta1<span class="sc">/</span>beta2, </span>
+<span id="cb394-9"><a href="理解机器学习里数据不均衡.html#cb394-9" tabindex="-1"></a>              <span class="at">linetype =</span> <span class="st">&quot;dashed&quot;</span>, <span class="at">linewidth =</span> <span class="dv">1</span>) <span class="sc">+</span> </span>
+<span id="cb394-10"><a href="理解机器学习里数据不均衡.html#cb394-10" tabindex="-1"></a>  <span class="fu">scale_color_aaas</span>() <span class="sc">+</span> </span>
+<span id="cb394-11"><a href="理解机器学习里数据不均衡.html#cb394-11" tabindex="-1"></a>  <span class="fu">xlim</span>(<span class="sc">-</span><span class="dv">4</span>, <span class="dv">5</span>) <span class="sc">+</span></span>
+<span id="cb394-12"><a href="理解机器学习里数据不均衡.html#cb394-12" tabindex="-1"></a>  <span class="fu">ylim</span>(<span class="sc">-</span><span class="dv">4</span>, <span class="dv">5</span>) <span class="sc">+</span></span>
+<span id="cb394-13"><a href="理解机器学习里数据不均衡.html#cb394-13" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">&quot;线性不可分的均衡数据上的决策边界&quot;</span>) <span class="sc">+</span> </span>
+<span id="cb394-14"><a href="理解机器学习里数据不均衡.html#cb394-14" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span> </span>
+<span id="cb394-15"><a href="理解机器学习里数据不均衡.html#cb394-15" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
+<span id="cb394-16"><a href="理解机器学习里数据不均衡.html#cb394-16" tabindex="-1"></a>    <span class="at">legend.position =</span> <span class="st">&quot;top&quot;</span>, </span>
+<span id="cb394-17"><a href="理解机器学习里数据不均衡.html#cb394-17" tabindex="-1"></a>    <span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="fl">0.5</span>)</span>
+<span id="cb394-18"><a href="理解机器学习里数据不均衡.html#cb394-18" tabindex="-1"></a>  )</span></code></pre></div>
 <pre><code>## Warning: Removed 1 rows containing missing values (`geom_point()`).</code></pre>
 <p><img src="example7_files/figure-html/unnamed-chunk-9-1.png" width="672" /></p>
-<div class="sourceCode" id="cb395"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb395-1"><a href="理解机器学习里数据不均衡.html#cb395-1" tabindex="-1"></a>model_r2 <span class="ot">=</span> <span class="fu">glm</span>(group <span class="sc">~</span> ., <span class="at">data =</span> data_train_r_un, <span class="at">family =</span> <span class="fu">binomial</span>())</span>
-<span id="cb395-2"><a href="理解机器学习里数据不均衡.html#cb395-2" tabindex="-1"></a>coef2 <span class="ot">=</span> <span class="fu">coef</span>(model_r2)</span>
-<span id="cb395-3"><a href="理解机器学习里数据不均衡.html#cb395-3" tabindex="-1"></a>coef2</span></code></pre></div>
+<div class="sourceCode" id="cb396"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb396-1"><a href="理解机器学习里数据不均衡.html#cb396-1" tabindex="-1"></a>model_r2 <span class="ot">=</span> <span class="fu">glm</span>(group <span class="sc">~</span> ., <span class="at">data =</span> data_train_r_un, <span class="at">family =</span> <span class="fu">binomial</span>())</span>
+<span id="cb396-2"><a href="理解机器学习里数据不均衡.html#cb396-2" tabindex="-1"></a>coef2 <span class="ot">=</span> <span class="fu">coef</span>(model_r2)</span>
+<span id="cb396-3"><a href="理解机器学习里数据不均衡.html#cb396-3" tabindex="-1"></a>coef2</span></code></pre></div>
 <pre><code>## (Intercept)          V1          V2 
 ##   -1.411091    1.773981   -2.381293</code></pre>
-<div class="sourceCode" id="cb397"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb397-1"><a href="理解机器学习里数据不均衡.html#cb397-1" tabindex="-1"></a>beta0 <span class="ot">=</span> coef2[<span class="dv">1</span>]</span>
-<span id="cb397-2"><a href="理解机器学习里数据不均衡.html#cb397-2" tabindex="-1"></a>beta1 <span class="ot">=</span> coef2[<span class="dv">2</span>]</span>
-<span id="cb397-3"><a href="理解机器学习里数据不均衡.html#cb397-3" tabindex="-1"></a>beta2 <span class="ot">=</span> coef2[<span class="dv">3</span>]</span>
-<span id="cb397-4"><a href="理解机器学习里数据不均衡.html#cb397-4" tabindex="-1"></a></span>
-<span id="cb397-5"><a href="理解机器学习里数据不均衡.html#cb397-5" tabindex="-1"></a>data_test_r <span class="sc">%&gt;%</span> </span>
-<span id="cb397-6"><a href="理解机器学习里数据不均衡.html#cb397-6" tabindex="-1"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span> </span>
-<span id="cb397-7"><a href="理解机器学习里数据不均衡.html#cb397-7" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(V1, V2, <span class="at">color =</span> group, <span class="at">alpha =</span> <span class="fl">0.5</span>)) <span class="sc">+</span> </span>
-<span id="cb397-8"><a href="理解机器学习里数据不均衡.html#cb397-8" tabindex="-1"></a>  <span class="fu">geom_abline</span>(<span class="at">intercept =</span> <span class="sc">-</span>beta0<span class="sc">/</span>beta2, <span class="at">slope =</span> <span class="sc">-</span>beta1<span class="sc">/</span>beta2, </span>
-<span id="cb397-9"><a href="理解机器学习里数据不均衡.html#cb397-9" tabindex="-1"></a>              <span class="at">linetype =</span> <span class="st">&quot;dashed&quot;</span>, <span class="at">linewidth =</span> <span class="dv">1</span>) <span class="sc">+</span> </span>
-<span id="cb397-10"><a href="理解机器学习里数据不均衡.html#cb397-10" tabindex="-1"></a>  <span class="fu">scale_color_aaas</span>() <span class="sc">+</span> </span>
-<span id="cb397-11"><a href="理解机器学习里数据不均衡.html#cb397-11" tabindex="-1"></a>  <span class="fu">xlim</span>(<span class="sc">-</span><span class="dv">4</span>, <span class="dv">5</span>) <span class="sc">+</span></span>
-<span id="cb397-12"><a href="理解机器学习里数据不均衡.html#cb397-12" tabindex="-1"></a>  <span class="fu">ylim</span>(<span class="sc">-</span><span class="dv">4</span>, <span class="dv">5</span>) <span class="sc">+</span></span>
-<span id="cb397-13"><a href="理解机器学习里数据不均衡.html#cb397-13" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">&quot;线性不可分的不均衡数据上的决策边界&quot;</span>) <span class="sc">+</span> </span>
-<span id="cb397-14"><a href="理解机器学习里数据不均衡.html#cb397-14" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span> </span>
-<span id="cb397-15"><a href="理解机器学习里数据不均衡.html#cb397-15" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
-<span id="cb397-16"><a href="理解机器学习里数据不均衡.html#cb397-16" tabindex="-1"></a>    <span class="at">legend.position =</span> <span class="st">&quot;top&quot;</span>, </span>
-<span id="cb397-17"><a href="理解机器学习里数据不均衡.html#cb397-17" tabindex="-1"></a>    <span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="fl">0.5</span>)</span>
-<span id="cb397-18"><a href="理解机器学习里数据不均衡.html#cb397-18" tabindex="-1"></a>  )</span></code></pre></div>
+<div class="sourceCode" id="cb398"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb398-1"><a href="理解机器学习里数据不均衡.html#cb398-1" tabindex="-1"></a>beta0 <span class="ot">=</span> coef2[<span class="dv">1</span>]</span>
+<span id="cb398-2"><a href="理解机器学习里数据不均衡.html#cb398-2" tabindex="-1"></a>beta1 <span class="ot">=</span> coef2[<span class="dv">2</span>]</span>
+<span id="cb398-3"><a href="理解机器学习里数据不均衡.html#cb398-3" tabindex="-1"></a>beta2 <span class="ot">=</span> coef2[<span class="dv">3</span>]</span>
+<span id="cb398-4"><a href="理解机器学习里数据不均衡.html#cb398-4" tabindex="-1"></a></span>
+<span id="cb398-5"><a href="理解机器学习里数据不均衡.html#cb398-5" tabindex="-1"></a>data_test_r <span class="sc">%&gt;%</span> </span>
+<span id="cb398-6"><a href="理解机器学习里数据不均衡.html#cb398-6" tabindex="-1"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span> </span>
+<span id="cb398-7"><a href="理解机器学习里数据不均衡.html#cb398-7" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(V1, V2, <span class="at">color =</span> group, <span class="at">alpha =</span> <span class="fl">0.5</span>)) <span class="sc">+</span> </span>
+<span id="cb398-8"><a href="理解机器学习里数据不均衡.html#cb398-8" tabindex="-1"></a>  <span class="fu">geom_abline</span>(<span class="at">intercept =</span> <span class="sc">-</span>beta0<span class="sc">/</span>beta2, <span class="at">slope =</span> <span class="sc">-</span>beta1<span class="sc">/</span>beta2, </span>
+<span id="cb398-9"><a href="理解机器学习里数据不均衡.html#cb398-9" tabindex="-1"></a>              <span class="at">linetype =</span> <span class="st">&quot;dashed&quot;</span>, <span class="at">linewidth =</span> <span class="dv">1</span>) <span class="sc">+</span> </span>
+<span id="cb398-10"><a href="理解机器学习里数据不均衡.html#cb398-10" tabindex="-1"></a>  <span class="fu">scale_color_aaas</span>() <span class="sc">+</span> </span>
+<span id="cb398-11"><a href="理解机器学习里数据不均衡.html#cb398-11" tabindex="-1"></a>  <span class="fu">xlim</span>(<span class="sc">-</span><span class="dv">4</span>, <span class="dv">5</span>) <span class="sc">+</span></span>
+<span id="cb398-12"><a href="理解机器学习里数据不均衡.html#cb398-12" tabindex="-1"></a>  <span class="fu">ylim</span>(<span class="sc">-</span><span class="dv">4</span>, <span class="dv">5</span>) <span class="sc">+</span></span>
+<span id="cb398-13"><a href="理解机器学习里数据不均衡.html#cb398-13" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">&quot;线性不可分的不均衡数据上的决策边界&quot;</span>) <span class="sc">+</span> </span>
+<span id="cb398-14"><a href="理解机器学习里数据不均衡.html#cb398-14" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span> </span>
+<span id="cb398-15"><a href="理解机器学习里数据不均衡.html#cb398-15" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
+<span id="cb398-16"><a href="理解机器学习里数据不均衡.html#cb398-16" tabindex="-1"></a>    <span class="at">legend.position =</span> <span class="st">&quot;top&quot;</span>, </span>
+<span id="cb398-17"><a href="理解机器学习里数据不均衡.html#cb398-17" tabindex="-1"></a>    <span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="fl">0.5</span>)</span>
+<span id="cb398-18"><a href="理解机器学习里数据不均衡.html#cb398-18" tabindex="-1"></a>  )</span></code></pre></div>
 <pre><code>## Warning: Removed 1 rows containing missing values (`geom_point()`).</code></pre>
 <p><img src="example7_files/figure-html/unnamed-chunk-9-2.png" width="672" /></p>
 

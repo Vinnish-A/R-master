@@ -7,7 +7,7 @@ documentclass: book
 bibliography: "first try.bib"
 csl: "ncb.csl"
 link-citations: true
-description: "Med-X社员手册"
+description: "R语言高手计划"
 github-repo: Vinnish-A/R-master
 ---
 

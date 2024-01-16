@@ -1075,12 +1075,12 @@ ifelse咋用请搜索，?ifelse可以在右下角弹出窗口查阅文档。</p>
 <pre><code>## # A tibble: 6 × 5
 ##     cut     n carat depth table
 ##   &lt;int&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
-## 1     1  1364 1.05   64.1  59.1
-## 2     2  4147 0.854  62.3  58.7
-## 3     3 10101 0.804  61.8  58.0
-## 4     4 11638 0.891  61.3  58.7
-## 5     5 18143 0.701  61.7  55.9
-## 6    NA  8547 0.800  61.8  57.4</code></pre>
+## 1     1  1297 1.04   64.1  59.0
+## 2     2  3884 0.847  62.4  58.7
+## 3     3  9599 0.808  61.8  58.0
+## 4     4 11000 0.896  61.3  58.7
+## 5     5 17272 0.707  61.7  56.0
+## 6    NA 10888 0.799  61.7  57.5</code></pre>
 <div class="sourceCode" id="cb78"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb78-1"><a href="用tidyr读写操作文件.html#cb78-1" tabindex="-1"></a>data_interpolated <span class="sc">%&gt;%</span> </span>
 <span id="cb78-2"><a href="用tidyr读写操作文件.html#cb78-2" tabindex="-1"></a>  <span class="fu">select</span>(cut, <span class="fu">where</span>(is.double)) <span class="sc">%&gt;%</span> </span>
 <span id="cb78-3"><a href="用tidyr读写操作文件.html#cb78-3" tabindex="-1"></a>  <span class="fu">group_by</span>(cut) <span class="sc">%&gt;%</span> </span>
@@ -1088,11 +1088,11 @@ ifelse咋用请搜索，?ifelse可以在右下角弹出窗口查阅文档。</p>
 <pre><code>## # A tibble: 5 × 5
 ##     cut   num carat depth table
 ##   &lt;int&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
-## 1     1  1364 0.990  63.6  58.7
-## 2     2  4147 0.840  62.2  58.4
-## 3     3 10101 0.803  61.8  57.8
-## 4     4 11638 0.869  61.4  58.4
-## 5     5 26690 0.748  61.7  56.7</code></pre>
+## 1     1  1297 0.981  63.6  58.8
+## 2     2  3884 0.836  62.2  58.5
+## 3     3  9599 0.806  61.8  57.9
+## 4     4 11000 0.874  61.4  58.5
+## 5     5 28160 0.756  61.7  56.7</code></pre>
 
 </div>
 </div>
