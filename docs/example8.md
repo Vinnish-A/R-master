@@ -493,7 +493,7 @@ list(getAnywhere("print.data.frame"), getAnywhere("print.tbl"))
 ##     }
 ##     invisible(x)
 ## }
-## <bytecode: 0x000001bb4aa2ea08>
+## <bytecode: 0x0000022513b7a7b8>
 ## <environment: namespace:base>
 ## 
 ## [[2]]
@@ -509,7 +509,7 @@ list(getAnywhere("print.data.frame"), getAnywhere("print.tbl"))
 ##     print_tbl(x, width, ..., n = n, max_extra_cols = max_extra_cols, 
 ##         max_footer_lines = max_footer_lines)
 ## }
-## <bytecode: 0x000001bb4a32bd20>
+## <bytecode: 0x00000225132614e0>
 ## <environment: namespace:pillar>
 ```
 
@@ -582,7 +582,7 @@ getAnywhere("t.test.formula")
 ##     y$data.name <- DNAME
 ##     y
 ## }
-## <bytecode: 0x000001bb4cbda9a0>
+## <bytecode: 0x0000022515cf0ba0>
 ## <environment: namespace:stats>
 ```
 

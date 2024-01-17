@@ -23,8 +23,8 @@ mm10 = read_tsv("./data/mm10.ncbiRefSeq.gtf", col_names = F)
 
 ## 工作环境 
 
-1. 卸载掉不需要的软件后，确认工作环境清洁（最好将电脑的用户路径改为英文），安装编程语言：R软件、R的集成开发环境：Rstudio
-2. 学习如何使用R安装R的软件包。首先是学会配置Cran和Bioconductor的镜像。然后是尝试从cran、github、bioconductor三种途径，安装上tidyverse、mlr3verse、mlr3proba、annoprobe等包（bioconductor并不常用，只需要会用devtools的install_github和base的install.packages函数安装包即可）。
+1. 卸载掉不需要的软件后，确认工作环境清洁（如果C盘够大，软件可以装C盘，如果C盘不大，最好把软件迁移到别的盘，C盘满了电脑无法启动；把数据、软件、游戏分开储存；最好将电脑的用户路径改为英文，否则无法编译部分程序和latex），安装编程语言：R软件、R的集成开发环境：Rstudio
+2. 学习如何使用R安装R的软件包。首先是学会配置Cran和Bioconductor的镜像。然后是尝试从cran、github、bioconductor三种途径，安装上tidyverse、mlr3verse、mlr3proba、annoprobe等包。
 
 参考书目：
 
@@ -34,7 +34,27 @@ mm10 = read_tsv("./data/mm10.ncbiRefSeq.gtf", col_names = F)
 
 ## 使用project管理项目
 
-再左上角的File里创建New Project，学习怎么使用Rproject[链接](https://zhuanlan.zhihu.com/p/630825871)。
+`Rproject`是用于管理代码和数据的方法。当你点开Rproj文件后，会打开Rstudio，并自动设置路径在Rproj文件所在的目录，一个健康的、便于管理的项目的项目目录应该是这样的：代码和代码放一块，数据和数据放一块。
+
+```{r fig.align='center'}
+knitr::include_graphics('F:/0Local/project/R-master/pic/filetree.bmp')
+```
+
+在左上角的File里创建New Project，学习怎么使用Rproject[链接](https://zhuanlan.zhihu.com/p/630825871)。
+
+## 使用git进行团队协作和文件管理
+
+git教程见[廖雪峰的git教程](https://www.liaoxuefeng.com/wiki/896043488029600)。重点学习使用`git remote`、`git push`、`git colne`、`git branch`这几个功能。
+
+## 安装R包的终极解决方案
+
+包有三个来源：cran、bioconductor、github，每个都有对应的途径安装，见[网络教程](https://zhuanlan.zhihu.com/p/129069910)。
+
+cran和bioconductor上的R包都经过了严格的审查，因此质量较高，安装也十分简便。其中bioconductor寄存了一系列生物数据的接口和处理流程，十分重要，但是win10和win11安装bioconductor可能遇到难以解决的网络代理问题。
+
+这个时候，手动安装也是个办法，手动安装的方法见[网络教程](https://zhuanlan.zhihu.com/p/343305532)，这里也可以使用`devtools::install_local()`。
+
+但是手动装包一次只能装一个，适用于不太复杂的小包。如果这个包存在许多依赖，可以使用`pak::pak("packge")`作为R包安装的终极解决方案。
 
 ## 第一周
 
@@ -66,7 +86,7 @@ tidyverse是相对独立于base的R的一种方言，是一门专门操作文件
 4. r的索引方法，如 $ [] [[]]等
 5. r的特点，向量化（需要一定的线性代数知识，对矩阵乘法有个印象就够了），重点学习apply函数簇中的apply和lapply函数
 
-内容较杂，希望一定要借助chatgpt来学习。
+内容较杂，希望一定要借助`chatgpt`来学习。
 
 ### 示例及任务
 

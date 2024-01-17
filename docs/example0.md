@@ -17,8 +17,8 @@ github-repo: Vinnish-A/R-master
 
 ## 工作环境 
 
-1. 卸载掉不需要的软件后，确认工作环境清洁（最好将电脑的用户路径改为英文），安装编程语言：R软件、R的集成开发环境：Rstudio
-2. 学习如何使用R安装R的软件包。首先是学会配置Cran和Bioconductor的镜像。然后是尝试从cran、github、bioconductor三种途径，安装上tidyverse、mlr3verse、mlr3proba、annoprobe等包（bioconductor并不常用，只需要会用devtools的install_github和base的install.packages函数安装包即可）。
+1. 卸载掉不需要的软件后，确认工作环境清洁（如果C盘够大，软件可以装C盘，如果C盘不大，最好把软件迁移到别的盘，C盘满了电脑无法启动；把数据、软件、游戏分开储存；最好将电脑的用户路径改为英文，否则无法编译部分程序和latex），安装编程语言：R软件、R的集成开发环境：Rstudio
+2. 学习如何使用R安装R的软件包。首先是学会配置Cran和Bioconductor的镜像。然后是尝试从cran、github、bioconductor三种途径，安装上tidyverse、mlr3verse、mlr3proba、annoprobe等包。
 
 参考书目：
 
@@ -28,7 +28,30 @@ github-repo: Vinnish-A/R-master
 
 ## 使用project管理项目
 
-再左上角的File里创建New Project，学习怎么使用Rproject[链接](https://zhuanlan.zhihu.com/p/630825871)。
+`Rproject`是用于管理代码和数据的方法。当你点开Rproj文件后，会打开Rstudio，并自动设置路径在Rproj文件所在的目录，一个健康的、便于管理的项目的项目目录应该是这样的：代码和代码放一块，数据和数据放一块。
+
+
+```r
+knitr::include_graphics('F:/0Local/project/R-master/pic/filetree.bmp')
+```
+
+<img src="pic/filetree.bmp" style="display: block; margin: auto;" />
+
+在左上角的File里创建New Project，学习怎么使用Rproject[链接](https://zhuanlan.zhihu.com/p/630825871)。
+
+## 使用git进行团队协作和文件管理
+
+git教程见[廖雪峰的git教程](https://www.liaoxuefeng.com/wiki/896043488029600)。重点学习使用`git remote`、`git push`、`git colne`、`git branch`这几个功能。
+
+## 安装R包的终极解决方案
+
+包有三个来源：cran、bioconductor、github，每个都有对应的途径安装，见[网络教程](https://zhuanlan.zhihu.com/p/129069910)。
+
+cran和bioconductor上的R包都经过了严格的审查，因此质量较高，安装也十分简便。其中bioconductor寄存了一系列生物数据的接口和处理流程，十分重要，但是win10和win11安装bioconductor可能遇到难以解决的网络代理问题。
+
+这个时候，手动安装也是个办法，手动安装的方法见[网络教程](https://zhuanlan.zhihu.com/p/343305532)，这里也可以使用`devtools::install_local()`。
+
+但是手动装包一次只能装一个，适用于不太复杂的小包。如果这个包存在许多依赖，可以使用`pak::pak("packge")`作为R包安装的终极解决方案。
 
 ## 第一周
 
@@ -162,8 +185,8 @@ R中的建模函数。包括：
 
 
 ```{=html}
-<div class="datatables html-widget html-fill-item" id="htmlwidget-4de6c076b74b65b67796" style="width:100%;height:auto;"></div>
-<script type="application/json" data-for="htmlwidget-4de6c076b74b65b67796">{"x":{"filter":"none","vertical":false,"data":[["1","2","3"],["chrM","chrM","chrM"],["ncbiRefSeq.2021-04-23","ncbiRefSeq.2021-04-23","ncbiRefSeq.2021-04-23"],["transcript","exon","transcript"],[15356,15356,15289],[15422,15422,15355],[".",".","."],["-","-","+"],[".",".","."],["gene_id \"TrnP\"; transcript_id \"rna-TrnP\";  gene_name \"TrnP\";","gene_id \"TrnP\"; transcript_id \"rna-TrnP\"; exon_number \"1\"; exon_id \"rna-TrnP.1\"; gene_name \"TrnP\";","gene_id \"TrnT\"; transcript_id \"rna-TrnT\";  gene_name \"TrnT\";"]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>X1<\/th>\n      <th>X2<\/th>\n      <th>X3<\/th>\n      <th>X4<\/th>\n      <th>X5<\/th>\n      <th>X6<\/th>\n      <th>X7<\/th>\n      <th>X8<\/th>\n      <th>X9<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"scrollX":true,"columnDefs":[{"className":"dt-right","targets":[4,5]},{"orderable":false,"targets":0}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
+<div class="datatables html-widget html-fill-item" id="htmlwidget-8535dedcfb4d7ab6a986" style="width:100%;height:auto;"></div>
+<script type="application/json" data-for="htmlwidget-8535dedcfb4d7ab6a986">{"x":{"filter":"none","vertical":false,"data":[["1","2","3"],["chrM","chrM","chrM"],["ncbiRefSeq.2021-04-23","ncbiRefSeq.2021-04-23","ncbiRefSeq.2021-04-23"],["transcript","exon","transcript"],[15356,15356,15289],[15422,15422,15355],[".",".","."],["-","-","+"],[".",".","."],["gene_id \"TrnP\"; transcript_id \"rna-TrnP\";  gene_name \"TrnP\";","gene_id \"TrnP\"; transcript_id \"rna-TrnP\"; exon_number \"1\"; exon_id \"rna-TrnP.1\"; gene_name \"TrnP\";","gene_id \"TrnT\"; transcript_id \"rna-TrnT\";  gene_name \"TrnT\";"]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>X1<\/th>\n      <th>X2<\/th>\n      <th>X3<\/th>\n      <th>X4<\/th>\n      <th>X5<\/th>\n      <th>X6<\/th>\n      <th>X7<\/th>\n      <th>X8<\/th>\n      <th>X9<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"scrollX":true,"columnDefs":[{"className":"dt-right","targets":[4,5]},{"orderable":false,"targets":0}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
 ```
 
 按要求要求整理成如下形式：
@@ -174,8 +197,8 @@ R中的建模函数。包括：
 
 
 ```{=html}
-<div class="datatables html-widget html-fill-item" id="htmlwidget-96d5db2f41738d88fe99" style="width:100%;height:auto;"></div>
-<script type="application/json" data-for="htmlwidget-96d5db2f41738d88fe99">{"x":{"filter":"none","vertical":false,"data":[["1","2","3","4","5","6"],["chrM","chrM","chrM","chrM","chrM","chrM"],["transcript","transcript","transcript","transcript","transcript","transcript"],[7927,7766,5328,7013,8607,14145],[8607,7969,6872,7696,9390,15288],["+","+","+","+","+","+"],["ATP6","ATP8","COX1","COX2","COX3","CYTB"],["NP_904333.1","NP_904332.1","NP_904330.1","NP_904331.1","NP_904334.1","NP_904340.1"],[680,203,1544,683,783,1143]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>chr<\/th>\n      <th>type<\/th>\n      <th>start<\/th>\n      <th>end<\/th>\n      <th>strand<\/th>\n      <th>gene_id<\/th>\n      <th>transcript_id<\/th>\n      <th>length<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"scrollX":true,"columnDefs":[{"className":"dt-right","targets":[3,4,8]},{"orderable":false,"targets":0}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
+<div class="datatables html-widget html-fill-item" id="htmlwidget-9db3f3398242505031ef" style="width:100%;height:auto;"></div>
+<script type="application/json" data-for="htmlwidget-9db3f3398242505031ef">{"x":{"filter":"none","vertical":false,"data":[["1","2","3","4","5","6"],["chrM","chrM","chrM","chrM","chrM","chrM"],["transcript","transcript","transcript","transcript","transcript","transcript"],[7927,7766,5328,7013,8607,14145],[8607,7969,6872,7696,9390,15288],["+","+","+","+","+","+"],["ATP6","ATP8","COX1","COX2","COX3","CYTB"],["NP_904333.1","NP_904332.1","NP_904330.1","NP_904331.1","NP_904334.1","NP_904340.1"],[680,203,1544,683,783,1143]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>chr<\/th>\n      <th>type<\/th>\n      <th>start<\/th>\n      <th>end<\/th>\n      <th>strand<\/th>\n      <th>gene_id<\/th>\n      <th>transcript_id<\/th>\n      <th>length<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"scrollX":true,"columnDefs":[{"className":"dt-right","targets":[3,4,8]},{"orderable":false,"targets":0}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
 ```
 
 本人给出的任务和示例是R语言基础的部分提纲。之后对于R语言除巩固基础外，更多的是在实战中熟悉R语言生态（评价一个人代码能力的不是一个人基础多好，而是这个人对这门语言的生态有多了解、会用多少的包、脑中有多少编程范式，从而高效的解决自己遇到的问题。但是对于基础的掌握会让你更快熟悉另一门语言，因为基础总是相通的。
